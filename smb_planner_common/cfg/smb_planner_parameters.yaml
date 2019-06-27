@@ -1,0 +1,116 @@
+################################################################################
+############################## PLANNER PARAMETERS ##############################
+################################################################################
+frame_id: "world"
+visualize: true
+verbose_planner: true
+
+bounding_box_inflation: 0.10  # [m] - Additional inflation of robot radius
+robot_radius: 0.10            # [m] - This is considered as the radius of the ball
+                              # containing the robot if we use VOXBLOX.
+planning_height: 0.5          # [m] - Nominal planning height if traversability 
+                              # estimation is not used      
+max_initial_rotation: 5.0     # [deg] - min angle between current robot yaw and
+                              # the first waypoint direction of global path
+threshold_goal_reached: 0.20  # [m] Distance to the global goal to consider it reached
+check_traversability: true    # Whether or not to use traversability information
+                              # when planning
+                              
+maximum_difference_elevation: 0.5 # Threshold to consider if we are nearby a cliff
+
+# Velocities and accelerations
+v_max: 0.75                   # [m/s]
+a_max: 0.50                   # [m/s^2]
+v_yaw_max: 0.5                # [rad/s] --> not used for ramp interpolator
+a_yaw_max: 0.5                # [rad/s^2] --> not used for ramp interpolator
+v_rot_on_spot: 0.50           # [rad/s] for rotation on spot
+sampling_dt: 0.1              # [s] Sampling time for trajectory to send to the controller
+
+################################ GLOBAL PLANNER ################################
+global_timer_dt: 0.1          # [s]
+global_interp_dt: 0.5         # [s] This has to be small enough for collision 
+                              # checks of the global path
+planner_type: 1               # 0:RRT connect, 1:RRT*, 2:Informed RRT*, 3:Bi-RRT*, 4:PRM
+
+simplify_solution: false      # If true, it reduces the number of waypoints a lot
+trust_approx_solution: false  # Whether or not we should reach the goal exactly
+optimistic_voxblox: true      # Whether we can consider unknown space free in Voxblox
+traversability_threshold: 0.5 # [-] Threshold to consider a seen spot as traversable (between 0 and 1)
+
+# OMPL
+num_seconds_to_plan: 5.0      # [s]
+use_distance_threshold: true  # This will set a threshold cost to consider a path 
+                              # "good enough" looking at the distance start - goal
+distance_threshold: 1.1       # [-] Constant factor that condiders a path good enough
+
+################################# LOCAL PLANNER ################################
+local_replan_dt: 0.25         # [s] Replanning rate for the local planner
+command_dt: 0.25              # [s] Command loop rate
+sec_ahead_planner: 1.20       # [s] Second-ahead where to select the local starting
+                              # position from where to plan locally
+local_goal_distance: 2.0      # [m] Distance of local goal along global path
+prediction_horizon_mpc: 1.0   # [s] Projection in the "future" of the local path 
+                              # considering the characteristics of the MPC
+
+# CHOMP solvers parameters
+nq: 20                        # Dimension of the configuration space
+dt: 1.0                       # [s] Delta time to compute the local path
+eta: 100.0                    # [-] Discount factor
+lambda: 0.1                   # [-] Multiplication factor for the smoothness cost
+cost_gain: 100.0              # [-] Gain that multiplies the collision cost
+eps: 2.0                      # [-] Factor for the cost function related to obstacles
+
+
+
+################################################################################
+############################## VOXBLOX PARAMETERS ##############################
+################################################################################
+lower_bound_x: -10.0
+lower_bound_y: -10.0
+lower_bound_z: 0.2
+upper_bound_x: 10.0
+upper_bound_y: 10.0
+upper_bound_z: 3.0
+
+tsdf_voxel_size: 0.2
+voxel_size: 0.2
+tsdf_voxels_per_side: 16
+slice_level: 0.4
+
+update_mesh_every_n_sec: 0.0
+world_frame: "world"
+
+publish_traversable: true
+split_at_collisions: 0.5
+optimize_time: true
+verbose: false
+
+
+
+################################################################################
+############################## TRAVERSABILITY MAP ##############################
+################################################################################
+/submap_service: "/elevation_mapping/get_submap"
+/map_frame_id: "world"     # Must be the same as the input elevation submap.
+/robot_frame_id: "base"
+/min_update_rate: 0.2
+/map_center_x: 0.0
+/map_center_y: 0.0
+/map_length_x: 5.0
+/map_length_y: 5.0
+/footprint_yaw: 0.20
+/max_gap_width: 0.30
+/grid_map_to_initialize_traversability_map:
+  enable: false
+  grid_map_topic_name: /elevation_mapping/elevation_map
+
+# Footprint parameters
+/footprint:
+  footprint_polygon: [[0.45, 0.30], [0.45, -0.30], [-0.45, -0.30], [-0.45, 0.30]] # Vertices of footprint polygon with coordinates [x, y] in robot footprint frame.
+  circular_footprint_radius: 0.20
+  circular_footprint_radius_inscribed: 0.10
+  circular_footprint_offset: 0.15
+  footprint_frame_id: base
+  traversability_default: 0.3
+  verify_roughness_footprint: false
+  check_robot_inclination: false

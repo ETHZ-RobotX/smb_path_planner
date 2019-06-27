@@ -1,0 +1,15 @@
+## SERVICES
+globalPlanner/plannerServiceName: "/compute_global_path"
+localPlanner/triggerServiceName: "/trigger_local_planner"
+
+## PUBLISHERS:
+globalPlanner/visualOutputMsgName: "path"
+globalPlanner/outputTrajectoryMsgName: "/global_path"
+
+localPlanner/visualOutputMsgName: "path" 
+localPlanner/outputMPCTrajectoryMsgName: "/mpc_trajectory"
+
+## SUBSCRIBERS:
+stateEstimatorMsgName: "/base_pose_measured"   # State estimator information - this is used in simulation
+smbStateMsgName: "/state_estimator/smb_state"
+elevationMapMsgName: "/elevation_mapping/elevation_map"

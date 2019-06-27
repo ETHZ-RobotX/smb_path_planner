@@ -1,0 +1,42 @@
+<launch>
+
+   <arg name="param_file" default="$(find smb_planner_common)/cfg/smb_planner_parameters.yaml"/>
+   <arg name="launch_prefix" default=""/> <!-- TO DEBUG: gdb - -args -->
+   <arg name="voxel_size" default="0.20"/>
+   
+   <!-- TOPICS -->
+   <arg name="input_pointcloud" default="/vi_sensor/camera_depth/depth/points"/>
+   
+   <!-- NODES -->
+	 <node name="voxblox_node" pkg="voxblox_ros" type="esdf_server" output="screen" args="-alsologtostderr" clear_params="true">
+			<remap from="pointcloud" to="$(arg input_pointcloud)"/>
+			<remap from="voxblox_node/esdf_map_out" to="esdf_map" />
+			<remap from="voxblox_node/tsdf_map_out" to="tsdf_map" />
+
+			<param name="method" value="fast" />
+			<param name="publish_tsdf_map" value="true" />
+			<param name="publish_esdf_map" value="true" />
+			<param name="tsdf_voxel_size" value="$(arg voxel_size)" />
+			<param name="tsdf_voxels_per_side" value="16" />
+			<param name="esdf_max_distance_m" value="5.0" />
+			<param name="max_ray_length_m" value="10.0" />
+			<param name="voxel_carving_enabled" value="true" />
+			<param name="color_mode" value="color" />
+			<param name="use_tf_transforms" value="true" />
+			<param name="update_mesh_every_n_sec" value="0.25" />
+			<param name="min_time_between_msgs_sec" value="0.10" />
+			<param name="clear_sphere_for_planning" value="true" />
+			<param name="occupied_sphere_radius" value="2.0" />
+			<param name="clear_sphere_radius" value="1.0" />
+			<param name="slice_level" value="0.4" />
+			<param name="world_frame" value="world" />
+			<param name="verbose" value="false" />
+   </node>
+
+   <node name="smb_local_planner" pkg="smb_local_planner" type="smb_local_planner_node" output="screen" launch-prefix="$(arg launch_prefix)">
+      <rosparam command="load" file="$(arg param_file)" />
+      <remap from="smb_local_planner/esdf_map_in" to="esdf_map" />
+      <remap from="smb_local_planner/tsdf_map_in" to="tsdf_map" />
+   </node>
+
+</launch>
