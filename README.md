@@ -8,6 +8,11 @@ __Author: Luca Bartolomei__
 __Affiliation: Vision For Robotics Lab, ETH Zurich__  
 __Contact: Luca Bartolomei, lbartolomei@ethz.ch__
 # Getting Started
+If the packages from the repository 
+`ethz-asl/eth_robotics_summer_school_2019` have already been downloaded and 
+built, it is possible to skip the "Installation" section and go directly to 
+[the next one](#structure-of-the-code).  
+If this is not the case, follow the installation instructions below.
 ## Installation
 This package is intended to be used with Ubuntu 18.04 and [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) or above.
 After installing ROS, install some extra dependencies:
@@ -17,8 +22,8 @@ $ sudo apt-get install ros-melodic-cmake-modules ros-melodic-ompl ros-melodic-gr
 Then if not already done so, set up a new catkin workspace:
 ```asm
 $ source /opt/ros/melodic/setup.bash
-$ mkdir -p ~/planner_ws/src
-$ cd ~/planner_ws
+$ mkdir -p ~/catkin_ws/src
+$ cd ~/catkin_ws
 $ catkin init
 $ catkin config --extend /opt/ros/melodic
 $ catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release
@@ -50,7 +55,7 @@ $ ./smb_path_planner/bin/clone_repos.sh -h
 ```
 Then, compile:
 ```asm
-$ cd ~/planner_ws
+$ cd ~/catkin_ws
 $ catkin build smb_path_planner
 ```
 ## Structure of the code
@@ -71,7 +76,7 @@ are stored in `smb_path_planner/smb_planner_common/cfg/`.
 
 ## Planning Panel in RViz
 Make sure all the packages have built successfully. As a sanity check, 
-re-source your workspace (`$ source ~/planner_ws/devel/setup.bash`) and start 
+re-source your workspace (`$ source ~/catkin_ws/devel/setup.bash`) and start 
 up RViz (`$ rviz`).
 In RViz, select `Panels -> Add New Panel` and select `Planning Panel` under 
 `smb_planner_rviz`.
