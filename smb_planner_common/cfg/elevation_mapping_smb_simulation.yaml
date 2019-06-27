@@ -1,4 +1,4 @@
-point_cloud_topic: "/dense_stereo/pointcloud"
+point_cloud_topic: "/vi_sensor/camera_depth/depth/points"
 map_frame_id: "world"
 robot_base_frame_id: "base"
 robot_pose_with_covariance_topic: "/stamped_pose_covariance"
