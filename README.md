@@ -12,8 +12,7 @@ __Contact: Luca Bartolomei, lbartolomei@ethz.ch__
 This package is intended to be used with Ubuntu 18.04 and [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) or above.
 After installing ROS, install some extra dependencies:
 ```asm
-$ sudo apt-get install ros-melodic-cmake-modules ros-melodic-ompl ros-melodic-grid-map ros-melodic-grid-map-visualization ros-melodic-velodyne-gazebo-plugins python-wstool
-python-catkin-tools libyaml-cpp-dev protobuf-compiler autoconf
+$ sudo apt-get install ros-melodic-cmake-modules ros-melodic-ompl ros-melodic-grid-map ros-melodic-grid-map-visualization ros-melodic-velodyne-gazebo-plugins python-wstool python-catkin-tools libyaml-cpp-dev protobuf-compiler autoconf
 ```
 Then if not already done so, set up a new catkin workspace:
 ```asm
@@ -89,7 +88,7 @@ $ roslaunch smb_sim sim_path_planner.launch
 ```
 In the controller panel, select `SmbPathFollowingController` from 
 the list. If this controller does not show up, press the refresh button and 
-try again.  
+try again. To start the controller, press the play button.  
 Then, start the `elevation_mapping` node:
 ```asm
 $ roslaunch smb_local_planner smb_elevation_mapping_simulation.launch
@@ -104,5 +103,15 @@ showed in RViz, start the local planner by pressing the button `Start Local
 Planner`.  
 
 ## How to run the planner on the real robot
-TODO
-
+Start the `LPC` on the robot and the `OPC` on the operator PC. All the necessary 
+nodes should be started. Then in one terminal run:
+```asm
+$ roslaunch smb_local_planner smb_elevation_mapping_real.launch
+```
+This launch files starts the elevation mapping node. Then start the planners:
+```asm
+$ roslaunch smb_local_planner smb_planner_real.launch
+```
+To send a global goal position, follow the same procedure as in simulation:
+1. Select the `SmbPathFollowingController` in the control panel and start it;
+2. Send the global goal using the `Planning Panel` in RViz.
