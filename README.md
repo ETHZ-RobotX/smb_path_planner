@@ -12,9 +12,7 @@ __Contact: Luca Bartolomei, lbartolomei@ethz.ch__
 This package is intended to be used with Ubuntu 18.04 and [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) or above.
 After installing ROS, install some extra dependencies:
 ```asm
-$ sudo apt-get install ros-melodic-cmake-modules ros-melodic-ompl 
-ros-melodic-grid-map ros-melodic-grid-map-visualization 
-ros-melodic-velodyne-gazebo-plugins python-wstool
+$ sudo apt-get install ros-melodic-cmake-modules ros-melodic-ompl ros-melodic-grid-map ros-melodic-grid-map-visualization ros-melodic-velodyne-gazebo-plugins python-wstool
 python-catkin-tools libyaml-cpp-dev protobuf-compiler autoconf
 ```
 Then if not already done so, set up a new catkin workspace:
