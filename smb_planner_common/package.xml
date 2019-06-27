@@ -18,7 +18,7 @@
   <depend>std_msgs</depend>
   <depend>tf</depend>
   <depend>visualization_msgs</depend>
-  <depend>elevation_mapping_demo</depend>
+  <depend>elevation_mapping_demos</depend>
   <depend>traversability_estimation</depend>
   <depend>voxblox_ros</depend>
   <depend>eigen_catkin</depend>

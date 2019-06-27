@@ -11,7 +11,7 @@ __Contact: Luca Bartolomei, lbartolomei@ethz.ch__
 If the packages from the repository 
 `ethz-asl/eth_robotics_summer_school_2019` have already been downloaded and 
 built, it is possible to skip the "Installation" section and go directly to 
-[the next one](#structure-of-the-code).  
+[the "Structure of the code"](#structure-of-the-code).  
 If this is not the case, follow the installation instructions below.
 ## Installation
 This package is intended to be used with Ubuntu 18.04 and [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) or above.
