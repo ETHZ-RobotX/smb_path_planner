@@ -30,8 +30,7 @@ $ catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release
 $ catkin config --merge-devel
 ```
 In this installation guide, it is assumed that the following packages for 
-simulation have already been downloaded from the SMB monorepo and built in the 
-same catkin workspace:
+simulation have already been downloaded and built in the same catkin workspace:
 * `any_node`
 * `message_logger`
 * `kindr`
