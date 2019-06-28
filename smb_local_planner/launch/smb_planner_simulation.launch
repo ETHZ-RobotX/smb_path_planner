@@ -1,4 +1,4 @@
-\<launch>
+<launch>
 
   <arg name="param_file" default="$(find smb_planner_common)/cfg/smb_planner_parameters_simulation.yaml"/>
   <arg name="traversability_filter_file" default="$(find smb_planner_common)/cfg/traversability_filter_parameter.yaml"/>

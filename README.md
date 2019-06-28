@@ -107,14 +107,25 @@ showed in RViz, start the local planner by pressing the button `Start Local
 Planner`.  
 
 ## How to run the planner on the real robot
-Start the `LPC` on the robot and the `OPC` on the operator PC. All the necessary 
-nodes should be started. Then in one terminal run:
+Start the `LPC` on the robot and the `OPC` on the operator side. To run the 
+`LPC`, run the following commands in the PC of the robot in multiple terminals:
 ```asm
-$ roslaunch smb_local_planner smb_elevation_mapping_real.launch
+$ roscore # terminal 1
+$ roslaunch smb_lpc lpc.launch # terminal 2
 ```
-This launch files starts the elevation mapping node. Then start the planners:
+Start the LiDAR and the mapping in another terminal in the robot PC:
 ```asm
-$ roslaunch smb_local_planner smb_planner_real.launch
+$ roslaunch ethzasl_icp_mapper supermegabot_robosense_dynamic_mapper.launch # terminal 3
+``` 
+ Then to start the planners, run on the PC of the robot in separate terminals:
+```asm
+$ roslaunch smb_local_planner smb_elevation_mapping_real.launch # terminal 4
+$ roslaunch smb_local_planner smb_planner_real.launch # terminal 5
+```
+On the operator side, start the `OPC`. First connect the `rosmaster` of the 
+PC to the `rosmaster` of the robot and then run in a terminal:
+```asm
+$ roslaunch smb_opc opc.launch
 ```
 To send a global goal position, follow the same procedure as in simulation:
 1. Select the `SmbPathFollowingController` in the control panel and start it;
