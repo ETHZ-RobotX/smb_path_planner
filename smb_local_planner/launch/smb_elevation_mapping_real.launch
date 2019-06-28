@@ -1,7 +1,7 @@
 <launch>
 
   <!-- Nodes for traversability: we need elevation mapping and the message interceptor node -->
-	<node pkg="elevation_mapping" type="elevation_mapping" name="elevation_mapping" output="screen">
+  <node pkg="elevation_mapping" type="elevation_mapping" name="elevation_mapping" output="screen">
     <rosparam command="load" file="$(find smb_planner_common)/cfg/elevation_mapping_smb.yaml" />
     <rosparam command="load" file="$(find elevation_mapping)/config/sensor_processors/kinect_nguyen_et_al.yaml" />
   </node>
