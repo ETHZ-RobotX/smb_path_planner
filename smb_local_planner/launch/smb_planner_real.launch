@@ -7,7 +7,7 @@
 	<arg name="voxel_size" default="0.20"/>
    
   <!-- TOPICS -->
-  <arg name="input_pointcloud" default="/rslidar_points"/>
+  <arg name="input_pointcloud" default="/corrected_scan"/>
    
   <!-- NODES -->
 	<node name="voxblox_node" pkg="voxblox_ros" type="esdf_server" output="screen" args="-alsologtostderr" clear_params="true">
