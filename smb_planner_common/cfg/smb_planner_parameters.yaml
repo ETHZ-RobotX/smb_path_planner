@@ -6,8 +6,9 @@ visualize: true
 verbose_planner: true
 
 bounding_box_inflation: 0.10  # [m] - Additional inflation of robot radius
-robot_radius: 0.10            # [m] - This is considered as the radius of the ball
-                              # containing the robot if we use VOXBLOX.
+robot_radius: 0.5             # [m] - This is considered as the radius of the ball
+                              # (in VOXBLOX) around each point in the global plan to
+                              # check collisions (must be larger than voxel size)
 planning_height: 0.5          # [m] - Nominal planning height if traversability 
                               # estimation is not used      
 max_initial_rotation: 25.0    # [deg] - min angle between current robot yaw and
@@ -38,7 +39,7 @@ optimistic_voxblox: true      # Whether we can consider unknown space free in Vo
 traversability_threshold: 0.5 # [-] Threshold to consider a seen spot as traversable (between 0 and 1)
 
 # OMPL
-num_seconds_to_plan: 5.0      # [s]
+num_seconds_to_plan: 10.0     # [s]
 use_distance_threshold: true  # This will set a threshold cost to consider a path 
                               # "good enough" looking at the distance start - goal
 distance_threshold: 1.1       # [-] Constant factor that condiders a path good enough
