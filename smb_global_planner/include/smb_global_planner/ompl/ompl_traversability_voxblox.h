@@ -252,7 +252,7 @@ public:
     if (traversabilility_start == TraversabilityStatus::UNTRAVERSABLE) {
       return false;
     } else {
-      // Overwrite the starting pose
+      // Overwrite the starting position
       start = start_proj;
     }
 
@@ -263,7 +263,7 @@ public:
     if (traversabilility_goal == TraversabilityStatus::UNTRAVERSABLE) {
       return false;
     } else {
-      // Overwrite the starting pose
+      // Overwrite the goal position
       goal = goal_proj;
     }
 

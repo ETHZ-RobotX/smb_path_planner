@@ -252,7 +252,7 @@ bool SmbGlobalPlanner::plannerServiceCallback(
     }
 
     if (traversability_start == TraversabilityStatus::UNTRAVERSABLE ||
-        !checkOptimisticMapCollision(current_state_)) {
+        !checkOptimisticMapCollision(projection_start)) {
       ROS_ERROR_STREAM("[Smb Global Planner] Start ["
                        << current_state_(0) << "," << current_state_(1)
                        << "] is in occupied position (optimistic).");
@@ -261,7 +261,7 @@ bool SmbGlobalPlanner::plannerServiceCallback(
 
     if (traversability_goal == TraversabilityStatus::UNTRAVERSABLE ||
         (voxblox_server_.getEsdfMapPtr()->isObserved(goal_) &&
-         !checkOptimisticMapCollision(goal_))) {
+         !checkOptimisticMapCollision(projection_goal))) {
       ROS_ERROR_STREAM("[Smb Global Planner] Goal ["
                        << goal_(0) << "," << goal_(1)
                        << "] is in occupied position (optimistic).");
@@ -422,7 +422,6 @@ double SmbGlobalPlanner::getMapDistance(const Eigen::Vector3d &position) const {
 
 bool SmbGlobalPlanner::checkOptimisticMapCollision(
     const Eigen::Vector3d &robot_position) {
-
   // This function returns false if in collision
   voxblox::Layer<voxblox::TsdfVoxel> *layer =
       voxblox_server_.getTsdfMapPtr()->getTsdfLayerPtr();
@@ -529,7 +528,7 @@ void SmbGlobalPlanner::sendStopCommand() const {
 }
 
 bool SmbGlobalPlanner::isPathCollisionFree() {
-  if (waypoints_.empty()) {
+  if (interpolated_waypoints_.empty()) {
     return true;
   }
 
