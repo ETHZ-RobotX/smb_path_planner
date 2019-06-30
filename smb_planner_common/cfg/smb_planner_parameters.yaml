@@ -39,7 +39,7 @@ optimistic_voxblox: true      # Whether we can consider unknown space free in Vo
 traversability_threshold: 0.5 # [-] Threshold to consider a seen spot as traversable (between 0 and 1)
 
 # OMPL
-num_seconds_to_plan: 5.0      # [s]
+num_seconds_to_plan: 10.0     # [s]
 use_distance_threshold: true  # This will set a threshold cost to consider a path 
                               # "good enough" looking at the distance start - goal
 distance_threshold: 1.1       # [-] Constant factor that condiders a path good enough
