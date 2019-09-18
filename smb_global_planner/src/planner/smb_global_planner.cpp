@@ -92,8 +92,11 @@ SmbGlobalPlanner::~SmbGlobalPlanner() {
 
 void SmbGlobalPlanner::initROS() {
   // Read the topics from file
+  std::string topic_file("topics");
+  nh_.getParam("/smb_global_planner/topic_file", topic_file);
   YAML::Node lconf = YAML::LoadFile(
-      ros::package::getPath("smb_planner_common") + "/cfg/topics.yaml");
+      ros::package::getPath("smb_planner_common") + "/cfg/" + topic_file +
+                            ".yaml");
 
   // Services
   planner_srv_ = nh_.advertiseService(
