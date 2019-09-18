@@ -21,7 +21,7 @@
   <depend>tf</depend>
   <depend>visualization_msgs</depend>
   <depend>rviz</depend>
-  <depend>yaml-cpp</depend>
+  <depend>yaml_cpp_catkin</depend>
   <depend>smb_planner_msgs</depend>
 
   <export>
