@@ -25,6 +25,8 @@ namespace smb_planner {
      */
     struct GlobalPlannerParameters {
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+        
+        bool use_global_planner_only;
 
         // OMPL optimization objective
         bool simplify_solution;

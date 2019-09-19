@@ -16,6 +16,7 @@ SmbGlobalPlanner::SmbGlobalPlanner(const ros::NodeHandle &nh,
     : nh_(nh), nh_private_(nh_private), planning_spinner_(1, &planning_queue_),
       params_(params), has_state_info_(false), perform_planning_(false),
       optimistic_(params.global_params.optimistic_voxblox),
+      use_global_planner_only_(params_.global_params.use_global_planner_only),
       voxblox_server_(nh_, nh_private_), rrt_(nh_, nh_private_, params_),
       current_state_(Eigen::Vector3d::Zero()), goal_(Eigen::Vector3d::Zero()),
       n_iter_vis_(0) {
@@ -376,6 +377,22 @@ void SmbGlobalPlanner::plannerTimerCallback(const ros::TimerEvent &event) {
           params_.global_params.global_interp_dt)) {
     ROS_ERROR("[Smb Global Planner] Could not interpolate global path!");
     return;
+  }
+
+  // If we use the global planner only, check if we need to perform
+  // additional rotations at the beginning
+  if(params_.global_params.use_global_planner_only) {
+    // Create a copy of the waypoints
+    std::vector<Eigen::VectorXd> interpolated_waypoints_without_rotation(
+            interpolated_waypoints_);
+    if(utility_mapping::interpolateInitialRotation(
+            interpolated_waypoints_without_rotation, interpolated_waypoints_,
+            current_state_(2), params_.v_max, params_.sampling_dt,
+            params_.max_initial_rotation)) {
+      ROS_WARN("[Smb Global Planner] Interpolated initial rotation");
+    } else {
+      ROS_INFO("[Smb Global Planner] Initial rotation interpolation necessary");
+    }
   }
 
   // Update the waypoints after the interpolation and visualize them

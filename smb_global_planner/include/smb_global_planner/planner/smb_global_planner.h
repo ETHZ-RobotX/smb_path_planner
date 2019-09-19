@@ -250,6 +250,7 @@ protected:
   bool perform_planning_;
   bool has_state_info_;
   bool optimistic_;
+  bool use_global_planner_only_;
 
   // Helper for updating the visualization of the path
   int n_iter_vis_;

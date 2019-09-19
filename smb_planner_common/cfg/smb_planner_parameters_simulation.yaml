@@ -4,6 +4,7 @@
 frame_id: "world"
 visualize: true
 verbose_planner: true
+use_global_planner_only: true
 
 bounding_box_inflation: 0.10  # [m] - Additional inflation of robot radius
 robot_radius: 0.5             # [m] - This is considered as the radius of the ball
@@ -29,7 +30,7 @@ sampling_dt: 0.1              # [s] Sampling time for trajectory to send to the 
 
 ################################ GLOBAL PLANNER ################################
 global_timer_dt: 0.1          # [s]
-global_interp_dt: 0.5         # [s] This has to be small enough for collision 
+global_interp_dt: 0.05        # [s] This has to be small enough for collision 
                               # checks of the global path
 planner_type: 1               # 0:RRT connect, 1:RRT*, 2:Informed RRT*, 3:Bi-RRT*, 4:PRM
 

@@ -416,6 +416,56 @@ bool rampInterpolatorWaypoints(
   return true;
 }
 
+bool interpolateInitialRotation(
+    const std::vector<Eigen::VectorXd> &interpolated_waypoints,
+    std::vector<Eigen::VectorXd> &interpolated_waypoints_with_rotation, 
+    const double current_yaw, const double v_max, const double sampling_dt, 
+    const double max_initial_rotation) {
+    // Create a vector of initial rotations
+  double yaw = current_yaw;
+  double time = 0.0;
+  Eigen::Vector3d initial_position(interpolated_waypoints.front().head(3));
+    
+  if(std::fabs(interpolated_waypoints.front()(3) - current_yaw) >= 
+          max_initial_rotation) {
+     // Number of steps
+     double delta = interpolated_waypoints.front()(3) - current_yaw;
+     if(delta > M_PI)
+         delta -= 2.0 * M_PI;
+     if(delta < -M_PI)
+         delta += 2.0 * M_PI;
+     size_t num_elements = std::fabs(delta) / (v_max * sampling_dt);
+
+     for(size_t i=0; i<num_elements; ++i) {
+         yaw += delta / num_elements;
+         if(yaw > 2.0*M_PI)
+           yaw -= 2.0*M_PI;
+         if(yaw < -2.0*M_PI)
+           yaw += 2.0*M_PI;
+             
+         Eigen::VectorXd waypoint(5); 
+         waypoint << initial_position(0), initial_position(1), 
+                     initial_position(2), yaw, time;
+         interpolated_waypoints_with_rotation.push_back(waypoint);
+         time += sampling_dt;
+     }
+     
+     // Update the waypoint list
+     for(size_t i = 0; i < interpolated_waypoints.size(); ++i) {
+       Eigen::VectorXd waypoint(5);
+       waypoint << interpolated_waypoints[i](0), interpolated_waypoints[i](1),
+                   interpolated_waypoints[i](2), interpolated_waypoints[i](3),
+                   time;
+       interpolated_waypoints_with_rotation.push_back(interpolated_waypoints[i]);
+       time += sampling_dt;
+     }          
+  } else {
+    interpolated_waypoints_with_rotation = interpolated_waypoints;
+    return false;
+  }
+  return true;
+}
+
 void createYawsFromStates(const std::vector<Eigen::Vector2d> &states,
                           std::vector<double> &yaws) {
 

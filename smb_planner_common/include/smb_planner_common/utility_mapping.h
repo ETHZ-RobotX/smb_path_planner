@@ -156,6 +156,25 @@ namespace utility_mapping {
             const double v_max,
             const double a_max,
             const double sampling_dt);
+            
+    /**
+	 * @brief Method that interpolates the initial rotation if necessary
+	 * @param[in] interpolated_waypoints : Waypoints whose rotation has to be 
+	 *                                     interpolated
+	 * @param[out] interpolated_waypoints_with_rotation : Output interpolated 
+	 *                                     waypoints
+	 * @param[in] current_yaw : current orientation of the robot
+	 * @param[in] v_max : maximum velocity between waypoints
+	 * @param[in] sampling_dt : sampling time for trajectory generation
+	 * @param[in] max_initial_rotation : maximum initial rotation allowed
+	 * @return True if interpolation is necessary, False otherwise
+	 */
+    bool interpolateInitialRotation(
+            const std::vector<Eigen::VectorXd> &interpolated_waypoints,
+            std::vector<Eigen::VectorXd> &interpolated_waypoints_with_rotation, 
+            const double current_yaw, const double v_max, 
+            const double sampling_dt, 
+            const double max_initial_rotation);
     
     /**
      * @brief Method that get a vector of yaws from a sequence of 2D states. The

@@ -124,6 +124,12 @@ bool readPlannerParameters(const ros::NodeHandle &nh,
 bool readGlobalPlannerParameters(const ros::NodeHandle &nh,
                                  GlobalPlannerParameters &params) {
 
+  if (!nh.getParam("use_global_planner_only", params.use_global_planner_only)) {
+    ROS_WARN("Not specified if we should the global planner only. "
+             "Using 'FALSE'.");
+    params.use_global_planner_only = false;
+  }
+
   if (!nh.getParam("simplify_solution", params.simplify_solution)) {
     ROS_WARN("Not specified if we should simplify solution. "
              "Using 'FALSE'.");
