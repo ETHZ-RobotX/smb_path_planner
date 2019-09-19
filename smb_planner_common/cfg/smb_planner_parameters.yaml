@@ -9,12 +9,12 @@ bounding_box_inflation: 0.10  # [m] - Additional inflation of robot radius
 robot_radius: 0.5             # [m] - This is considered as the radius of the ball
                               # (in VOXBLOX) around each point in the global plan to
                               # check collisions (must be larger than voxel size)
-planning_height: 0.5          # [m] - Nominal planning height if traversability 
+planning_height: 0.4          # [m] - Nominal planning height if traversability 
                               # estimation is not used      
 max_initial_rotation: 25.0    # [deg] - min angle between current robot yaw and
                               # the first waypoint direction of global path
 threshold_goal_reached: 0.20  # [m] Distance to the global goal to consider it reached
-check_traversability: false   # Whether or not to use traversability information
+check_traversability: true    # Whether or not to use traversability information
                               # when planning
                               
 maximum_difference_elevation: 0.5 # Threshold to consider if we are nearby a cliff
@@ -36,7 +36,7 @@ planner_type: 1               # 0:RRT connect, 1:RRT*, 2:Informed RRT*, 3:Bi-RRT
 simplify_solution: false      # If true, it reduces the number of waypoints a lot
 trust_approx_solution: false  # Whether or not we should reach the goal exactly
 optimistic_voxblox: true      # Whether we can consider unknown space free in Voxblox
-traversability_threshold: 0.5 # [-] Threshold to consider a seen spot as traversable (between 0 and 1)
+traversability_threshold: 0.2 # [-] Threshold to consider a seen spot as traversable (between 0 and 1)
 
 # OMPL
 num_seconds_to_plan: 10.0     # [s]
@@ -92,13 +92,13 @@ verbose: false
 ############################## TRAVERSABILITY MAP ##############################
 ################################################################################
 /submap_service: "/elevation_mapping/get_submap"
-/map_frame_id: "world"     # Must be the same as the input elevation submap.
+/map_frame_id: "base"     # Must be the same as the input elevation submap.
 /robot_frame_id: "base"
 /min_update_rate: 0.2
 /map_center_x: 0.0
 /map_center_y: 0.0
-/map_length_x: 5.0
-/map_length_y: 5.0
+/map_length_x: 2.0
+/map_length_y: 2.0
 /footprint_yaw: 0.20
 /max_gap_width: 0.30
 /grid_map_to_initialize_traversability_map:

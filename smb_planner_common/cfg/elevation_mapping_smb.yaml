@@ -12,15 +12,15 @@ track_point_z: 0.0
 min_update_rate: 2.0
 time_tolerance: 0.5
 time_offset_for_point_cloud: 0.0
-sensor_processor/ignore_points_above: 0.4
+sensor_processor/ignore_points_above: 1.5
 robot_motion_map_update/covariance_scale: 0.01
 
 # Map.
-length_in_x: 5.0
-length_in_y: 5.0
+length_in_x: 2.0
+length_in_y: 2.0
 position_x: 0.0
 position_y: 0.0
-resolution: 0.20
+resolution: 0.1
 min_variance: 0.0001
 max_variance: 0.05
 mahalanobis_distance_threshold: 2.5
