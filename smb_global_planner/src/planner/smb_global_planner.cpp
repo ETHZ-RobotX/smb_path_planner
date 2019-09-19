@@ -543,7 +543,7 @@ bool SmbGlobalPlanner::isPathCollisionFree() {
 
   // Visualization - show the next path only every n-th iterations
   if (params_.visualize) {
-    if (n_iter_vis_ % 300 == 0) {
+    if (n_iter_vis_ % 10 == 0) {
       publishVisualization(interpolated_waypoints_);
     }
     // Update counter

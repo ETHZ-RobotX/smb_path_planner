@@ -21,10 +21,7 @@ print_help() {
  echo " - message_logger"
  echo " - kindr"
  echo " - kindr_ros"
- echo " - elevation_mapping"
- echo " - elevation_mapping_demo"
  echo " - grid_map"
- echo " - traversability_estimation"
  echo " "
  echo "The other necessary repositories will be cloned only if the are not "
  echo "already present in the destination folder. All the repositories are ".
@@ -86,6 +83,8 @@ declare -a REPOSITORIES=(
   "minkindr"
   "minkindr_ros"
   "voxblox"
+  "traversability_estimation"
+  "elevation_mapping"
 )
 
 # Create a git folder if necessary and move to it.
@@ -98,23 +97,27 @@ echo ""
 for REPOSITORY in "${REPOSITORIES[@]}"; do
   echo -e "Checking repository \033[1;34m${REPOSITORY}\033[0m"
   if [ -d "${REPOSITORY}" ]; then
-	echo -e "  The folder exists. Skiping repository."
+	  echo -e "  The folder exists. Skiping repository."
   else
-	echo -e "  The folder doesn't exist. Cloning repository."
-	git clone "https://github.com/leggedrobotics/${REPOSITORY}.git"
-	git clone "https://github.com/ethz-asl/${REPOSITORY}.git"
-	git clone "https://bitbucket.org/leggedrobotics/${REPOSITORY}.git"
-	git clone "https://github.com/catkin/${REPOSITORY}.git"
-	git clone "https://github.com/ANYbotics/${REPOSITORY}.git"
-  fi
+	  echo -e "  The folder doesn't exist. Cloning repository."
+	
+		if [ "${REPOSITORY}" == "eigen_catkin" ] || [ "${REPOSITORY}" == "eigen_checks" ]  || 
+			 [ "${REPOSITORY}" == "glog_catkin" ] || [ "${REPOSITORY}" == "ceres_catkin" ]  || 
+			 [ "${REPOSITORY}" == "gflags_catkin" ] || [ "${REPOSITORY}" == "minkindr" ]  || 
+			 [ "${REPOSITORY}" == "minkindr_ros" ] || [ "${REPOSITORY}" == "voxblox" ]; then
+			 git clone "https://github.com/ethz-asl/${REPOSITORY}.git"
+		fi  
+		
+		if [ "${REPOSITORY}" == "catkin_simple" ]; then
+			git clone "https://github.com/catkin/${REPOSITORY}.git"
+		fi
+		
+		if [ "${REPOSITORY}" == "traversability_estimation" ]; then
+			git clone "https://github.com/leggedrobotics/${REPOSITORY}.git"
+		fi
+		
+		if [ "${REPOSITORY}" == "elevation_mapping" ]; then
+			git clone "https://github.com/ANYbotics/${REPOSITORY}.git"
+		fi
+	fi
 done
-
-# Clone rbl with Mercurial
-REPOSITORY=rbdl
-echo -e "Checking repository \033[1;34m${REPOSITORY}\033[0m"
-if [ -d "${REPOSITORY}" ]; then
-   echo -e "  The folder exists. Skiping repository."
-else
-   echo -e "  The folder doesn't exist. Cloning repository."
-   hg clone ssh://hg@bitbucket.org/leggedrobotics/${REPOSITORY} -r master
-fi
