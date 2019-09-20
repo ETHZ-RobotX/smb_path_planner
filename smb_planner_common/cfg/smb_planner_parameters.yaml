@@ -43,6 +43,7 @@ num_seconds_to_plan: 10.0     # [s]
 use_distance_threshold: true  # This will set a threshold cost to consider a path 
                               # "good enough" looking at the distance start - goal
 distance_threshold: 1.1       # [-] Constant factor that condiders a path good enough
+goal_bias: 0.1                # Bias the sampling in the planner towards goal (RRT* and InformedRRT* only!)
 
 ################################# LOCAL PLANNER ################################
 local_replan_dt: 0.25         # [s] Replanning rate for the local planner
@@ -66,6 +67,7 @@ eps: 1.0                      # [-] Factor for the cost function related to obst
 ################################################################################
 ############################## VOXBLOX PARAMETERS ##############################
 ################################################################################
+use_fixed_map_size: false
 lower_bound_x: -10.0
 lower_bound_y: -10.0
 lower_bound_z: 0.2

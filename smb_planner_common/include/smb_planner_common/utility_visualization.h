@@ -270,6 +270,20 @@ namespace utility_visualization {
             const std::string& name,
             const std::string& frame_id,
             const double robot_radius);
+            
+    /**
+     * @brief Method to create a marker to show to boundaries for planning
+     * @param[in] lower : lower bound (x,y,z)
+     * @param[in] upper : upper bound (x,y,z)
+     * @param[in] name : namespace for the marker in rviz
+     * @param[in] frame_id : frame id for the marker
+     * @return marker to be visualized in rviz
+     */
+    visualization_msgs::Marker createBoundaries(
+            const Eigen::Vector3d &lower, 
+            const Eigen::Vector3d &upper,
+            const std::string &name, 
+            const std::string &frame_id);
 
 } // end namespace utility_visualization
 } // end namespace smb_planner

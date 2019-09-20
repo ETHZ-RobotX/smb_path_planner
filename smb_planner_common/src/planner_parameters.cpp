@@ -153,6 +153,11 @@ bool readGlobalPlannerParameters(const ros::NodeHandle &nh,
     params.distance_threshold = 0.2;
   }
 
+  if (!nh.getParam("goal_bias", params.goal_bias)) {
+    ROS_WARN("Not specified goal_bias. Using 0.05.");
+    params.goal_bias = 0.05;
+  }
+
   if (!nh.getParam("planner_type", params.planner_type)) {
     ROS_WARN("Not specified planner_type. Using 'RRT*'.");
     params.planner_type = 1;
@@ -177,6 +182,12 @@ bool readGlobalPlannerParameters(const ros::NodeHandle &nh,
     ROS_WARN("Not specified if planner with voxblox is optimistic. "
              "Using 'TRUE'.");
     params.optimistic_voxblox = true;
+  }
+
+  if (!nh.getParam("use_fixed_map_size", params.use_fixed_map_size)) {
+    ROS_WARN("Not specified if planner should use fixed map size. "
+             "Using 'FALSE'.");
+    params.use_fixed_map_size = false;
   }
 
   if (!nh.getParam("lower_bound_x", params.lower_bound(0))) {

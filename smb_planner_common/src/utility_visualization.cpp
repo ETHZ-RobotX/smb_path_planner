@@ -314,5 +314,52 @@ visualization_msgs::Marker createSphereCollisionForState(
   return state_marker;
 }
 
+visualization_msgs::Marker createBoundaries(
+    const Eigen::Vector3d &lower, const Eigen::Vector3d &upper,
+    const std::string &name, const std::string &frame_id) {
+
+  visualization_msgs::Marker line_marker;
+  line_marker.header.frame_id = frame_id;
+  
+  line_marker.header.stamp = ros::Time::now();
+  line_marker.type = visualization_msgs::Marker::LINE_STRIP;
+  line_marker.color.a = 0.4;
+  line_marker.color.r = 1.0;
+  line_marker.color.g = 0.0;
+  line_marker.color.b = 0.0;
+  line_marker.ns = name;
+  line_marker.scale.x = 0.2;
+  line_marker.scale.y = 0.0;
+  line_marker.scale.z = 0.0;
+ 
+  geometry_msgs::Point point_00;
+  point_00.x = lower(0);
+  point_00.y = lower(1);
+  point_00.z = 0.0;
+  
+  geometry_msgs::Point point_10;
+  point_10.x = upper(0);
+  point_10.y = lower(1);
+  point_10.z = 0.0;
+  
+  geometry_msgs::Point point_11;
+  point_11.x = upper(0);
+  point_11.y = upper(1);
+  point_11.z = 0.0;
+  
+  geometry_msgs::Point point_01;
+  point_01.x = lower(0);
+  point_01.y = upper(1);
+  point_01.z = 0.0;
+  
+  line_marker.points.push_back(point_00);
+  line_marker.points.push_back(point_10);
+  line_marker.points.push_back(point_11);
+  line_marker.points.push_back(point_01);
+  line_marker.points.push_back(point_00);
+
+  return line_marker;
+}
+
 } // end namespace utility_visualization
 } // end namespace smb_planner

@@ -304,9 +304,11 @@ void SmbGlobalPlanner::plannerTimerCallback(const ros::TimerEvent &event) {
   // Register start time
   ros::Time start_time = ros::Time::now();
 
-  // Figure out map bounds!
-  computeMapBounds(&params_.global_params.lower_bound,
-                   &params_.global_params.upper_bound);
+  // Figure out map bounds from voxblox only if we do pessimistic planning
+  if(!params_.global_params.use_fixed_map_size) {
+    computeMapBounds(&params_.global_params.lower_bound,
+                     &params_.global_params.upper_bound);
+  }
 
   if (params_.verbose_planner) {
     ROS_INFO_STREAM("[Smb Global Planner] Map bounds: "
@@ -353,7 +355,12 @@ void SmbGlobalPlanner::plannerTimerCallback(const ros::TimerEvent &event) {
                      "goal ["
                      << goal_(0) << "," << goal_(1) << "]");
     // Update flag and variables
-    perform_planning_ = false;
+    if(params_.global_params.use_global_planner_only) {
+      // Here we are forcing replanning if we did not manage to find a path
+      perform_planning_ = true;
+    } else {
+      perform_planning_ = false;
+    }
     waypoints_.clear();
 
     // Do not send stop command here because we have already sent one when
@@ -803,6 +810,12 @@ void SmbGlobalPlanner::publishVisualization(
       waypoints_, utility_visualization::Color::Orange(),
       "interpolated_waypoints", 0.10));
 
+  marker_array_.markers.push_back(
+      smb_planner::utility_visualization::createBoundaries(
+          params_.global_params.lower_bound,
+          params_.global_params.upper_bound,
+          "boundaries", params_.frame_id));
+
   const int kPublishEveryNSamples =
       static_cast<int>(std::max(std::floor(waypoints_.size() * 0.05), 1.0));
   for (size_t k = 0; k < waypoints_.size(); ++k) {
@@ -860,6 +873,13 @@ void SmbGlobalPlanner::publishVisualization() {
         waypoints_pruned[k], utility_visualization::Color::Red(),
         "interpolated_yaw" + std::to_string(k), 0.08));
   }
+
+  // Add boundaries
+  marker_array_.markers.push_back(
+      smb_planner::utility_visualization::createBoundaries(
+         params_.global_params.lower_bound, params_.global_params.upper_bound,
+         "boundaries", params_.frame_id));
+
   path_marker_pub_.publish(marker_array_);
 }
 

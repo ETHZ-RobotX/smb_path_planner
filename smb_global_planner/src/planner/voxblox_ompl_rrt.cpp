@@ -63,14 +63,20 @@ void VoxbloxOmplRrt::setupProblem(const Eigen::Vector3d &start,
     problem_setup_.setRrtConnect();
   } else if (planner_type_ == kRrtStar) {
     problem_setup_.setRrtStar();
+    problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   } else if (planner_type_ == kInformedRrtStar) {
     problem_setup_.setInformedRrtStar();
+    problem_setup_.getPlanner()->as<ompl::geometric::InformedRRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   } else if (planner_type_ == kPrm) {
     problem_setup_.setPrm();
   } else if (planner_type_ == kBitStar) {
     problem_setup_.setBitStar();
   } else {
     problem_setup_.setDefaultPlanner();
+    problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   }
 
   if (lower_bound_ != upper_bound_) {
@@ -130,14 +136,20 @@ void VoxbloxOmplRrt::setupTraversabilityProblem(
     problem_setup_.setRrtConnect();
   } else if (planner_type_ == kRrtStar) {
     problem_setup_.setRrtStar();
+    problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   } else if (planner_type_ == kInformedRrtStar) {
     problem_setup_.setInformedRrtStar();
+    problem_setup_.getPlanner()->as<ompl::geometric::InformedRRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   } else if (planner_type_ == kPrm) {
     problem_setup_.setPrm();
   } else if (planner_type_ == kBitStar) {
     problem_setup_.setBitStar();
   } else {
     problem_setup_.setDefaultPlanner();
+    problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   }
 
   if (lower_bound_ != upper_bound_) {
@@ -223,9 +235,11 @@ void VoxbloxOmplRrt::setupFromStartAndGoal(const Eigen::Vector3d &start,
   problem_setup_.setStartAndGoalStates(start_ompl, goal_ompl,
                                        0.5 * voxel_size_);
   problem_setup_.setup();
+  /** DELETE (lucaBartolomei)
   if (params_.verbose_planner) {
     problem_setup_.print();
   }
+  */
 
   // Add optimization objective
   if (params_.global_params.use_distance_threshold) {
