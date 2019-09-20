@@ -382,13 +382,11 @@ void SmbGlobalPlanner::plannerTimerCallback(const ros::TimerEvent &event) {
   // If we use the global planner only, check if we need to perform
   // additional rotations at the beginning
   if(params_.global_params.use_global_planner_only) {
-    // Create a copy of the waypoints
-    std::vector<Eigen::VectorXd> interpolated_waypoints_without_rotation(
-            interpolated_waypoints_);
     if(utility_mapping::interpolateInitialRotation(
-            interpolated_waypoints_without_rotation, interpolated_waypoints_,
-            current_state_(2), params_.v_max, params_.sampling_dt,
-            params_.max_initial_rotation)) {
+            interpolated_waypoints_, current_state_, 
+            interpolated_waypoints_.front()(3), params_.v_max, 
+            params_.sampling_dt, params_.max_initial_rotation,
+            params_.planning_height)) {
       ROS_WARN("[Smb Global Planner] Interpolated initial rotation");
     } else {
       ROS_INFO("[Smb Global Planner] Initial rotation interpolation necessary");

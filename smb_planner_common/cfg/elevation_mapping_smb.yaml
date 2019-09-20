@@ -3,21 +3,21 @@ map_frame_id: base
 robot_base_frame_id: base
 sensor_frame_id: realsense_depth_optical_frame
 robot_pose_with_covariance_topic: /stamped_pose_covariance
-robot_pose_cache_size: 500
+robot_pose_cache_size: 200
 point_cloud_topic: /realsense/depth/color/points
 track_point_frame_id: base
-track_point_x: 0.3
+track_point_x: 0.0
 track_point_y: 0.0
 track_point_z: 0.0
 min_update_rate: 2.0
 time_tolerance: 0.5
 time_offset_for_point_cloud: 0.0
-sensor_processor/ignore_points_above: 1.5
+sensor_processor/ignore_points_above: 10.0
 robot_motion_map_update/covariance_scale: 0.01
 
 # Map.
-length_in_x: 2.0
-length_in_y: 2.0
+length_in_x: 3.0
+length_in_y: 3.0
 position_x: 0.0
 position_y: 0.0
 resolution: 0.1

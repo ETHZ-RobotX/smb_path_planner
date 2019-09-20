@@ -6,8 +6,9 @@
     <rosparam command="load" file="$(find elevation_mapping)/config/sensor_processors/realsense_d435.yaml" />
   </node>
   
-  <node pkg="smb_planner_common" type="smb_pose_interceptor_node" name="smb_pose_interceptor" output="screen" />
-  <node pkg="tf" type="static_transform_publisher" name="trasform_sensor" args="0 0 0 0 0 0 /map /sensor 100"/>
+  <node pkg="smb_planner_common" type="smb_pose_interceptor_node" name="smb_pose_interceptor" output="screen" >
+    <remap from="/base_pose_measured" to="/base_pose_measured_disabled" />
+  </node>
   
   <!-- Launch visualizations for the resulting elevation map -->
   <include file="$(find elevation_mapping_demos)/launch/visualization.launch" />

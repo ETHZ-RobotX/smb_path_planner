@@ -129,7 +129,6 @@ namespace utility_mapping {
 
 	/**
 	 * @brief Method to get the voxels around a query position in a given radius
-	 * @tparam[in] VoxelType : ESDF or TSDF voxel type
 	 * @param[in] layer : layer in voxblox to extract the info from
 	 * @param[in] center : query position
 	 * @param[in] radius : radius around query position to check
@@ -159,22 +158,24 @@ namespace utility_mapping {
             
     /**
 	 * @brief Method that interpolates the initial rotation if necessary
-	 * @param[in] interpolated_waypoints : Waypoints whose rotation has to be 
+	 * @param[out] interpolated_waypoints : Waypoints whose rotation has to be 
 	 *                                     interpolated
-	 * @param[out] interpolated_waypoints_with_rotation : Output interpolated 
-	 *                                     waypoints
-	 * @param[in] current_yaw : current orientation of the robot
+	 * @param[out] current_state : current robot state
+	 * @param[in] target_yaw : orientation to look in direction of first waypoint
 	 * @param[in] v_max : maximum velocity between waypoints
 	 * @param[in] sampling_dt : sampling time for trajectory generation
 	 * @param[in] max_initial_rotation : maximum initial rotation allowed
+	 * @param[in] nominal_height : nominal planning height (decided at startup)
 	 * @return True if interpolation is necessary, False otherwise
 	 */
     bool interpolateInitialRotation(
-            const std::vector<Eigen::VectorXd> &interpolated_waypoints,
-            std::vector<Eigen::VectorXd> &interpolated_waypoints_with_rotation, 
-            const double current_yaw, const double v_max, 
+            std::vector<Eigen::VectorXd> &interpolated_waypoints, 
+            const Eigen::Vector3d &current_state, 
+            const double target_yaw,
+            const double v_max, 
             const double sampling_dt, 
-            const double max_initial_rotation);
+            const double max_initial_rotation, 
+            const double nominal_height);
     
     /**
      * @brief Method that get a vector of yaws from a sequence of 2D states. The
