@@ -70,7 +70,9 @@ SmbGlobalPlanner::SmbGlobalPlanner(const ros::NodeHandle &nh,
   if (params_.check_traversability) {
     traversability_estimator_ =
         std::unique_ptr<smb_planner::TraversabilityEstimator>(
-            new smb_planner::TraversabilityEstimator(nh_));
+            new smb_planner::TraversabilityEstimator(nh_,
+                  params_.elevation_maps_weights,
+                  params_.n_sensors_traversability));
   }
 
   // Set up planner

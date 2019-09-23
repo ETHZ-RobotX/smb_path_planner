@@ -18,8 +18,12 @@ namespace smb_planner {
         /**
          * @brief Class constructor
          * @param[in] nh : ros node handle for ros communication
+         * @param[in] n_sensors : number of sensors used for traversability est
+         * @param[in] maps_weights : weights for the different elevation maps
          */
-        TraversabilityEstimator(const ros::NodeHandle& nh);
+        TraversabilityEstimator(const ros::NodeHandle& nh,
+                                const std::vector<double> &maps_weights,
+                                const int n_sensors = 1);
 
         /**
          * @brief Class destructor
@@ -43,7 +47,10 @@ namespace smb_planner {
             return traversability_map_->getTraversabilityMap();
         }
         
-        bool hasElevationMap() const { return got_elevation_map_; }
+        bool hasElevationMap() const { return got_elevation_map_[0]; }
+        bool hasElevationMap(const int n_sensor) const {
+          return got_elevation_map_[n_sensor];
+        }
 
     private:
         /**
@@ -51,6 +58,15 @@ namespace smb_planner {
          * @param[in] msg : Elevation map message
          */
         void elevationMapCallback(const grid_map_msgs::GridMap& msg);
+        
+        /**
+         * @brief Callback to process the elevation map into traversability map
+         * @param[in] msg : Elevation map message
+         * @param[in] n_sensor : ID of the sensor
+         */
+        void elevationSensorMapCallback(
+               const grid_map_msgs::GridMapConstPtr &msg,
+               const int n_sensor);
 
         /**
          * @brief Actual method that converts elevation map into traversability
@@ -59,18 +75,30 @@ namespace smb_planner {
          */
         bool setupTraversabilityMap(const grid_map::GridMap& gridMap);
 
+        /**
+         * @brief Method to get a fused elevation map from the ones stored in
+         *        memory, and then compute the traversability map out of it
+         * @return True if traversability extraction was successfull, False oth.
+         */
+        bool setupFusedTraversabilityMap();
+
     protected:
         // ROS variables to listen to the traversability map topic
         ros::NodeHandle nh_;
-        ros::Subscriber elevation_map_sub_;
+        std::vector<ros::Subscriber> elevation_map_subs_;
 
         // Traversability map
+        int n_sensors_;
+        std::vector<double> weights_;
+        double weights_sum_;
+
+        std::vector<grid_map::GridMap> elevation_grid_maps_;
         std::vector<std::string> elevation_map_layers_;
         std::shared_ptr<traversability_estimation::TraversabilityMap>
                 traversability_map_;
                 
         // Check variable
-        bool got_elevation_map_;
+        std::vector<bool> got_elevation_map_;
     };
 
 }  // namespace smb_planner

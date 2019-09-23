@@ -1,9 +1,9 @@
-point_cloud_topic: "/vi_sensor/camera_depth/depth/points"
+point_cloud_topic: "/velodyne_points"
 map_frame_id: "world"
 robot_base_frame_id: "base"
 robot_pose_with_covariance_topic: "/stamped_pose_covariance"
 robot_pose_cache_size: 200
-track_point_frame_id: "/vi_sensor/camera_left_link"
+track_point_frame_id: "/velodyne"
 track_point_x: 0.0
 track_point_y: 0.0
 track_point_z: 0.0

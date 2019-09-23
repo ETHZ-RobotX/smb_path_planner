@@ -81,6 +81,21 @@ bool readPlannerParameters(const ros::NodeHandle &nh,
     params.maximum_difference_elevation = 0.5;
   }
 
+  if (!nh.getParam("n_sensors_traversability",
+                   params.n_sensors_traversability)) {
+    ROS_WARN("Not specified number of sensors for traversability estimation. "
+             "Using '1'.");
+    params.n_sensors_traversability = 1;
+  }
+
+  params.elevation_maps_weights.resize(params.n_sensors_traversability, 1.0);
+  for(int s = 0; s < params.n_sensors_traversability; ++s) {
+    if (!nh.getParam("elevation_maps_weights_" + std::to_string(s),
+                     params.elevation_maps_weights[s])) {
+      ROS_WARN("Weight %d for fused elevation map not specified. Using 1.0", s);
+    }
+  }
+
   if (!nh.getParam("v_max", params.v_max)) {
     ROS_WARN("Not specified v_max. Using '0.5 m/s'.");
     params.v_max = 0.5;

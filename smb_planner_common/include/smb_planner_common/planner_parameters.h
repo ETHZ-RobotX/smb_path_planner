@@ -97,6 +97,8 @@ namespace smb_planner {
         bool check_traversability;
         double traversability_threshold;
         double maximum_difference_elevation;
+        double n_sensors_traversability;
+        std::vector<double> elevation_maps_weights;
 
         // Velocities and accelerations
         double v_max;
