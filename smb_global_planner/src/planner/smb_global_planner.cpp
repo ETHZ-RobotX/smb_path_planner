@@ -700,6 +700,13 @@ void SmbGlobalPlanner::checkDistanceGoal() {
       // Inform the user and clear visualization markers
       clearAllOldMarkers();
       ROS_INFO("[Smb Global Planner] Goal reached!");
+
+      // If we are using only the global planner, then send stop command to
+      // controller. If we use the local planner as well, then it should take
+      // care of it.
+      if(params_.global_params.use_global_planner_only) {
+        sendStopCommand();
+      }
     }
   }
 }
