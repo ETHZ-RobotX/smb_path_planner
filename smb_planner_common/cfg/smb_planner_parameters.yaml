@@ -4,9 +4,10 @@
 frame_id: "world"
 visualize: true
 verbose_planner: true
+use_global_planner_only: true
 
 bounding_box_inflation: 0.10  # [m] - Additional inflation of robot radius
-robot_radius: 0.75             # [m] - This is considered as the radius of the ball
+robot_radius: 0.5             # [m] - This is considered as the radius of the ball
                               # (in VOXBLOX) around each point in the global plan to
                               # check collisions (must be larger than voxel size)
 planning_height: 0.2          # [m] - Nominal planning height if traversability 
@@ -37,6 +38,10 @@ simplify_solution: false      # If true, it reduces the number of waypoints a lo
 trust_approx_solution: false  # Whether or not we should reach the goal exactly
 optimistic_voxblox: true      # Whether we can consider unknown space free in Voxblox
 traversability_threshold: 0.2 # [-] Threshold to consider a seen spot as traversable (between 0 and 1)
+n_sensors_traversability: 1   # Number of sensors used for traversability estimation (so far - 21.09.2019 - only one sensor is supported)
+elevation_maps_weights_0: 1.0
+elevation_maps_weights_1: 1.0
+elevation_maps_weights_2: 1.0
 
 # OMPL
 num_seconds_to_plan: 10.0     # [s]
