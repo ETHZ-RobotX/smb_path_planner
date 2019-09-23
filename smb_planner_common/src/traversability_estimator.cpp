@@ -114,8 +114,49 @@ bool TraversabilityEstimator::setupFusedTraversabilityMap() {
   // Check that we have an elevation map for all the sensors
   for(int i = 0; i < n_sensors_; ++i) {
     if(!got_elevation_map_[i]) {
-      ROS_WARN_STREAM("Layer " << i << " does not have an elevation map yet");
+      ROS_WARN_STREAM("Layer " << i << " does not have an elevation map yet. "
+                      "This may happen at initialization");
       return false;
+    }
+  }
+
+  // Extract the elevation data from the structure and fuse them. Here we
+  // check that the maps have the same size. At the moment, maps with
+  // different sizes are not supported
+  std::vector<grid_map::Matrix> elevation_data(n_sensors_);
+  int max_cols, max_rows;
+  int bigger_map_index;
+
+  for(int i = 0; i < n_sensors_; ++i) {
+    elevation_data[i] = elevation_grid_maps_[i].get("elevation");
+    if(i == 0 || max_cols < elevation_data[i].cols()) {
+      max_cols = elevation_data[i].cols();
+      bigger_map_index = i;
+    }
+    if(i == 0 || max_rows < elevation_data[i].rows()) {
+      max_rows = elevation_data[i].rows();
+      bigger_map_index = i;
+    }
+  }
+
+  for(int i = 0; i < n_sensors_; ++i) {
+    const int n_rows = elevation_data[i].rows();
+    const int n_cols = elevation_data[i].cols();
+    int delta_cols = max_cols - n_cols;
+    int delta_rows = max_rows - n_rows;
+
+    if(delta_cols > 0 || delta_rows > 0) {
+      ROS_WARN_THROTTLE(5, "Current implementation cannot support maps with "
+                        "different sizes in the proper way!");
+      grid_map::Matrix padded_map(Eigen::MatrixXf::Zero(max_rows, max_cols));
+      for(int r = 0; r < max_rows; ++r) {
+        for (int c = 0; c < max_cols; ++c) {
+          padded_map(r,c) = std::numeric_limits<float>::quiet_NaN();
+        }
+      }
+      padded_map.block(delta_rows/2, delta_cols/2, n_rows, n_cols) =
+              elevation_data[i];
+      elevation_data[i] = padded_map;
     }
   }
 
@@ -124,28 +165,17 @@ bool TraversabilityEstimator::setupFusedTraversabilityMap() {
   // at least one sensor). Then all the information will be overwritten by
   // the fusion. Just to be safe, we delete the elevation layer from the map.
   grid_map::GridMap fused_elevation_map;
-  fused_elevation_map = elevation_grid_maps_[0];
-  fused_elevation_map.clear("elevation");
-
-  // Extract the elevation data from the structure and fuse them. Here we
-  // check that the maps have the same size. At the moment, maps with
-  // different sizes are not supported
-  std::vector<grid_map::Matrix> elevation_data(n_sensors_);
-  for(int i = 0; i < n_sensors_; ++i) {
-    elevation_data[i] = elevation_grid_maps_[i].get("elevation");
-    if(i > 0 && (elevation_data[i].rows() != elevation_data[i-1].rows() ||
-       elevation_data[i].cols() != elevation_data[i-1].cols())) {
-      ROS_ERROR("Maps with different dimensions are not supported yet");
-      return false;
-    }
+  fused_elevation_map = elevation_grid_maps_[bigger_map_index];
+  if(fused_elevation_map.exists("elevation")) {
+    fused_elevation_map.clear("elevation");
   }
 
   // TODO(lucaBartolomei) At the moment need to iterate over values - better
   //  solution?
   grid_map::Matrix fused_elevation_matrix(Eigen::MatrixXf::Zero(
-          elevation_data[0].rows(), elevation_data[0].cols()));
-  for(int r = 0; r < fused_elevation_matrix.rows(); ++r) {
-    for(int c = 0; c < fused_elevation_matrix.cols(); ++c) {
+          max_rows, max_cols));
+  for(int r = 0; r < max_rows; ++r) {
+    for(int c = 0; c < max_cols; ++c) {
       double elevation_value = weights_[0] * elevation_data[0](r,c);
       for(int s = 1; s < n_sensors_; ++s) {
         if(std::isnan(elevation_value) &&

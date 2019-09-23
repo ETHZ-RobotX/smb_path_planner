@@ -13,6 +13,10 @@
 #include <ros/ros.h>
 #include <Eigen/Dense>
 
+// @brief Utility for debugging Eigen matrices
+const static Eigen::IOFormat CSVFormat(Eigen::StreamPrecision,
+        Eigen::DontAlignCols, ", ", "\n");
+
 namespace smb_planner {
 
     /**
