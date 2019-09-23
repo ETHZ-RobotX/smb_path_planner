@@ -120,6 +120,18 @@ bool TraversabilityEstimator::setupFusedTraversabilityMap() {
     }
   }
 
+  // Check that the maps have the same resolution. If not, we will not
+  // compute the traversability because we need to perform a lot of
+  // additional expensive checks on the matrices
+  double resolution = elevation_grid_maps_[0].getResolution();
+  for(int i = 1; i < n_sensors_; ++i) {
+    if(resolution != elevation_grid_maps_[i].getResolution()) {
+      ROS_ERROR("The elevation maps have different resolution. Traversability"
+                " will not be computed");
+      return false;
+    }
+  }
+
   // Extract the elevation data from the structure and fuse them. Here we
   // check that the maps have the same size. At the moment, maps with
   // different sizes are not supported
