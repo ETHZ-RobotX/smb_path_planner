@@ -538,7 +538,14 @@ void SmbGlobalPlanner::publishTrajectory() const {
   }
 }
 
-void SmbGlobalPlanner::sendStopCommand() const {
+void SmbGlobalPlanner::sendStopCommand() {
+
+  // If we are using the global planner only, we can send the stop command to
+  // the MPC directly. If not, then we send this info to the local planner
+  if(params_.global_params.use_global_planner_only) {
+    sendStopCommandToController();
+    return;
+  }
 
   // Send an empty path to the local planner
   nav_msgs::Path path_msg;
@@ -553,6 +560,49 @@ void SmbGlobalPlanner::sendStopCommand() const {
     ROS_WARN("[Smb Global Planner] Published empty trajectory to the local "
              "planner");
   }
+
+  // Delete the old marker as well
+  clearAllOldMarkers();
+}
+
+void SmbGlobalPlanner::sendStopCommandToController() {
+
+  // Send an empty path to the local planner
+  nav_msgs::Path stop_path;
+  stop_path.header.frame_id = params_.frame_id;
+  stop_path.header.stamp = ros::Time::now();
+  stop_path.header.seq = 0;
+
+  geometry_msgs::PoseStamped pose;
+  pose.header.frame_id = params_.frame_id;
+  pose.header.stamp = ros::Time(0.0);
+  pose.header.seq = 0;
+
+  pose.pose.position.x = current_state_(0);
+  pose.pose.position.y = current_state_(1);
+  pose.pose.position.z = params_.planning_height;
+  pose.pose.orientation = tf::createQuaternionMsgFromYaw(current_state_(2));
+  stop_path.poses.push_back(pose);
+
+  // Hack: to stop the robot send the current position (need to have a
+  // "trajectory" that is long enough in time
+  double time = params_.sampling_dt;
+  while(time <= params_.local_params.prediction_horizon_mpc) {
+    pose.header.stamp = ros::Time(time);
+    pose.header.seq++;
+    stop_path.poses.push_back(pose);
+    time += params_.sampling_dt;
+  }
+
+  if (trajectory_pub_.getNumSubscribers() > 0) {
+    trajectory_pub_.publish(stop_path);
+  }
+  if (params_.verbose_planner) {
+    ROS_WARN("[Smb Global Planner] Published empty trajectory to MPC");
+  }
+
+  // Delete also markers
+  clearAllOldMarkers();
 }
 
 bool SmbGlobalPlanner::isPathCollisionFree() {
@@ -705,7 +755,7 @@ void SmbGlobalPlanner::checkDistanceGoal() {
       // controller. If we use the local planner as well, then it should take
       // care of it.
       if(params_.global_params.use_global_planner_only) {
-        sendStopCommand();
+        sendStopCommandToController();
       }
     }
   }
