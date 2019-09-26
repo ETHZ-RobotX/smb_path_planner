@@ -204,12 +204,14 @@ bool SmbGlobalPlanner::plannerServiceCallback(
   }
 
   // Setup latest copy of map.
+  if(true) {
   if (!(esdf_map_ &&
         esdf_map_->getEsdfLayerPtr()->getNumberOfAllocatedBlocks() > 0) &&
       !(tsdf_map_ &&
         tsdf_map_->getTsdfLayerPtr()->getNumberOfAllocatedBlocks() > 0)) {
     ROS_ERROR("[Smb Global Planner] Both maps of voxblox are empty!");
     return false;
+  }
   }
 
   // Check start and goal positions
@@ -256,16 +258,30 @@ bool SmbGlobalPlanner::plannerServiceCallback(
           params_.traversability_threshold,
           params_.maximum_difference_elevation, projection_goal);
     }
+    
+    if (traversability_start == TraversabilityStatus::UNTRAVERSABLE) {
+      ROS_ERROR_STREAM("[Smb Global Planner] Start ["
+                       << current_state_(0) << "," << current_state_(1)
+                       << "] is in untraversable position.");
+      return false;
+    }
 
-    if (traversability_start == TraversabilityStatus::UNTRAVERSABLE ||
+    if (traversability_start == TraversabilityStatus::UNKNOWN &&
         !checkOptimisticMapCollision(projection_start)) {
       ROS_ERROR_STREAM("[Smb Global Planner] Start ["
                        << current_state_(0) << "," << current_state_(1)
                        << "] is in occupied position (optimistic).");
       return false;
     }
+    
+    if (traversability_goal == TraversabilityStatus::UNTRAVERSABLE) {
+      ROS_ERROR_STREAM("[Smb Global Planner] Goal ["
+                       << goal_(0) << "," << goal_(1)
+                       << "] is in untraversable position (optimistic).");
+      return false;
+    }    
 
-    if (traversability_goal == TraversabilityStatus::UNTRAVERSABLE ||
+    if (traversability_goal == TraversabilityStatus::UNKNOWN &&
         (voxblox_server_.getEsdfMapPtr()->isObserved(goal_) &&
          !checkOptimisticMapCollision(projection_goal))) {
       ROS_ERROR_STREAM("[Smb Global Planner] Goal ["
@@ -340,6 +356,7 @@ void SmbGlobalPlanner::plannerTimerCallback(const ros::TimerEvent &event) {
   if (!params_.check_traversability) {
     rrt_.setupProblem(start, goal_);
   } else {
+    ROS_INFO("[Smb Global Planner] Setting up problem with traversability");
     rrt_.setupTraversabilityProblem(
         start, goal_, traversability_estimator_->getGridMapTraversability());
   }
@@ -663,6 +680,9 @@ bool SmbGlobalPlanner::isPathCollisionFree() {
       }
       // If the position is unknown, projection is already set to
       // check_point
+      if(traversability_status == TraversabilityStatus::TRAVERSABLE) {
+        continue;
+      }
     }
 
     if (!optimistic_) {

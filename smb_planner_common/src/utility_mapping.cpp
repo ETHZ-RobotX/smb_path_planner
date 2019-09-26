@@ -425,9 +425,10 @@ bool interpolateInitialRotation(
     const Eigen::Vector3d &current_state, const double target_yaw,
     const double v_max, const double sampling_dt, 
     const double max_initial_rotation, const double nominal_height) {
+    std::cout << "0" << std::endl;
   // Check if we need to add rotation; if not, just return
   if(std::fabs(current_state(2) - target_yaw) >= max_initial_rotation) {
-  
+  std::cout << "1" << std::endl;
     double yaw = current_state(2);
     double time = 0.0;
   
@@ -439,7 +440,7 @@ bool interpolateInitialRotation(
         delta += 2.0 * M_PI;
     size_t num_elements = std::fabs(delta) / (v_max * sampling_dt);
     std::vector<Eigen::VectorXd> rotation_vector(num_elements);
-     
+     std::cout << "2" << std::endl;
     for(size_t i=0; i<num_elements; ++i) {
         yaw += delta / num_elements;
         if(yaw > 2.0*M_PI)
@@ -453,19 +454,19 @@ bool interpolateInitialRotation(
         rotation_vector[i] = waypoint;
         time += sampling_dt;
     }
-     
+     std::cout << "3" << std::endl;
     // Insert the rotation command vector to the beginning of the interpolated
     // waypoints vector
     interpolated_waypoints.insert(interpolated_waypoints.begin(),
                                   rotation_vector.begin(), 
                                   rotation_vector.end()); 
-                                  
+                      std::cout << "4" << std::endl;
     // Re-timing of the interpolated waypoints to account for new commands of 
     // initial rotation
     for(size_t i = num_elements; i < interpolated_waypoints.size(); ++i) {
       interpolated_waypoints[i](4) += rotation_vector.back()(4);
     }
-                                  
+              std::cout << "5" << std::endl;                    
     return true;
   } else {
     return false;

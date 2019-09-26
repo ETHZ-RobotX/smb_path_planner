@@ -7,14 +7,14 @@ verbose_planner: true
 use_global_planner_only: true
 
 bounding_box_inflation: 0.10  # [m] - Additional inflation of robot radius
-robot_radius: 0.5             # [m] - This is considered as the radius of the ball
+robot_radius: 0.6             # [m] - This is considered as the radius of the ball
                               # (in VOXBLOX) around each point in the global plan to
                               # check collisions (must be larger than voxel size)
-planning_height: 0.2          # [m] - Nominal planning height if traversability 
+planning_height: 0.20          # [m] - Nominal planning height if traversability 
                               # estimation is not used      
 max_initial_rotation: 25.0    # [deg] - min angle between current robot yaw and
                               # the first waypoint direction of global path
-threshold_goal_reached: 0.20  # [m] Distance to the global goal to consider it reached
+threshold_goal_reached: 0.05  # [m] Distance to the global goal to consider it reached
 check_traversability: true    # Whether or not to use traversability information
                               # when planning
                               
@@ -29,8 +29,8 @@ v_rot_on_spot: 0.50           # [rad/s] for rotation on spot
 sampling_dt: 0.1              # [s] Sampling time for trajectory to send to the controller
 
 ################################ GLOBAL PLANNER ################################
-global_timer_dt: 0.1          # [s]
-global_interp_dt: 0.5         # [s] This has to be small enough for collision 
+global_timer_dt: 0.01          # [s]
+global_interp_dt: 0.1         # [s] This has to be small enough for collision 
                               # checks of the global path
 planner_type: 1               # 0:RRT connect, 1:RRT*, 2:Informed RRT*, 3:Bi-RRT*, 4:PRM
 
@@ -40,14 +40,14 @@ optimistic_voxblox: true      # Whether we can consider unknown space free in Vo
 traversability_threshold: 0.2 # [-] Threshold to consider a seen spot as traversable (between 0 and 1)
 n_sensors_traversability: 1   # Number of sensors used for traversability estimation (so far - 21.09.2019 - only one sensor is supported)
 elevation_maps_weights_0: 1.0
-elevation_maps_weights_1: 1.0
+elevation_maps_weights_1: 5.0
 elevation_maps_weights_2: 1.0
 
 # OMPL
 num_seconds_to_plan: 10.0     # [s]
 use_distance_threshold: true  # This will set a threshold cost to consider a path 
                               # "good enough" looking at the distance start - goal
-distance_threshold: 1.1       # [-] Constant factor that condiders a path good enough
+distance_threshold: 1.5       # [-] Constant factor that condiders a path good enough
 goal_bias: 0.1                # Bias the sampling in the planner towards goal (RRT* and InformedRRT* only!)
 
 ################################# LOCAL PLANNER ################################
@@ -72,13 +72,13 @@ eps: 1.0                      # [-] Factor for the cost function related to obst
 ################################################################################
 ############################## VOXBLOX PARAMETERS ##############################
 ################################################################################
-use_fixed_map_size: false
-lower_bound_x: -10.0
-lower_bound_y: -10.0
-lower_bound_z: 0.2
-upper_bound_x: 10.0
-upper_bound_y: 10.0
-upper_bound_z: 3.0
+use_fixed_map_size: true
+lower_bound_x: -50.0
+lower_bound_y: -50.0
+lower_bound_z: -3.0
+upper_bound_x: 50.0
+upper_bound_y: 50.0
+upper_bound_z: 5.0
 
 tsdf_voxel_size: 0.2
 voxel_size: 0.2
@@ -104,10 +104,10 @@ verbose: false
 /min_update_rate: 0.2
 /map_center_x: 0.0
 /map_center_y: 0.0
-/map_length_x: 3.0
-/map_length_y: 3.0
+/map_length_x: 5.0
+/map_length_y: 5.0
 /footprint_yaw: 0.20
-/max_gap_width: 0.30
+/max_gap_width: 0.10
 /grid_map_to_initialize_traversability_map:
   enable: true
   grid_map_topic_name: /elevation_mapping/elevation_map
@@ -119,6 +119,6 @@ verbose: false
   circular_footprint_radius_inscribed: 0.10
   circular_footprint_offset: 0.15
   footprint_frame_id: base
-  traversability_default: 0.3
+  traversability_default: 0.1
   verify_roughness_footprint: false
   check_robot_inclination: false
