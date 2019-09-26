@@ -1,4 +1,4 @@
-point_cloud_topic: /corrected_scan
+point_cloud_topic: /scan_lidar #/corrected_scan 
 sensor_frame_id: /map
 map_frame_id: base
 robot_base_frame_id: base

@@ -38,7 +38,7 @@ simplify_solution: false      # If true, it reduces the number of waypoints a lo
 trust_approx_solution: false  # Whether or not we should reach the goal exactly
 optimistic_voxblox: true      # Whether we can consider unknown space free in Voxblox
 traversability_threshold: 0.5 # [-] Threshold to consider a seen spot as traversable (between 0 and 1)
-n_sensors_traversability: 2   # Number of sensors used for traversability estimation (so far - 21.09.2019 - only one sensor is supported)
+n_sensors_traversability: 1   # Number of sensors used for traversability estimation (so far - 21.09.2019 - only one sensor is supported)
 elevation_maps_weights_0: 0.5
 elevation_maps_weights_1: 1.0
 elevation_maps_weights_2: 1.0
