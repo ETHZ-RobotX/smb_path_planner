@@ -19,9 +19,6 @@ print_help() {
  echo " - smb_common"
  echo " - any_node"
  echo " - message_logger"
- echo " - kindr"
- echo " - kindr_ros"
- echo " - grid_map"
  echo " "
  echo "The other necessary repositories will be cloned only if the are not "
  echo "already present in the destination folder. All the repositories are ".
@@ -85,6 +82,9 @@ declare -a REPOSITORIES=(
   "voxblox"
   "traversability_estimation"
   "elevation_mapping"
+  "kindr"
+  "kindr_ros"
+  "grid_map"
 )
 
 # Create a git folder if necessary and move to it.
@@ -116,7 +116,8 @@ for REPOSITORY in "${REPOSITORIES[@]}"; do
 			git clone "https://github.com/leggedrobotics/${REPOSITORY}.git"
 		fi
 		
-		if [ "${REPOSITORY}" == "elevation_mapping" ]; then
+		if [ "${REPOSITORY}" == "elevation_mapping" ] || [ "${REPOSITORY}" == "kindr" ]  || 
+			 [ "${REPOSITORY}" == "kindr_ros" ] || [ "${REPOSITORY}" == "grid_map" ]; then
 			git clone "https://github.com/ANYbotics/${REPOSITORY}.git"
 		fi
 	fi

@@ -33,8 +33,6 @@ In this installation guide, it is assumed that the following packages for
 simulation have already been downloaded and built in the same catkin workspace:
 * `any_node`
 * `message_logger`
-* `kindr`
-* `kindr_ros`
 * `smb_sim`
 * `smb_path_following_controller`
 * `elevation_mapping`
