@@ -21,6 +21,11 @@ cs_add_executable(smb_pose_interceptor_node
 )
 target_link_libraries(smb_pose_interceptor_node ${CATKIN_LIBRARIES})
 
+cs_add_executable(smb_tf_interceptor_node
+		src/smb_tf_interceptor.cpp
+)
+target_link_libraries(smb_tf_interceptor_node ${CATKIN_LIBRARIES})
+
 ##########
 # EXPORT #
 ##########
