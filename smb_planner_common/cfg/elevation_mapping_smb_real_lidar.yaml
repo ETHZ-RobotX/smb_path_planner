@@ -1,5 +1,5 @@
 point_cloud_topic: /scan_lidar #/corrected_scan 
-sensor_frame_id: /map
+sensor_frame_id: /lidar
 map_frame_id: base
 robot_base_frame_id: base
 robot_pose_with_covariance_topic: /stamped_pose_covariance
@@ -9,8 +9,8 @@ track_point_x: 0.0
 track_point_y: 0.0
 track_point_z: 0.0
 
-length_in_x: 20.0
-length_in_y: 20.0
+length_in_x: 10.0
+length_in_y: 10.0
 position_x: 0.0
 position_y: 0.0
 resolution: 0.2

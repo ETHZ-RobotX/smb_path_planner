@@ -11,7 +11,7 @@
     type: traversabilityFilters/SlopeFilter
     params:
       map_type: traversability_slope
-      critical_value: 1.3
+      critical_value: 0.70 #1.3
 #  - name: stepFilter
 #    type: traversabilityFilters/StepFilter
 #    params:
@@ -30,7 +30,7 @@
     type: gridMapFilters/MathExpressionFilter
     params:
       output_layer: traversability
-      expression: (1.0 / 3.0) * (traversability_slope + traversability_roughness) # traversability_step + 
+      expression: (1.0 / 2.0) * (traversability_slope + traversability_roughness) # traversability_step + 
   - name: deletionFilter
     type: gridMapFilters/DeletionFilter
     params:

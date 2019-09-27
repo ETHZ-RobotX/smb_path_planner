@@ -18,7 +18,7 @@ threshold_goal_reached: 0.05  # [m] Distance to the global goal to consider it r
 check_traversability: true    # Whether or not to use traversability information
                               # when planning
                               
-maximum_difference_elevation: 0.5 # Threshold to consider if we are nearby a cliff
+maximum_difference_elevation: 2.0 # Threshold to consider if we are nearby a cliff
 
 # Velocities and accelerations
 v_max: 0.50                   # [m/s]
@@ -80,8 +80,8 @@ upper_bound_x: 50.0
 upper_bound_y: 50.0
 upper_bound_z: 5.0
 
-tsdf_voxel_size: 0.2
-voxel_size: 0.2
+tsdf_voxel_size: 0.15
+voxel_size: 0.15
 tsdf_voxels_per_side: 16
 slice_level: 0.4
 
