@@ -454,22 +454,19 @@ bool interpolateInitialRotation(
         rotation_vector[i] = waypoint;
         time += sampling_dt;
     }
-    // Insert the rotation command vector to the beginning of the interpolated
-    // waypoints vector
-    interpolated_waypoints.insert(interpolated_waypoints.begin(),
+
+    if(!rotation_vector.empty()) { // ie num_elements != 0
+      // Insert the rotation command vector to the beginning of the interpolated
+      // waypoints vector
+      interpolated_waypoints.insert(interpolated_waypoints.begin(),
                                   rotation_vector.begin(), 
                                   rotation_vector.end()); 
-    // Re-timing of the interpolated waypoints to account for new commands of 
-    // initial rotation
-    std::cout << "Interpolated waypoints size: " << interpolated_waypoints.size() << std::endl;
-    std::cout << "Rotation vector size: " << rotation_vector.size() << std::endl;
-    std::cout << "Num elements: " << num_elements << std::endl;
-    if(num_elements != 0) {
+      // Re-timing of the interpolated waypoints to account for new commands of 
+      // initial rotation (i.e. shift all the timings by the initial offset)
       for(size_t i = num_elements; i < interpolated_waypoints.size(); ++i) {
         interpolated_waypoints[i](4) += rotation_vector.back()(4);
       }
     }
-              std::cout << "5" << std::endl;                    
     return true;
   } else {
     return false;
