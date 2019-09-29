@@ -454,7 +454,7 @@ bool interpolateInitialRotation(
         rotation_vector[i] = waypoint;
         time += sampling_dt;
     }
-
+    
     if(!rotation_vector.empty()) { // ie num_elements != 0
       // Insert the rotation command vector to the beginning of the interpolated
       // waypoints vector
@@ -464,7 +464,7 @@ bool interpolateInitialRotation(
       // Re-timing of the interpolated waypoints to account for new commands of 
       // initial rotation (i.e. shift all the timings by the initial offset)
       for(size_t i = num_elements; i < interpolated_waypoints.size(); ++i) {
-        interpolated_waypoints[i](4) += rotation_vector.back()(4);
+        interpolated_waypoints[i](4) += rotation_vector.back()(4) + sampling_dt;
       }
     }
     return true;

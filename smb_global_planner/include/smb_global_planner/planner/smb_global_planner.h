@@ -103,7 +103,7 @@ private:
   /**
    * @brief Method that publishes the current global path to the local planner
    */
-  void publishTrajectory() const;
+  void publishTrajectory();
 
   /**
    * @brief Method that sends the stop commands. If we are using the global

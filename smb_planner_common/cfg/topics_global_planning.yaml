@@ -11,5 +11,5 @@ localPlanner/outputMPCTrajectoryMsgName: "/local_path"
 
 ## SUBSCRIBERS:
 stateEstimatorMsgName: "/base_pose_measured"   # State estimator information - this is used in simulation
-smbStateMsgName: "/state_estimator/smb_state"
+smbStateMsgName: "/state_estimator/smb_state_IS_THIS_CAUSING_PROBLEMS"
 elevationMapMsgName: "/elevation_mapping/elevation_map"

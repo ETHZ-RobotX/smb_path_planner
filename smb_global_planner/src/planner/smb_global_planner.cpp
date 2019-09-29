@@ -187,6 +187,11 @@ bool SmbGlobalPlanner::plannerServiceCallback(
              "Abort planning.");
     return false;
   }
+  
+  // Check that the goal position is valid
+  if(!isGoalValid()) {
+    return false;
+  }  
 
   // Set the start pose
   Eigen::Vector3d start(current_state_(0), current_state_(1),
@@ -305,11 +310,12 @@ bool SmbGlobalPlanner::plannerServiceCallback(
 void SmbGlobalPlanner::plannerTimerCallback(const ros::TimerEvent &event) {
 
   // If we don't have to perform planning and the current global path is fine
-  if (!perform_planning_ && isPathCollisionFree()) {
-    return;
-  }
+  if (!perform_planning_ && isPathCollisionFree()) { return; }  
+  
+  // Check that the goal is reachable
+  if(!isGoalValid()) { return; }
 
-  if (params_.verbose_planner) {
+  if (params_.verbose_planner) { 
     ROS_INFO("[Smb Global Planner] Planning path.");
   }
 
@@ -385,7 +391,8 @@ void SmbGlobalPlanner::plannerTimerCallback(const ros::TimerEvent &event) {
     // Planning here!
     success = rrt_.getPathBetweenWaypoints(start, goal_, waypoints);
   } else if(params_.verbose_planner) {
-    ROS_INFO("[SMB Global Planner] Found straight line connection");
+    ROS_INFO_STREAM("[SMB Global Planner] Found straight line connection with "
+                    << waypoints.size() << " poses");
   }
 
   // Inform the user + post-processing
@@ -431,7 +438,7 @@ void SmbGlobalPlanner::plannerTimerCallback(const ros::TimerEvent &event) {
     if(utility_mapping::interpolateInitialRotation(
             interpolated_waypoints_, current_state_, 
             interpolated_waypoints_.front()(3), params_.v_max, 
-            params_.sampling_dt, params_.max_initial_rotation,
+            params_.global_params.global_interp_dt, params_.max_initial_rotation,
             params_.planning_height)) {
       ROS_WARN("[Smb Global Planner] Interpolated initial rotation");
     } else {
@@ -535,7 +542,7 @@ double SmbGlobalPlanner::computePathLength(
   return distance;
 }
 
-void SmbGlobalPlanner::publishTrajectory() const {
+void SmbGlobalPlanner::publishTrajectory() {
 
   nav_msgs::Path path_msg;
   path_msg.header.frame_id = params_.frame_id;
@@ -544,8 +551,27 @@ void SmbGlobalPlanner::publishTrajectory() const {
   geometry_msgs::PoseStamped pose;
   pose.header.frame_id = params_.frame_id;
   pose.header.seq = 0;
+  double last_time = 0.0;
+  
+  // Re-timing check to avoid problem with the controller
+  for(int i = 0; i < interpolated_waypoints_.size(); ++i) {
+    interpolated_waypoints_[i](4) = static_cast<double>(i) * 
+       params_.global_params.global_interp_dt;
+  }
 
   for (auto wp : interpolated_waypoints_) {
+    if(pose.header.seq != 0 && 
+       std::fabs(wp(4) - last_time) <= params_.sampling_dt * 1.01) {
+      ROS_ERROR_STREAM("[SMB Global Planner] Timings of the output trajectory "
+                       "are wrong! The current time difference is: "
+                       << wp(4) - last_time << " s at pose number "
+                       << pose.header.seq << " with last time "
+                       << last_time << " s and new pose time " 
+                       << wp(4) << " s. Sampling time set to "
+                       << params_.global_params.global_interp_dt);
+      return;                 
+    }
+  
     pose.header.stamp = ros::Time(wp(4));
     pose.pose.position.x = wp(0);
     pose.pose.position.y = wp(1);
@@ -565,13 +591,25 @@ void SmbGlobalPlanner::publishTrajectory() const {
 
     path_msg.poses.push_back(pose);
     pose.header.seq++;
+    last_time = wp(4);
   }
+  
+  // Check the trajectory
+  if(params_.global_params.use_global_planner_only &&
+     path_msg.poses.back().header.stamp.toSec() < 
+         params_.local_params.prediction_horizon_mpc) {
+    ROS_ERROR("[Smb Global Planner] Cannot publish trajectory to MPC because" 
+              "the last time stamp is lower than MPC prediction horizon!");
+    return;
+  }            
 
   if (trajectory_pub_.getNumSubscribers() > 0) {
     trajectory_pub_.publish(path_msg);
   }
+  
   if (params_.verbose_planner) {
-    ROS_INFO("[Smb Global Planner] Published trajectory to the local planner.");
+    ROS_INFO_STREAM("[Smb Global Planner] Published trajectory with size "
+                    << path_msg.poses.size() << " to the local planner.");
   }
 }
 
@@ -768,10 +806,32 @@ bool SmbGlobalPlanner::isPathCollisionFree() {
 
 bool SmbGlobalPlanner::isGoalValid() {
   // Check if the goal is reacheable
-  if (getMapDistance(goal_) < params_.robot_radius) {
-    ROS_ERROR_STREAM("[Smb Global Planner] Goal ["
-                     << goal_(0) << "," << goal_(1)
-                     << "] is in occupied position.");
+  bool valid_goal = true;
+  
+  Eigen::Vector3d projected_position(goal_);
+  if(params_.check_traversability) {
+    TraversabilityStatus traversability_status = 
+      utility_mapping::getTrasversabilityInformation(
+          traversability_estimator_->getGridMapTraversability(), goal_.head<2>(),
+          params_.planning_height, params_.traversability_threshold,
+          params_.maximum_difference_elevation, projected_position);
+    valid_goal &= traversability_status != TraversabilityStatus::UNTRAVERSABLE;
+          
+    if(!valid_goal && params_.verbose_planner) {
+      ROS_ERROR("[Smb Global Planner] Goal is in untraversable position");
+      return false;
+    }  
+  }     
+  
+  if(optimistic_) {
+    valid_goal &= checkOptimisticMapCollision(projected_position);
+  } else {
+    valid_goal &= (getMapDistance(projected_position) < params_.robot_radius);
+  }
+  
+  if (!valid_goal) {
+    ROS_ERROR_STREAM("[Smb Global Planner] Goal [" << goal_(0) << "," 
+                     << goal_(1) << "] is in occupied position.");
     perform_planning_ = false;
     return false;
   }

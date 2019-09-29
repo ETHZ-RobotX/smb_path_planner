@@ -256,6 +256,7 @@ bool VoxbloxOmplRrt::validTraversableStraightLine(
     if(traversability_status == TraversabilityStatus::UNTRAVERSABLE) {
       return false;
     } else if(traversability_status == TraversabilityStatus::TRAVERSABLE) {
+      path.push_back(projected_position);
       continue;
     } // else: UNKNOWN: check voxblox
 

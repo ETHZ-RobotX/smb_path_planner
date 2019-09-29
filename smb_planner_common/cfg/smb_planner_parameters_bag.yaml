@@ -29,8 +29,8 @@ v_rot_on_spot: 0.50           # [rad/s] for rotation on spot
 sampling_dt: 0.1              # [s] Sampling time for trajectory to send to the controller
 
 ################################ GLOBAL PLANNER ################################
-global_timer_dt: 0.01          # [s]
-global_interp_dt: 0.1         # [s] This has to be small enough for collision 
+global_timer_dt: 0.01         # [s]
+global_interp_dt: 0.15        # [s] This has to be small enough for collision 
                               # checks of the global path
 planner_type: 1               # 0:RRT connect, 1:RRT*, 2:Informed RRT*, 3:Bi-RRT*, 4:PRM
 
