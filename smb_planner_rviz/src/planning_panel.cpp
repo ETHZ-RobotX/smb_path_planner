@@ -65,7 +65,6 @@ void PlanningPanel::createLayout() {
   try {
 		odometry_topic_ = QString::fromStdString(
 		    lconf["stateEstimatorMsgName"].as<std::string>());
-		std::cout << "odom" << std::endl;
 		namespace_ = QString::fromStdString("");
 		global_planner_srv_name_ = QString::fromStdString(
 		    lconf["globalPlanner/plannerServiceName"].as<std::string>());
