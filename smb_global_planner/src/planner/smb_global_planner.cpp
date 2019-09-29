@@ -352,23 +352,43 @@ void SmbGlobalPlanner::plannerTimerCallback(const ros::TimerEvent &event) {
   // Container where the waypoints of the global path are stored
   std::vector<Eigen::Vector3d> waypoints;
 
-  // Set up problem depending on the desidered configuration
-  if (!params_.check_traversability) {
-    rrt_.setupProblem(start, goal_);
+  // Check if we can do straight line planning. If not, plan with OMPL
+  bool success = false;
+  int n_steps = std::min(20, static_cast<int>(std::ceil(
+          (goal_ - start).norm() / 0.5)));
+  if(!params_.check_traversability) {
+    success = rrt_.validStraightLine(start, goal_, n_steps, waypoints);
   } else {
-    ROS_INFO("[Smb Global Planner] Setting up problem with traversability");
-    rrt_.setupTraversabilityProblem(
-        start, goal_, traversability_estimator_->getGridMapTraversability());
+    success = rrt_.validTraversableStraightLine(start, goal_, n_steps,
+            waypoints, traversability_estimator_->getGridMapTraversability());
   }
 
-  if (params_.global_params.use_distance_threshold && params_.verbose_planner) {
-    ROS_INFO_STREAM("[Smb Global Planner] Setting cost threshold to "
-                    << params_.global_params.distance_threshold *
-                           (goal_.head<2>() - start.head<2>()).norm());
+  // If we did not find a straight line connection, then plan with OMPL
+  if(!success) {
+    // Set up problem depending on the desidered configuration
+    if (!params_.check_traversability) {
+      rrt_.setupProblem(start, goal_);
+    } else {
+      ROS_INFO("[Smb Global Planner] Setting up problem with traversability");
+      rrt_.setupTraversabilityProblem(
+              start, goal_,
+              traversability_estimator_->getGridMapTraversability());
+    }
+
+    if (params_.global_params.use_distance_threshold &&
+        params_.verbose_planner) {
+      ROS_INFO_STREAM("[Smb Global Planner] Setting cost threshold to "
+                              << params_.global_params.distance_threshold *
+                                 (goal_.head<2>() - start.head<2>()).norm());
+    }
+
+    // Planning here!
+    success = rrt_.getPathBetweenWaypoints(start, goal_, waypoints);
+  } else if(params_.verbose_planner) {
+    ROS_INFO("[SMB Global Planner] Found straight line connection");
   }
 
-  // Planning here!
-  bool success = rrt_.getPathBetweenWaypoints(start, goal_, waypoints);
+  // Inform the user + post-processing
   if (!success) {
     ROS_ERROR_STREAM("[Smb Global Planner] Could not find a path to the "
                      "goal ["
