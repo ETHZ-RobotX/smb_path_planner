@@ -17,7 +17,7 @@
   <depend>roscpp</depend>
   <depend>std_msgs</depend>
   <depend>ompl</depend>
-  <depend>yaml_cpp_catkin</depend>
+  <depend>yaml-cpp</depend>
   <depend>smb_planner_msgs</depend>
   <depend>smb_planner_common</depend>
 
