@@ -1,6 +1,6 @@
 <launch>
 
-   <arg name="param_file" default="$(find smb_planner_common)/cfg/smb_planner_parameters.yaml"/>
+   <arg name="param_file" default="$(find smb_planner_common)/cfg/smb_planner_parameters_summer_school.yaml"/>
    <arg name="traversability_filter_file" default="$(find smb_planner_common)/cfg/traversability_filter_parameter.yaml"/>
    <arg name="launch_prefix" default=""/> <!-- TO DEBUG: gdb - -args -->
    <arg name="voxel_size" default="0.15"/>

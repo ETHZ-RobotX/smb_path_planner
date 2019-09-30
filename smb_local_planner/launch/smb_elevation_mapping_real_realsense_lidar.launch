@@ -2,12 +2,12 @@
 
   <!-- Nodes for traversability: we need elevation mapping and the message interceptor node -->
   <node pkg="elevation_mapping" type="elevation_mapping" name="elevation_mapping_0" output="screen">
-    <rosparam command="load" file="$(find smb_planner_common)/cfg/elevation_mapping_smb.yaml" />
+    <rosparam command="load" file="$(find smb_planner_common)/cfg/elevation_mapping_smb_realsense.yaml" />
     <rosparam command="load" file="$(find elevation_mapping)/config/sensor_processors/realsense_d435.yaml" />
   </node>
   
   <node pkg="elevation_mapping" type="elevation_mapping" name="elevation_mapping_1" output="screen">
-    <rosparam command="load" file="$(find smb_planner_common)/cfg/elevation_mapping_smb_real_lidar.yaml" />
+    <rosparam command="load" file="$(find smb_planner_common)/cfg/elevation_mapping_smb_lidar.yaml" />
     <rosparam command="load" file="$(find elevation_mapping)/config/sensor_processors/velodyne_HDL-32E.yaml" />
   </node>
   
