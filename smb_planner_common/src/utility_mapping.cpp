@@ -271,7 +271,11 @@ void getSphereAroundPoint(const voxblox::Layer<voxblox::TsdfVoxel> &layer,
       voxblox::Point point_voxel_space(x, y, center.z() / voxel_size);
 
       // check if point is inside the spheres radius
-      if (point_voxel_space.head(2).norm() <= radius_in_voxels) {
+      // TODO (lucaBartolomei) note that this check on Voxblox and the robot
+      // radius has been removed because it did not allow to check for collision
+      // some parts of the global path. Notice that it is there in the original
+      // Voxblox implementation!!
+      //if (point_voxel_space.head(2).norm() <= radius_in_voxels) {
         voxblox::GlobalIndex voxel_offset_index(
             std::floor(point_voxel_space.x()),
             std::floor(point_voxel_space.y()),
@@ -284,7 +288,7 @@ void getSphereAroundPoint(const voxblox::Layer<voxblox::TsdfVoxel> &layer,
             voxel_offset_index + center_index, voxels_per_side, &block_index,
             &voxel_index);
         (*block_voxel_list)[block_index].push_back(voxel_index);
-      }
+      //}
     }
   }
 }
@@ -414,6 +418,59 @@ bool rampInterpolatorWaypoints(
   point_end << position_end(0), position_end(1), z_end, yaw_end, time;
   interpolated_waypoints.push_back(point_end);
   return true;
+}
+
+bool interpolateInitialRotation(
+    std::vector<Eigen::VectorXd> &interpolated_waypoints, 
+    const Eigen::Vector3d &current_state, const double target_yaw,
+    const double v_max, const double sampling_dt, 
+    const double max_initial_rotation, const double nominal_height) {
+
+  // Check if we need to add rotation; if not, just return
+  if(std::fabs(current_state(2) - target_yaw) >= max_initial_rotation) {
+
+    double yaw = current_state(2);
+    double time = 0.0;
+  
+    // Create vector of initial rotation commands
+    double delta = target_yaw - current_state(2);
+    if(delta > M_PI)
+        delta -= 2.0 * M_PI;
+    if(delta < -M_PI)
+        delta += 2.0 * M_PI;
+    size_t num_elements = std::fabs(delta) / (v_max * sampling_dt);
+    std::vector<Eigen::VectorXd> rotation_vector(num_elements);
+
+    for(size_t i=0; i<num_elements; ++i) {
+        yaw += delta / num_elements;
+        if(yaw > 2.0*M_PI)
+          yaw -= 2.0*M_PI;
+        if(yaw < -2.0*M_PI)
+          yaw += 2.0*M_PI;
+             
+        Eigen::VectorXd waypoint(5); 
+        waypoint << current_state(0), current_state(1), 
+                    nominal_height, yaw, time;
+        rotation_vector[i] = waypoint;
+        time += sampling_dt;
+    }
+    
+    if(!rotation_vector.empty()) { // ie num_elements != 0
+      // Insert the rotation command vector to the beginning of the interpolated
+      // waypoints vector
+      interpolated_waypoints.insert(interpolated_waypoints.begin(),
+                                  rotation_vector.begin(), 
+                                  rotation_vector.end()); 
+      // Re-timing of the interpolated waypoints to account for new commands of 
+      // initial rotation (i.e. shift all the timings by the initial offset)
+      for(size_t i = num_elements; i < interpolated_waypoints.size(); ++i) {
+        interpolated_waypoints[i](4) += rotation_vector.back()(4) + sampling_dt;
+      }
+    }
+    return true;
+  } else {
+    return false;
+  }    
 }
 
 void createYawsFromStates(const std::vector<Eigen::Vector2d> &states,

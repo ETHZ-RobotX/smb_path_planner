@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(smb_planner_rviz)
 
+find_package(yaml-cpp REQUIRED)
 find_package(catkin_simple REQUIRED)
 catkin_simple(ALL_DEPS_REQUIRED)
 

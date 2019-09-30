@@ -13,6 +13,10 @@
 #include <ros/ros.h>
 #include <Eigen/Dense>
 
+// @brief Utility for debugging Eigen matrices
+const static Eigen::IOFormat CSVFormat(Eigen::StreamPrecision,
+        Eigen::DontAlignCols, ", ", "\n");
+
 namespace smb_planner {
 
     /**
@@ -25,12 +29,15 @@ namespace smb_planner {
      */
     struct GlobalPlannerParameters {
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+        
+        bool use_global_planner_only;
 
         // OMPL optimization objective
         bool simplify_solution;
         bool trust_approx_solution;
         bool use_distance_threshold;
         double distance_threshold;
+        double goal_bias;
 
         int planner_type;
         double num_seconds_to_plan;
@@ -41,6 +48,7 @@ namespace smb_planner {
         bool optimistic_voxblox;
 
         // Bounds on the size of the map.
+        bool use_fixed_map_size;
         Eigen::Vector3d lower_bound;
         Eigen::Vector3d upper_bound;
     };
@@ -93,6 +101,8 @@ namespace smb_planner {
         bool check_traversability;
         double traversability_threshold;
         double maximum_difference_elevation;
+        double n_sensors_traversability;
+        std::vector<double> elevation_maps_weights;
 
         // Velocities and accelerations
         double v_max;

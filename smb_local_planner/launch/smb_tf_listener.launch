@@ -1,0 +1,17 @@
+<launch>
+
+  <!-- Nodes for traversability: we need elevation mapping and the message interceptor node -->
+  <node pkg="elevation_mapping" type="elevation_mapping" name="elevation_mapping" output="screen">
+    <rosparam command="load" file="$(find smb_planner_common)/cfg/elevation_mapping_smb_real_lidar.yaml" />
+    <rosparam command="load" file="$(find elevation_mapping)/config/sensor_processors/velodyne_HDL-32E.yaml" />
+  </node>
+  
+  <node pkg="smb_planner_common" type="smb_tf_interceptor_node" name="smb_tf_interceptor_node" output="screen" >
+    <param name="world_frame" value="world" />
+    <param name="robot_frame" value="body" />
+  </node>
+  
+  <!-- Launch visualizations for the resulting elevation map -->
+  <include file="$(find elevation_mapping_demos)/launch/visualization.launch" />
+  
+</launch>

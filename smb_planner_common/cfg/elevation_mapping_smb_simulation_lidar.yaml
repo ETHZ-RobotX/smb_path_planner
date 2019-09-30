@@ -1,15 +1,15 @@
-point_cloud_topic: "/point_map"
-map_frame_id: "map"
+point_cloud_topic: "/velodyne_points"
+map_frame_id: "world"
 robot_base_frame_id: "base"
 robot_pose_with_covariance_topic: "/stamped_pose_covariance"
 robot_pose_cache_size: 200
-track_point_frame_id: "/map"
+track_point_frame_id: "/velodyne"
 track_point_x: 0.0
 track_point_y: 0.0
 track_point_z: 0.0
 
-length_in_x: 5.0
-length_in_y: 5.0
+length_in_x: 10.0
+length_in_y: 10.0
 position_x: 0.0
 position_y: 0.0
 resolution: 0.20

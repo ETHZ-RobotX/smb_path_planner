@@ -103,12 +103,20 @@ private:
   /**
    * @brief Method that publishes the current global path to the local planner
    */
-  void publishTrajectory() const;
+  void publishTrajectory();
+
+  /**
+   * @brief Method that sends the stop commands. If we are using the global
+   *        planner only, then we directly send the stop command to the MPC.
+   *        If we are using the planner in combination with a local planner,
+   *        then we communicate the stop command to the local planner.
+   */
+  void sendStopCommand();
 
   /**
    * @brief Method that sends the stop commands directly to the MPC
    */
-  void sendStopCommand() const;
+  void sendStopCommandToController();
 
   /**
    * @brief Utility function that checks if the current global path will not
@@ -250,6 +258,7 @@ protected:
   bool perform_planning_;
   bool has_state_info_;
   bool optimistic_;
+  bool use_global_planner_only_;
 
   // Helper for updating the visualization of the path
   int n_iter_vis_;

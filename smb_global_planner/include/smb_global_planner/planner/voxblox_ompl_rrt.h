@@ -68,6 +68,16 @@ public:
                                   const Eigen::Vector3d &goal,
                                   const grid_map::GridMap &traversability_map);
 
+  // Check for straight line planning
+  bool validStraightLine(
+          const Eigen::Vector3d &start, const Eigen::Vector3d &goal,
+          const int n_step, std::vector<Eigen::Vector3d> &path) const;
+
+  bool validTraversableStraightLine(
+          const Eigen::Vector3d &start, const Eigen::Vector3d &goal,
+          const int n_step, std::vector<Eigen::Vector3d> &path,
+          const grid_map::GridMap &traversability_map) const;
+
   // Fixed start and end locations, returns list of waypoints between.
   bool getPathBetweenWaypoints(const Eigen::Vector3d &start,
                                const Eigen::Vector3d &goal,

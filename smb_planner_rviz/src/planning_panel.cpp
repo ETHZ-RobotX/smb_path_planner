@@ -32,7 +32,11 @@ namespace smb_planner_rviz {
 
 PlanningPanel::PlanningPanel(QWidget *parent)
     : rviz::Panel(parent), nh_(ros::NodeHandle()), interactive_markers_(nh_) {
-  createLayout();
+  try {
+    createLayout();
+  } catch(const YAML::ParserException& e) {
+  	ROS_ERROR("[Planning Panel] YAML Exception: %s", e.what());
+  }
 }
 
 void PlanningPanel::onInitialize() {
@@ -53,15 +57,23 @@ void PlanningPanel::onInitialize() {
 void PlanningPanel::createLayout() {
   QGridLayout *topic_layout = new QGridLayout;
   // Input the namespace.
-  YAML::Node lconf = YAML::LoadFile(
-      ros::package::getPath("smb_planner_common") + "/cfg/topics.yaml");
-  odometry_topic_ =
-      QString::fromStdString(lconf["stateEstimatorMsgName"].as<std::string>());
-  namespace_ = QString::fromStdString("");
-  global_planner_srv_name_ = QString::fromStdString(
-      lconf["globalPlanner/plannerServiceName"].as<std::string>());
-  local_planner_srv_name_ = QString::fromStdString(
-      lconf["localPlanner/triggerServiceName"].as<std::string>());
+  std::string filename(ros::package::getPath("smb_planner_common") +
+      "/cfg/topics.yaml");
+  YAML::Node lconf = YAML::LoadFile(filename);
+  ROS_INFO_STREAM("[Planning Panel] Reading from " << filename);
+
+  try {
+		odometry_topic_ = QString::fromStdString(
+		    lconf["stateEstimatorMsgName"].as<std::string>());
+		namespace_ = QString::fromStdString("");
+		global_planner_srv_name_ = QString::fromStdString(
+		    lconf["globalPlanner/plannerServiceName"].as<std::string>());
+		local_planner_srv_name_ = QString::fromStdString(
+		    lconf["localPlanner/triggerServiceName"].as<std::string>());
+  } catch(const YAML::ParserException& e) {
+  	ROS_ERROR("[Planning Panel] YAML Exception: %s", e.what());
+  	return;
+  }
 
   odometry_sub_ = nh_.subscribe(namespace_.toStdString() + "/" +
                                     odometry_topic_.toStdString(),

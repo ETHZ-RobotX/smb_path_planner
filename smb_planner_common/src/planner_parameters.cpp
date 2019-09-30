@@ -81,6 +81,21 @@ bool readPlannerParameters(const ros::NodeHandle &nh,
     params.maximum_difference_elevation = 0.5;
   }
 
+  if (!nh.getParam("n_sensors_traversability",
+                   params.n_sensors_traversability)) {
+    ROS_WARN("Not specified number of sensors for traversability estimation. "
+             "Using '1'.");
+    params.n_sensors_traversability = 1;
+  }
+
+  params.elevation_maps_weights.resize(params.n_sensors_traversability, 1.0);
+  for(int s = 0; s < params.n_sensors_traversability; ++s) {
+    if (!nh.getParam("elevation_maps_weights_" + std::to_string(s),
+                     params.elevation_maps_weights[s])) {
+      ROS_WARN("Weight %d for fused elevation map not specified. Using 1.0", s);
+    }
+  }
+
   if (!nh.getParam("v_max", params.v_max)) {
     ROS_WARN("Not specified v_max. Using '0.5 m/s'.");
     params.v_max = 0.5;
@@ -124,6 +139,12 @@ bool readPlannerParameters(const ros::NodeHandle &nh,
 bool readGlobalPlannerParameters(const ros::NodeHandle &nh,
                                  GlobalPlannerParameters &params) {
 
+  if (!nh.getParam("use_global_planner_only", params.use_global_planner_only)) {
+    ROS_WARN("Not specified if we should the global planner only. "
+             "Using 'FALSE'.");
+    params.use_global_planner_only = false;
+  }
+
   if (!nh.getParam("simplify_solution", params.simplify_solution)) {
     ROS_WARN("Not specified if we should simplify solution. "
              "Using 'FALSE'.");
@@ -145,6 +166,11 @@ bool readGlobalPlannerParameters(const ros::NodeHandle &nh,
   if (!nh.getParam("distance_threshold", params.distance_threshold)) {
     ROS_WARN("Not specified distance_threshold. Using 0.2.");
     params.distance_threshold = 0.2;
+  }
+
+  if (!nh.getParam("goal_bias", params.goal_bias)) {
+    ROS_WARN("Not specified goal_bias. Using 0.05.");
+    params.goal_bias = 0.05;
   }
 
   if (!nh.getParam("planner_type", params.planner_type)) {
@@ -171,6 +197,12 @@ bool readGlobalPlannerParameters(const ros::NodeHandle &nh,
     ROS_WARN("Not specified if planner with voxblox is optimistic. "
              "Using 'TRUE'.");
     params.optimistic_voxblox = true;
+  }
+
+  if (!nh.getParam("use_fixed_map_size", params.use_fixed_map_size)) {
+    ROS_WARN("Not specified if planner should use fixed map size. "
+             "Using 'FALSE'.");
+    params.use_fixed_map_size = false;
   }
 
   if (!nh.getParam("lower_bound_x", params.lower_bound(0))) {

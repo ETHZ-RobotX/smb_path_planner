@@ -63,14 +63,20 @@ void VoxbloxOmplRrt::setupProblem(const Eigen::Vector3d &start,
     problem_setup_.setRrtConnect();
   } else if (planner_type_ == kRrtStar) {
     problem_setup_.setRrtStar();
+    problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   } else if (planner_type_ == kInformedRrtStar) {
     problem_setup_.setInformedRrtStar();
+    problem_setup_.getPlanner()->as<ompl::geometric::InformedRRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   } else if (planner_type_ == kPrm) {
     problem_setup_.setPrm();
   } else if (planner_type_ == kBitStar) {
     problem_setup_.setBitStar();
   } else {
     problem_setup_.setDefaultPlanner();
+    problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   }
 
   if (lower_bound_ != upper_bound_) {
@@ -130,14 +136,20 @@ void VoxbloxOmplRrt::setupTraversabilityProblem(
     problem_setup_.setRrtConnect();
   } else if (planner_type_ == kRrtStar) {
     problem_setup_.setRrtStar();
+    problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   } else if (planner_type_ == kInformedRrtStar) {
     problem_setup_.setInformedRrtStar();
+    problem_setup_.getPlanner()->as<ompl::geometric::InformedRRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   } else if (planner_type_ == kPrm) {
     problem_setup_.setPrm();
   } else if (planner_type_ == kBitStar) {
     problem_setup_.setBitStar();
   } else {
     problem_setup_.setDefaultPlanner();
+    problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()
+        ->setGoalBias(params_.global_params.goal_bias);
   }
 
   if (lower_bound_ != upper_bound_) {
@@ -164,6 +176,126 @@ void VoxbloxOmplRrt::setupTraversabilityProblem(
   }
   problem_setup_.setStateValidityCheckingResolution(
       validity_checking_resolution);
+}
+
+bool VoxbloxOmplRrt::validStraightLine(const Eigen::Vector3d &start,
+                                       const Eigen::Vector3d &goal,
+                                       const int n_step,
+                                       std::vector<Eigen::Vector3d> &path)
+                                       const {
+  double delta_x = (goal(0) - start(0)) / static_cast<double>(n_step);
+  double delta_y = (goal(1) - start(1)) / static_cast<double>(n_step);
+  double delta_z = (goal(2) - start(2)) / static_cast<double>(n_step);
+
+  for (int i = 0; i <= n_step; ++i) {
+    Eigen::Vector3d delta_position(delta_x * static_cast<double>(i),
+                                   delta_y * static_cast<double>(i),
+                                   delta_z * static_cast<double>(i));
+
+    voxblox::Point robot_point =
+            (start + delta_position).cast<voxblox::FloatingPoint>();
+    voxblox::HierarchicalIndexMap block_voxel_list;
+    voxblox::utils::getSphereAroundPoint(
+            *tsdf_layer_, robot_point, params_.robot_radius, &block_voxel_list);
+
+    for (const std::pair<voxblox::BlockIndex, voxblox::VoxelIndexList> &kv :
+            block_voxel_list) {
+      // Get block -- only already existing blocks are in the list.
+      voxblox::Block<voxblox::TsdfVoxel>::Ptr block_ptr =
+              tsdf_layer_->getBlockPtrByIndex(kv.first);
+
+      if (!block_ptr) {
+        continue;
+      }
+
+      for (const voxblox::VoxelIndex &voxel_index : kv.second) {
+        if (!block_ptr->isValidVoxelIndex(voxel_index)) {
+          return false;
+        }
+        const voxblox::TsdfVoxel &tsdf_voxel =
+                block_ptr->getVoxelByVoxelIndex(voxel_index);
+        if (tsdf_voxel.distance < 0.0f) {
+          return false;
+        }
+      }
+    }
+
+    // If no collision is found, then add the position to the storage
+    path.push_back(start + delta_position);
+  }
+
+  // Add the final position as well - we already know it is valid
+  path.push_back(goal);
+
+  return true;
+}
+
+bool VoxbloxOmplRrt::validTraversableStraightLine(
+        const Eigen::Vector3d &start, const Eigen::Vector3d &goal,
+        const int n_step, std::vector<Eigen::Vector3d> &path,
+        const grid_map::GridMap &traversability_map) const {
+
+  double delta_x = (goal(0) - start(0)) / static_cast<double>(n_step);
+  double delta_y = (goal(1) - start(1)) / static_cast<double>(n_step);
+  double delta_z = (goal(2) - start(2)) / static_cast<double>(n_step);
+
+  for (int i = 0; i <= n_step; ++i) {
+    Eigen::Vector3d delta_position(delta_x * static_cast<double>(i),
+                                   delta_y * static_cast<double>(i),
+                                   delta_z * static_cast<double>(i));
+
+    // Check if it is traversable. If not, then return false; if yes,
+    // consider position valid; if unknown, check voxblox
+    Eigen::Vector3d projected_position;
+    TraversabilityStatus traversability_status =
+            utility_mapping::getTrasversabilityInformation(
+                    traversability_map, (start + delta_position).head(2),
+                    params_.planning_height, params_.traversability_threshold,
+                    params_.maximum_difference_elevation, projected_position);
+
+    if(traversability_status == TraversabilityStatus::UNTRAVERSABLE) {
+      return false;
+    } else if(traversability_status == TraversabilityStatus::TRAVERSABLE) {
+      path.push_back(projected_position);
+      continue;
+    } // else: UNKNOWN: check voxblox
+
+    voxblox::Point robot_point =
+            projected_position.cast<voxblox::FloatingPoint>();
+    voxblox::HierarchicalIndexMap block_voxel_list;
+    voxblox::utils::getSphereAroundPoint(
+            *tsdf_layer_, robot_point, params_.robot_radius, &block_voxel_list);
+
+    for (const std::pair<voxblox::BlockIndex, voxblox::VoxelIndexList> &kv :
+            block_voxel_list) {
+      // Get block -- only already existing blocks are in the list.
+      voxblox::Block<voxblox::TsdfVoxel>::Ptr block_ptr =
+              tsdf_layer_->getBlockPtrByIndex(kv.first);
+
+      if (!block_ptr) {
+        continue;
+      }
+
+      for (const voxblox::VoxelIndex &voxel_index : kv.second) {
+        if (!block_ptr->isValidVoxelIndex(voxel_index)) {
+          return false;
+        }
+        const voxblox::TsdfVoxel &tsdf_voxel =
+                block_ptr->getVoxelByVoxelIndex(voxel_index);
+        if (tsdf_voxel.distance < 0.0f) {
+          return false;
+        }
+      }
+    }
+
+    // If no collision is found, then add the position to the storage
+    path.push_back(start + delta_position);
+  }
+
+  // Add the final position as well - we already know it is valid
+  path.push_back(goal);
+
+  return true;
 }
 
 bool VoxbloxOmplRrt::getPathBetweenWaypoints(
@@ -223,9 +355,11 @@ void VoxbloxOmplRrt::setupFromStartAndGoal(const Eigen::Vector3d &start,
   problem_setup_.setStartAndGoalStates(start_ompl, goal_ompl,
                                        0.5 * voxel_size_);
   problem_setup_.setup();
+  /** DELETE (lucaBartolomei)
   if (params_.verbose_planner) {
     problem_setup_.print();
   }
+  */
 
   // Add optimization objective
   if (params_.global_params.use_distance_threshold) {
