@@ -453,7 +453,6 @@ void SmbGlobalPlanner::plannerTimerCallback(const ros::TimerEvent &event) {
 
   if (params_.verbose_planner) {
     ROS_INFO_STREAM("[Smb Global Planner] All timings: "
-                    << std::endl
                     << (ros::Time::now() - start_time).toSec() << " s");
     ROS_INFO_STREAM("[Smb Global Planner] Finished planning with start "
                     "point: ["
@@ -560,17 +559,20 @@ void SmbGlobalPlanner::publishTrajectory() {
   }
 
   for (auto wp : interpolated_waypoints_) {
+  
+    /*
     if(pose.header.seq != 0 && 
-       std::fabs(wp(4) - last_time) <= params_.sampling_dt * 1.01) {
+       std::fabs(wp(4) - last_time) < params_.global_params.global_interp_dt) {
       ROS_ERROR_STREAM("[SMB Global Planner] Timings of the output trajectory "
                        "are wrong! The current time difference is: "
-                       << wp(4) - last_time << " s at pose number "
+                       << std::fabs(wp(4) - last_time) << " s at pose number "
                        << pose.header.seq << " with last time "
                        << last_time << " s and new pose time " 
                        << wp(4) << " s. Sampling time set to "
-                       << params_.global_params.global_interp_dt);
+                       << params_.global_params.global_interp_dt << " s");
       return;                 
     }
+    */
   
     pose.header.stamp = ros::Time(wp(4));
     pose.pose.position.x = wp(0);
