@@ -7,6 +7,13 @@ The package has been tested under ROS Melodic and Ubuntu 18.04.
 __Author: Luca Bartolomei__  
 __Affiliation: Vision For Robotics Lab, ETH Zurich__  
 __Contact: Luca Bartolomei, lbartolomei@ethz.ch__
+
+# Additional information for 2020 Edition  
+Additional installation:  
+```
+$ sudo apt-get install ros-melodic-teb-local-planner ros-melodic-robot-self-filter ros-melodic-pointcloud-to-laserscan
+```
+
 # Getting Started
 If the packages from the repository 
 [`ethz-asl/eth_robotics_summer_school_2019`](https://github.com/ethz-asl/eth_robotics_summer_school_2019) have already been downloaded and 

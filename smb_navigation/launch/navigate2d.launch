@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<launch>
+  
+  <arg name="simulation" 	default="true"/>
+  <arg name="odom_topic" 	default="/base/odometry"/>
+  <arg name="icp_running"       default="false"/>
+
+  <group unless="$(arg icp_running)">
+    <include file="$(find smb_navigation)/launch/point_cloud_processing.launch">
+      <arg name="config_files_folder" value="$(find smb_navigation)/config/point_cloud_processing_no_icp"/>
+    </include>
+    <group unless="$(arg simulation)">
+      <include file="$(find smb_navigation)/launch/robosense.launch"/>
+    </group>
+  </group>
+
+
+  <include file="$(find smb_navigation)/launch/point_cloud_to_scan.launch"/>
+  
+  <!-- move_base -->
+  <include file="$(find smb_navigation)/launch/move_base.launch"/>
+</launch> 

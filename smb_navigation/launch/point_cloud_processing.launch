@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  
+  <arg name="launch-prefix"               default=""/>
+  <arg name="config_files_folder"         default="$(find smb_navigation)/config/point_cloud_processing"/>
+
+  <node pkg="point_cloud_processor" type="point_cloud_processor" name="point_cloud_processor_smb" output="log" launch-prefix="$(arg launch-prefix)">
+    <param name="config_files_folder"       value="$(arg config_files_folder)"/>
+    <rosparam command="load" file="$(arg config_files_folder)/stream_sources.yaml"/>
+  </node>
+
+</launch>
