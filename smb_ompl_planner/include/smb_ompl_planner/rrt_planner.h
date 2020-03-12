@@ -101,6 +101,11 @@ public:
 
   void setVoxelSize(const double voxel_size) { voxel_size_ = voxel_size; }
 
+  void setCostmap(costmap_2d::Costmap2D* costmap)
+  {
+    costmap_ = costmap;
+  }
+
   /**
    * @brief Method to get the straight line planning between start and goal
    * @param[in] start: start position of the robot
@@ -140,6 +145,9 @@ private:
   // Set up the problem in OMPL
   ompl::OmplSetup problem_setup_;
   RrtPlannerType planner_type_;
+
+  // Costmap
+  costmap_2d::Costmap2D* costmap_;
 
   // Limits of the planning
   Eigen::Vector2d lower_bound_;

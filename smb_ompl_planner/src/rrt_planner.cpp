@@ -52,6 +52,8 @@ void RrtPlanner::setupProblem(const Eigen::Vector2d& start,
 {
   problem_setup_.clear();
 
+  problem_setup_.setGridmapCollisionChecking(params_.robot_radius, costmap_);
+
   if (!params_.use_distance_threshold)
   {
     problem_setup_.setDefaultObjective();

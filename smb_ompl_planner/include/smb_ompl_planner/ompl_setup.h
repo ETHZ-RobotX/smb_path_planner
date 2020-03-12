@@ -45,7 +45,6 @@
 #pragma once
 
 #include <ompl/base/objectives/PathLengthOptimizationObjective.h>
-#include <ompl/base/spaces/RealVectorStateSpace.h>
 #include <ompl/geometric/SimpleSetup.h>
 #include <ompl/geometric/planners/bitstar/BITstar.h>
 #include <ompl/geometric/planners/prm/PRM.h>
@@ -57,8 +56,6 @@
 
 namespace ompl
 {
-
-typedef base::RealVectorStateSpace RStateSpace;
 
 // Setup class for a geometric planning problem with Real state space (R).
 class OmplSetup : public geometric::SimpleSetup
@@ -128,10 +125,12 @@ public:
     getProblemDefinition()->setOptimizationObjective(obj);
   }
 
-  void setGridmapCollisionChecking(double robot_radius)
+  void setGridmapCollisionChecking(double robot_radius,
+                                   costmap_2d::Costmap2D* costmap)
   {
     std::shared_ptr<GridmapValidityChecker> validity_checker(
-        new GridmapValidityChecker(getSpaceInformation(), robot_radius));
+        new GridmapValidityChecker(getSpaceInformation(), robot_radius,
+                                   costmap));
 
     setStateValidityChecker(base::StateValidityCheckerPtr(validity_checker));
     si_->setMotionValidator(base::MotionValidatorPtr(
@@ -165,8 +164,7 @@ public:
         // simplifyTime_ member of the parent class.
         simplifyTime_ = time::seconds(time::now() - start);
         OMPL_INFORM("Ompl Setup: Vertex reduction took %f seconds and changed "
-                    "from %d to"
-                    " %d states",
+                    "from %d to %d states",
                     simplifyTime_, num_states, path.getStateCount());
         return;
       }

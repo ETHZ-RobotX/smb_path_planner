@@ -37,11 +37,16 @@
 #pragma once
 
 #include <Eigen/Dense>
+#include <costmap_2d/cost_values.h>
+#include <costmap_2d/costmap_2d.h>
 #include <ompl/base/MotionValidator.h>
 #include <ompl/base/StateValidityChecker.h>
+#include <ompl/base/spaces/RealVectorStateSpace.h>
 
 namespace ompl
 {
+
+typedef base::RealVectorStateSpace RStateSpace;
 
 /**
  * @brief Class used to check the collision of the robot with the obstacles in
@@ -51,11 +56,18 @@ class GridmapValidityChecker : public base::StateValidityChecker
 {
 public:
   GridmapValidityChecker(const base::SpaceInformationPtr& space_info,
-                         const double robot_radius)
-      : base::StateValidityChecker(space_info), robot_radius_(robot_radius)
+                         const double robot_radius,
+                         costmap_2d::Costmap2D* costmap)
+      : base::StateValidityChecker(space_info), robot_radius_(robot_radius),
+        costmap_(costmap)
   {
   }
 
+  /**
+   * @brief Method used by the OMPL planner to check if a sampled state is valid
+   * @param[in] state: sample to be checked
+   * @return True if the sample is valid, false otherwise
+   */
   virtual bool isValid(const base::State* state) const
   {
     if (!si_->satisfiesBounds(state))
@@ -63,19 +75,74 @@ public:
       return false;
     }
 
-    std::cout << "Collision checker not implemented yet" << std::endl;
-    return false;
+    // Get the state in cell coordinates
+    const RStateSpace::StateType* derived =
+        static_cast<const RStateSpace::StateType*>(state);
+    Eigen::Vector2d state_eigen(derived->values[0], derived->values[1]);
+
+    // Get the cost
+    unsigned char cost;
+    if (!getCostAtState(state_eigen, cost))
+    {
+      // We are out of the map
+      return false;
+    }
+    return true;
   }
 
-  // Returns whether there is a collision: true if yes, false if not.
-  virtual bool
-  checkCollisionWithRobot(const Eigen::Vector2d& robot_position) const
+  /**
+   * @brief Method to query the cost map to get the cost. Return true if we
+   *        manage to extract the cost. The position to be check is also
+   *        "inflated" by the robot radius.
+   * @param[in] state: (x,y) position in Eigen format
+   * @param[out] cost: result from costmap
+   * @return True if we can get the cost, False otherwise
+   */
+  virtual bool getCostAtState(const Eigen::Vector2d& state,
+                              unsigned char& cost) const
   {
-    return false;
+    unsigned int state_x_i, state_y_i;
+    Eigen::Vector2d inflated_state(state.x() + robot_radius_,
+                                   state.y() + robot_radius_);
+    if (!costmap_->worldToMap(inflated_state.x(), inflated_state.y(), state_x_i,
+                              state_y_i))
+    {
+      // We are out of the map
+      return false;
+    }
+
+    // Get the cost
+    cost = costmap_->getCost(state_x_i, state_y_i);
+
+    // Check the cost - not all these checks are necessary, but we explicitly
+    // add them for teaching purposes
+    // Doc:https://wiki.ros.org/costmap_2d?action=AttachFile&do=get&target=costmapspec.png
+    const unsigned char k_threshold = 50;
+    if (cost == costmap_2d::LETHAL_OBSTACLE)
+    {
+      // In this case, we are in collision
+      return false;
+    }
+    else if (cost <= costmap_2d::INSCRIBED_INFLATED_OBSTACLE &&
+             cost >= k_threshold)
+    {
+      // In this case, we are not completly in collision, but we may be very
+      // close to an obstacle
+      return false;
+    }
+    else if (cost <= k_threshold || cost == costmap_2d::NO_INFORMATION)
+    {
+      // In this case we are not in collision so we keep going with the checks
+      // We plan also in unknown space, because it is a global planner
+      return true;
+    }
   }
+
+  double getRobotRadius() const { return robot_radius_; }
 
 protected:
   double robot_radius_;
+  costmap_2d::Costmap2D* costmap_;
 };
 
 class GridmapMotionValidator : public base::MotionValidator
@@ -86,6 +153,7 @@ public:
       std::shared_ptr<GridmapValidityChecker> validity_checker)
       : base::MotionValidator(space_info), validity_checker_(validity_checker)
   {
+    robot_radius_ = validity_checker_->getRobotRadius();
   }
 
   virtual bool checkMotion(const base::State* s1, const base::State* s2) const
@@ -95,13 +163,86 @@ public:
   }
 
   // Check motion returns *false* if invalid, *true* if valid.
-  // So opposite of checkCollision, but same as isValid.
+  // So same as isValid.
   // last_valid is the state and percentage along the trajectory that's
   // a valid state.
   virtual bool checkMotion(const base::State* s1, const base::State* s2,
                            std::pair<base::State*, double>& last_valid) const
   {
-    return false;
+    // Get the states in eigen format
+    const RStateSpace::StateType* s1_derived =
+        static_cast<const RStateSpace::StateType*>(s1);
+    Eigen::Vector2d s1_eigen(s1_derived->values[0], s1_derived->values[1]);
+
+    const RStateSpace::StateType* s2_derived =
+        static_cast<const RStateSpace::StateType*>(s2);
+    Eigen::Vector2d s2_eigen(s2_derived->values[0], s2_derived->values[1]);
+
+    // Discretize the connection s1-s2
+    int n_states = std::floor((s1_eigen - s2_eigen).norm() / robot_radius_);
+    Eigen::Vector2d direction(s2_eigen - s1_eigen);
+
+    // Check the particular case where n_states is 0. In this case, check just
+    // the start and end states
+    if (n_states == 0)
+    {
+      return validity_checker_->isValid(s1) && validity_checker_->isValid(s2);
+    }
+
+    // Iterate over the states along the connection
+    bool valid = true;
+    const unsigned char k_threshold = 50;
+    for (int i = 0; i <= n_states; ++i)
+    {
+      Eigen::Vector2d state_i =
+          s1_eigen + double(i) / double(n_states) * direction;
+      unsigned char cost;
+
+      if (!validity_checker_->getCostAtState(state_i, cost))
+      {
+        // Out of map - directly return
+        return false;
+      }
+
+      // Check the cost - not all these checks are necessary, but we explicitly
+      // add them for teaching purposes
+      // Doc:https://wiki.ros.org/costmap_2d?action=AttachFile&do=get&target=costmapspec.png
+      if (cost == costmap_2d::LETHAL_OBSTACLE)
+      {
+        // In this case, we are in collision
+        valid = false;
+      }
+      else if (cost <= costmap_2d::INSCRIBED_INFLATED_OBSTACLE &&
+               cost >= k_threshold)
+      {
+        // In this case, we are not completly in collision, but we may be very
+        // close to an obstacle
+        valid = false;
+      }
+      else if (cost <= k_threshold || cost == costmap_2d::NO_INFORMATION)
+      {
+        // In this case we are not in collision so we keep going with the checks
+        // We plan also in unknown space, because it is a global planner
+        continue;
+      }
+
+      if (!valid)
+      {
+        if (last_valid.first != nullptr)
+        {
+          ompl::base::ScopedState<ompl::RStateSpace> last_valid_state(
+              si_->getStateSpace());
+          last_valid_state->values[0] = state_i.x();
+          last_valid_state->values[1] = state_i.y();
+          si_->copyState(last_valid.first, last_valid_state.get());
+        }
+
+        last_valid.second = static_cast<double>(i / n_states);
+        break;
+      }
+    }
+
+    return valid;
   }
 
 protected:

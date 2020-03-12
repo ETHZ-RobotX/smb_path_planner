@@ -36,8 +36,6 @@
 
 #include "smb_ompl_planner/ompl_planner.h"
 
-#include <costmap_2d/cost_values.h>
-#include <costmap_2d/costmap_2d.h>
 #include <pluginlib/class_list_macros.h>
 
 // register this planner as a BaseOmplPlanner plugin
@@ -102,7 +100,6 @@ void OmplPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
     private_nh.param("robot_radius", rrt_params.robot_radius, 0.5);
     private_nh.param("num_seconds_to_plan", rrt_params.num_seconds_to_plan,
                      5.0);
-
     private_nh.param("default_tolerance", default_tolerance_, 0.0);
 
     int planner_type;
@@ -195,11 +192,9 @@ bool OmplPlanner::makePlan(const geometry_msgs::PoseStamped& start,
   // clear the plan, just in case
   plan.clear();
 
-  ros::NodeHandle n;
-  std::string global_frame = frame_id_;
-
   // until tf can handle transforming things that are way in the past... we'll
   // require the goal to be in our global frame
+  std::string global_frame = frame_id_;
   if (goal.header.frame_id != global_frame)
   {
     ROS_ERROR("The goal pose passed to this planner must be in the %s frame.  "
@@ -278,6 +273,7 @@ bool OmplPlanner::makePlan(const geometry_msgs::PoseStamped& start,
   Eigen::Vector2d goal_eigen(goal.pose.position.x, goal.pose.position.y);
   ompl_planner_->setBounds(lower_bound, upper_bound);
   ompl_planner_->setVoxelSize(cell_size);
+  ompl_planner_->setCostmap(costmap_);
   ompl_planner_->setupProblem(start_eigen, goal_eigen);
 
   // Planning here!
