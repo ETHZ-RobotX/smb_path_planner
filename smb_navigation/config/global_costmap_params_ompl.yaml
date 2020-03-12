@@ -44,14 +44,18 @@ global_costmap:
 #### OMPL parameters
 OmplPlanner:
   use_distance_threshold: true
-  simplify_solution: false
+  simplify_solution: true
   trust_approx_solution: false
   verbose_planner: false
   
-  distance_threshold: 1.05
+  distance_threshold: 1.05 # [m]
   goal_bias: 0.05
-  robot_radius: 0.45
-  num_seconds_to_plan: 2.5
+  robot_radius: 0.45 # [m]
+  num_seconds_to_plan: 2.5 # [s]
+  min_distance_waypoints: 3.0 # [m]
+
+  planner_type: 1 # 0: RRT Connect, 1: RRT*, 2: PRM -
+  replanning_rate: 5.0 # [Hz]
 
  
    

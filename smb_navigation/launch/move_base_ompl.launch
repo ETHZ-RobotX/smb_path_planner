@@ -25,6 +25,16 @@
     <param name="base_global_planner" value="$(arg base_global_planner)"/>
     <param name="base_local_planner"  value="$(arg base_local_planner)"/>
     <rosparam file="$(find smb_navigation)/config/base_local_planner.yaml" command="load"/>
+    
+    <!-- Additional parameters -->
+    <param name="footprint_padding" value="0.01" />
+    <param name="controller_frequency" value="5.0" />
+    <param name="controller_patience" value="3.0" />
+    <param name="oscillation_timeout" value="30.0" />
+    <param name="oscillation_distance" value="0.5" />
+    <param name="planner_patience" value="1" />
+    <param name="controller_patience" value="1" /> 
+    <param name="recovery_behavior_enabled" value="true" />
 
     <!-- observation sources located in costmap_common.yaml -->
     <rosparam file="$(find smb_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />

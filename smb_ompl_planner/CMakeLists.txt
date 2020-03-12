@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(smb_ompl_planner)
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
+add_compile_options(-std=c++11 -Wall)
+
+# Find packages
 find_package(ompl REQUIRED)
 find_package(catkin REQUIRED
     COMPONENTS
@@ -31,6 +34,7 @@ catkin_package(
         tf2_ros
 )
 
+# Build
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
@@ -47,6 +51,7 @@ add_dependencies(${PROJECT_NAME}
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${OMPL_LIBRARIES})
 
+# Executable
 add_executable(${PROJECT_NAME}_node
     src/ompl_planner_node.cpp
 )
@@ -59,6 +64,7 @@ target_link_libraries(${PROJECT_NAME}_node
   ${PROJECT_NAME}
 )
 
+# Install
 install(TARGETS ${PROJECT_NAME}
   DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 

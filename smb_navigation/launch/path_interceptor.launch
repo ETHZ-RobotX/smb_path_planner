@@ -1,0 +1,18 @@
+<launch>
+
+  <arg name="launch_prefix" default=""/>
+
+  <node name="path_interceptor" pkg="smb_navigation" type="path_interceptor_node" output="screen" launch-prefix="$(arg launch_prefix)">
+     <!-- Parameters -->
+     <param name="v_max" value="2.0"/>
+     <param name="a_max" value="3.0"/>
+     <param name="sampling_dt" value="0.25"/>
+     <param name="max_initial_rotation" value="30.0"/>
+     
+     <!-- Topics -->
+     <remap from="odometry" to="/odometry" />
+     <remap from="move_base/path" to="/move_base/TebLocalPlannerROS/local_plan" />
+     <remap from="mpc_trajectory" to="/mpc_trajectory" />
+  </node>
+
+</launch>

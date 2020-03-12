@@ -73,18 +73,11 @@ void OmplPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
     costmap_ = costmap;
     frame_id_ = frame_id;
 
-    unsigned int cx = costmap->getSizeInCellsX(),
-                 cy = costmap->getSizeInCellsY();
-
     private_nh.param("old_navfn_behavior", old_navfn_behavior_, false);
     if (!old_navfn_behavior_)
       convert_offset_ = 0.5;
     else
       convert_offset_ = 0.0;
-
-    plan_pub_ = private_nh.advertise<nav_msgs::Path>("plan", 1);
-    make_plan_srv_ = private_nh.advertiseService(
-        "make_plan", &OmplPlanner::makePlanService, this);
 
     // Now set up the planner
     RrtParameters rrt_params;
@@ -101,9 +94,25 @@ void OmplPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
     private_nh.param("num_seconds_to_plan", rrt_params.num_seconds_to_plan,
                      5.0);
     private_nh.param("default_tolerance", default_tolerance_, 0.0);
+    private_nh.param("min_distance_waypoints", min_distance_waypoints_, 2.0);
 
     int planner_type;
     private_nh.param("planner_type", planner_type, 1);
+
+    double replanning_rate;
+    private_nh.param("replanning_rate", replanning_rate, 5.0);
+
+    // ROS communication
+    plan_pub_ = private_nh.advertise<nav_msgs::Path>("plan", 1);
+    odometry_sub_ = private_nh.subscribe("/odometry", 10,
+                                         &OmplPlanner::odometryCallback, this);
+    make_plan_srv_ = private_nh.advertiseService(
+        "make_plan", &OmplPlanner::makePlanService, this);
+
+    // Now start the ROS timer - every time the path is in collision, we replan
+    timer_collisions_ =
+        private_nh.createTimer(ros::Duration(1 / replanning_rate),
+                               &OmplPlanner::collisionTimerCallback, this);
 
     ompl_planner_ = std::make_shared<smb_ompl_planner::RrtPlanner>(
         rrt_params, RrtPlannerType(planner_type));
@@ -136,12 +145,77 @@ void OmplPlanner::clearRobotCell(const geometry_msgs::PoseStamped& global_pose,
 bool OmplPlanner::makePlanService(nav_msgs::GetPlan::Request& req,
                                   nav_msgs::GetPlan::Response& resp)
 {
+  // Clear containers
+  goal_ << req.goal.pose.position.x, req.goal.pose.position.y;
+  global_path_.clear();
+
+  // Main body of service
   makePlan(req.start, req.goal, resp.plan.poses);
 
   resp.plan.header.stamp = ros::Time::now();
   resp.plan.header.frame_id = frame_id_;
 
   return true;
+}
+
+void OmplPlanner::odometryCallback(const nav_msgs::OdometryConstPtr& odom_msg)
+{
+  odometry_ << odom_msg->pose.pose.position.x, odom_msg->pose.pose.position.y;
+}
+
+void OmplPlanner::collisionTimerCallback(const ros::TimerEvent&)
+{
+  if (global_path_.empty())
+  {
+    return;
+  }
+
+  // Iterate over the poses in the global path and check for collisions
+  bool collision = false;
+  const unsigned char k_threshold = 50;
+  for (auto waypoint : global_path_)
+  {
+    unsigned int state_x_i, state_y_i;
+    if (!costmap_->worldToMap(waypoint.x(), waypoint.y(), state_x_i, state_y_i))
+    {
+      // We are out of the map
+      collision = true;
+      break;
+    }
+
+    // Get the cost
+    unsigned char cost = costmap_->getCost(state_x_i, state_y_i);
+    if (cost == costmap_2d::LETHAL_OBSTACLE)
+    {
+      collision = true;
+      break;
+    }
+    else if (cost <= costmap_2d::INSCRIBED_INFLATED_OBSTACLE &&
+             cost >= k_threshold)
+    {
+      collision = true;
+      break;
+    }
+  }
+
+  // If we are not in collision, we are ok
+  if (!collision)
+  {
+    return;
+  }
+
+  // If we are in collision, we replan
+  ROS_WARN("[Ompl Planner] Global path in collision, replanning");
+  geometry_msgs::PoseStamped start, goal;
+
+  start.header.frame_id = goal.header.frame_id = frame_id_;
+  start.pose.position.x = odometry_.x();
+  start.pose.position.y = odometry_.y();
+  goal.pose.position.x = goal_.x();
+  goal.pose.position.y = goal_.y();
+
+  std::vector<geometry_msgs::PoseStamped> plan;
+  makePlan(start, goal, plan);
 }
 
 void OmplPlanner::mapToWorld(double mx, double my, double& wx, double& wy)
@@ -277,12 +351,12 @@ bool OmplPlanner::makePlan(const geometry_msgs::PoseStamped& start,
   ompl_planner_->setupProblem(start_eigen, goal_eigen);
 
   // Planning here!
-  std::vector<Eigen::Vector2d> waypoints;
+  std::vector<Eigen::Vector2d> ompl_path;
   bool success;
   try
   {
     success = ompl_planner_->getPathBetweenWaypoints(start_eigen, goal_eigen,
-                                                     waypoints);
+                                                     ompl_path);
   }
   catch (ompl::Exception& ex)
   {
@@ -296,12 +370,31 @@ bool OmplPlanner::makePlan(const geometry_msgs::PoseStamped& start,
     return false;
   }
 
-  // Save the path in the right format
   ROS_INFO("[Ompl Planner] Planning successful");
 
+  // Interpolate the global path in between - the local planner will ignore the
+  // orientation along the global path
+  global_path_.clear();
+  global_path_.push_back(ompl_path[0]);
+
+  for (size_t i = 1; i < ompl_path.size(); ++i)
+  {
+    Eigen::Vector2d direction(ompl_path[i] - ompl_path[i - 1]);
+    double distance_path_chunk(direction.norm());
+    int n_points = std::ceil(distance_path_chunk / min_distance_waypoints_);
+
+    for (int j = 1; j <= n_points; ++j) // skip the first one (avoid repetition)
+    {
+      Eigen::Vector2d wp =
+          ompl_path[i - 1] + double(j) / double(n_points) * direction;
+      global_path_.push_back(wp);
+    }
+  }
+
+  // Save the path in the right format
   geometry_msgs::PoseStamped pose_path = start;
   plan.push_back(pose_path);
-  for (auto waypoint : waypoints)
+  for (auto waypoint : global_path_)
   {
     pose_path.pose.position.x = waypoint.x();
     pose_path.pose.position.y = waypoint.y();
@@ -313,6 +406,9 @@ bool OmplPlanner::makePlan(const geometry_msgs::PoseStamped& start,
 
   // publish the plan for visualization purposes
   publishPlan(plan);
+
+  // Update variables for the checks
+  goal_ = goal_eigen;
 
   return true;
 }

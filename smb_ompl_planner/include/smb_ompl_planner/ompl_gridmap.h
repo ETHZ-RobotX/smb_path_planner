@@ -136,6 +136,8 @@ public:
       // We plan also in unknown space, because it is a global planner
       return true;
     }
+
+    return true;
   }
 
   double getRobotRadius() const { return robot_radius_; }

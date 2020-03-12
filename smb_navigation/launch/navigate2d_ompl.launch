@@ -20,4 +20,5 @@
   
   <!-- move_base -->
   <include file="$(find smb_navigation)/launch/move_base_ompl.launch"/>
+  <include file="$(find smb_navigation)/launch/path_interceptor.launch"/>
 </launch> 

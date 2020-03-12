@@ -46,8 +46,6 @@ enum RrtPlannerType
 {
   kRrtConnect = 0,
   kRrtStar,
-  kInformedRrtStar,
-  kBitStar,
   kPrm
 };
 
@@ -135,16 +133,25 @@ public:
                              std::vector<Eigen::Vector2d>& solution);
 
 protected:
+  /**
+   * @brief Method to setup the problem using the start and goal information
+   * @param[in] start: starting position for the planning
+   * @param[in] goal: goal position
+   */
   void setupFromStartAndGoal(const Eigen::Vector2d& start,
                              const Eigen::Vector2d& goal);
 
+  /**
+   * @brief Utility function to get the distance between a state in ompl format
+   *        and a state in eigen format
+   * @return Distance value
+   */
   double getDistanceEigenToState(const Eigen::Vector2d& eigen,
                                  const ompl::base::State* state_ptr);
 
 private:
   // Set up the problem in OMPL
   ompl::OmplSetup problem_setup_;
-  RrtPlannerType planner_type_;
 
   // Costmap
   costmap_2d::Costmap2D* costmap_;
@@ -155,6 +162,7 @@ private:
 
   // Parameters
   RrtParameters params_;
+  RrtPlannerType planner_type_;
   double voxel_size_;
 };
 

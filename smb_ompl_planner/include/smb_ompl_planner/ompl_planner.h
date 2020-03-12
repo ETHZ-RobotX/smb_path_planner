@@ -44,6 +44,7 @@
 #include <nav_core/base_global_planner.h>
 #include <nav_msgs/GetPlan.h>
 #include <nav_msgs/Path.h>
+#include <nav_msgs/Odometry.h>
 #include <ros/ros.h>
 
 #include "smb_ompl_planner/rrt_planner.h"
@@ -113,8 +114,13 @@ public:
    */
   void publishPlan(const std::vector<geometry_msgs::PoseStamped>& path);
 
+  /**
+   * @brief Callbacks
+   */
   bool makePlanService(nav_msgs::GetPlan::Request& req,
                        nav_msgs::GetPlan::Response& resp);
+  void odometryCallback(const nav_msgs::OdometryConstPtr &odom_msg);
+  void collisionTimerCallback(const ros::TimerEvent&);
 
 protected:
   /**
@@ -123,8 +129,16 @@ protected:
    */
   costmap_2d::Costmap2D* costmap_;
   std::string frame_id_;
+
   ros::Publisher plan_pub_;
+  ros::Subscriber odometry_sub_;
+  ros::Timer timer_collisions_;
+
   bool initialized_;
+
+  std::vector<Eigen::Vector2d> global_path_;
+  Eigen::Vector2d odometry_;
+  Eigen::Vector2d goal_;
 
 private:
   void mapToWorld(double mx, double my, double& wx, double& wy);
@@ -143,7 +157,9 @@ private:
 
   unsigned char* cost_array_;
   unsigned int start_x_, start_y_, end_x_, end_y_;
+
   double default_tolerance_;
+  double min_distance_waypoints_;
 
   bool old_navfn_behavior_;
   float convert_offset_;

@@ -2,10 +2,10 @@
 <package format="2">
   <name>smb_navigation</name>
   <version>0.0.0</version>
-  <description>The swaco_navigation package</description>
+  <description>The smb_navigation package</description>
 
-  <maintainer email="grizzi@ethz.ch">Giuseppe Rizzi</maintainer>
-  <author email="grizzi@ethz.ch">Giuseppe Rizzi</author>
+  <maintainer email="lbartolomei@ethz.ch">Luca Bartolomei</maintainer>
+  <author email="lbartolomei@ethz.ch">Luca Bartolomei</author>
   <license>TODO</license>
 
   <buildtool_depend>catkin</buildtool_depend>
@@ -14,6 +14,7 @@
   <depend>teb_local_planner</depend>
   <depend>pointcloud_to_laserscan</depend>
   <depend>robot_self_filter</depend>
+  <depend>smb_ompl_planner</depend>
 
   <export>
   </export>
