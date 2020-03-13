@@ -181,8 +181,8 @@ public:
     Eigen::Vector2d s2_eigen(s2_derived->values[0], s2_derived->values[1]);
 
     // Discretize the connection s1-s2
-    int n_states = std::floor((s1_eigen - s2_eigen).norm() / robot_radius_);
     Eigen::Vector2d direction(s2_eigen - s1_eigen);
+    int n_states = std::floor(direction.norm() / robot_radius_);
 
     // Check the particular case where n_states is 0. In this case, check just
     // the start and end states
