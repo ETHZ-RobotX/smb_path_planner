@@ -1,11 +1,17 @@
 # Super Mega Bot Path Planner
 
-Package for path planning of Super Mega Bots for the ETH Robotics Summer School, 2020. 
+Package for path planning of Super Mega Bots for the ETH Robotics Summer School. 
 The package has been tested under ROS Melodic and Ubuntu 18.04.
 
 __Author: Luca Bartolomei__  
 __Affiliation: Vision For Robotics Lab, ETH Zurich__  
 __Contact: Luca Bartolomei, lbartolomei@ethz.ch__
+
+# TO-DO list
+This is what should be done if something changes in the software stack of the summer school.
+* Adapt the planner with the new Gazebo simulation of the SMB
+* Adapt the planner with the new controller of the SMB
+* In order to run move_base stuff, we need odometry information. This should be added both in the simulation and in the state estimator of the real robot.
 
 # Installation instructions  
 Install the following packages first:
