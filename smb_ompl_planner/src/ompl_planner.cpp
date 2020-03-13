@@ -45,11 +45,14 @@ PLUGINLIB_EXPORT_CLASS(smb_ompl_planner::OmplPlanner,
 namespace smb_ompl_planner
 {
 
-OmplPlanner::OmplPlanner() : costmap_(NULL), initialized_(false) {}
+OmplPlanner::OmplPlanner()
+    : costmap_(NULL), initialized_(false), has_odometry_(false)
+{
+}
 
 OmplPlanner::OmplPlanner(std::string name, costmap_2d::Costmap2D* costmap,
                          std::string frame_id)
-    : costmap_(NULL), initialized_(false)
+    : costmap_(NULL), initialized_(false), has_odometry_(false)
 {
   // initialize the planner
   initialize(name, costmap, frame_id);
@@ -102,9 +105,16 @@ void OmplPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
     double replanning_rate;
     private_nh.param("replanning_rate", replanning_rate, 5.0);
 
+    std::string odometry_topic;
+    if (!private_nh.getParam("odometry_topic", odometry_topic))
+    {
+      ROS_WARN("[Ompl Planner] Odometry topic not specified");
+      odometry_topic = "/odometry_test";
+    }
+
     // ROS communication
     plan_pub_ = private_nh.advertise<nav_msgs::Path>("plan", 1);
-    odometry_sub_ = private_nh.subscribe("/odometry", 10,
+    odometry_sub_ = private_nh.subscribe(odometry_topic, 10,
                                          &OmplPlanner::odometryCallback, this);
     make_plan_srv_ = private_nh.advertiseService(
         "make_plan", &OmplPlanner::makePlanService, this);
@@ -150,7 +160,10 @@ bool OmplPlanner::makePlanService(nav_msgs::GetPlan::Request& req,
   global_path_.clear();
 
   // Main body of service
-  makePlan(req.start, req.goal, resp.plan.poses);
+  if (!makePlan(req.start, req.goal, resp.plan.poses))
+  {
+    return false;
+  }
 
   resp.plan.header.stamp = ros::Time::now();
   resp.plan.header.frame_id = frame_id_;
@@ -160,6 +173,7 @@ bool OmplPlanner::makePlanService(nav_msgs::GetPlan::Request& req,
 
 void OmplPlanner::odometryCallback(const nav_msgs::OdometryConstPtr& odom_msg)
 {
+  has_odometry_ = true;
   odometry_ << odom_msg->pose.pose.position.x, odom_msg->pose.pose.position.y;
 }
 
@@ -260,6 +274,13 @@ bool OmplPlanner::makePlan(const geometry_msgs::PoseStamped& start,
   {
     ROS_ERROR("This planner has not been initialized yet, but it is being "
               "used, please call initialize() before use");
+    return false;
+  }
+
+  if (!has_odometry_)
+  {
+    ROS_ERROR_THROTTLE(5, "[Ompl Planner] Odometry not available. Have you set "
+                          "the right topic in the parameter file?");
     return false;
   }
 

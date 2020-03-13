@@ -135,6 +135,7 @@ protected:
   ros::Timer timer_collisions_;
 
   bool initialized_;
+  bool has_odometry_;
 
   std::vector<Eigen::Vector2d> global_path_;
   Eigen::Vector2d odometry_;

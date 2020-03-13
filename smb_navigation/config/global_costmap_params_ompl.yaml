@@ -41,7 +41,7 @@ global_costmap:
     enabled: true
     observation_sources: laser_scan_sensor
 
-#### OMPL parameters
+#### OMPL Planner Parameters ####
 OmplPlanner:
   use_distance_threshold: true
   simplify_solution: true
@@ -56,6 +56,8 @@ OmplPlanner:
 
   planner_type: 1 # 0: RRT Connect, 1: RRT*, 2: PRM -
   replanning_rate: 5.0 # [Hz]
+  
+  odometry_topic: "/odometry"
 
  
    
