@@ -6,9 +6,7 @@
     Planning plugin for RVIZ.
   </description>
 
-  <author email="helen.oleynikova@mavt.ethz.ch">Helen Oleynikova</author>
   <author email="lbartolomei@mavt.ethz.ch">Luca Bartolomei</author>
-
   <maintainer email="lbartolomei@mavt.ethz.ch">Luca Bartolomei</maintainer>
 
   <license>BSD</license>
