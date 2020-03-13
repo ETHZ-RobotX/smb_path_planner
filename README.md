@@ -11,6 +11,9 @@ __Contact: Luca Bartolomei, lbartolomei@ethz.ch__
 This is what should be done if something changes in the software stack of the summer school.
 * Adapt the planner with the new Gazebo simulation of the SMB
 * Adapt the planner with the new controller of the SMB
+* Add possibility to estimate traversability of terrain (2.5D maps)
+* Find proper way to increase the clearance of the global paths from costmap_2d
+* Tune the planner properly
 * In order to run move_base stuff, we need odometry information. This should be added both in the simulation and in the state estimator of the real robot.
 
 # Installation instructions  
