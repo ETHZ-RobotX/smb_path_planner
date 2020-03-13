@@ -19,6 +19,6 @@
   <include file="$(find smb_navigation)/launch/point_cloud_to_scan.launch"/>
   
   <!-- move_base -->
-  <include file="$(find smb_navigation)/launch/move_base_ompl.launch"/>
+  <include file="$(find smb_ompl_planner)/launch/move_base_ompl.launch"/>
   <include file="$(find smb_navigation)/launch/path_interceptor.launch"/>
 </launch> 
