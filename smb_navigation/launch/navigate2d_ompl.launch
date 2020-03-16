@@ -3,8 +3,7 @@
 <launch>
   
   <arg name="simulation" 	default="true"/>
-  <arg name="odom_topic" 	default="/base/odometry"/>
-  <arg name="icp_running"       default="false"/>
+  <arg name="icp_running" default="false"/>
 
   <group unless="$(arg icp_running)">
     <include file="$(find smb_navigation)/launch/point_cloud_processing.launch">
