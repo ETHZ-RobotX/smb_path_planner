@@ -15,7 +15,7 @@
   <depend>pointcloud_to_laserscan</depend>
   <depend>robot_self_filter</depend>
   <depend>smb_ompl_planner</depend>
-
+  <exec_depend>point_cloud_processor</exec_depend>
   <export>
   </export>
 </package>
