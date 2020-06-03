@@ -38,6 +38,7 @@ catkin_package(
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
+    ${OMPL_INCLUDE_DIRS}
 )
 
 add_library(${PROJECT_NAME}
