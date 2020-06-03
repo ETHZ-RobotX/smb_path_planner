@@ -33,7 +33,7 @@ TrajectoryPlannerROS:
 
 TebLocalPlannerROS:
 
-  odom_topic: /odometry
+  odom_topic: /camera/odom/sample
   map_frame: /world
 
   # Trajectory

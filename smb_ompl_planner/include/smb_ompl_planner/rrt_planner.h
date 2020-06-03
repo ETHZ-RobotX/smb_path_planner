@@ -99,10 +99,7 @@ public:
 
   void setVoxelSize(const double voxel_size) { voxel_size_ = voxel_size; }
 
-  void setCostmap(costmap_2d::Costmap2D* costmap)
-  {
-    costmap_ = costmap;
-  }
+  void setCostmap(costmap_2d::Costmap2D* costmap) { costmap_ = costmap; }
 
   /**
    * @brief Method to get the straight line planning between start and goal

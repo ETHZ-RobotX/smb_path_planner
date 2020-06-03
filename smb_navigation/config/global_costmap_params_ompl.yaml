@@ -48,16 +48,17 @@ OmplPlanner:
   trust_approx_solution: false
   verbose_planner: false
   
-  distance_threshold: 1.05 # [m]
+  distance_threshold: 1.05     # [m]
   goal_bias: 0.05
-  robot_radius: 0.45 # [m]
-  num_seconds_to_plan: 2.5 # [s]
-  min_distance_waypoints: 3.0 # [m]
+  robot_radius: 0.45           # [m]
+  num_seconds_to_plan: 2.5     # [s]
+  min_distance_waypoints: 3.0  # [m]
+  dist_goal_reached: 0.3       # [m] Threshold to consider the goal reached
 
   planner_type: 1 # 0: RRT Connect, 1: RRT*, 2: PRM
   replanning_rate: 5.0 # [Hz]
   
-  odometry_topic: "/odometry"
+  odometry_topic: "/camera/odom/sample"
 
  
    

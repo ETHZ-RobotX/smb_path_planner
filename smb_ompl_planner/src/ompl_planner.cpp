@@ -29,7 +29,7 @@
 
 /*
  * ompl_planner.cpp
- * @brief Implementation of the logic of the planner
+ * @brief Implementation of the logic of the OMPL-based planner
  * @author: Luca Bartolomei
  * Created on: March 11, 2020
  */
@@ -96,6 +96,7 @@ void OmplPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
     private_nh.param("robot_radius", rrt_params.robot_radius, 0.5);
     private_nh.param("num_seconds_to_plan", rrt_params.num_seconds_to_plan,
                      5.0);
+    private_nh.param("dist_goal_reached", dist_goal_reached_, 0.3);
     private_nh.param("default_tolerance", default_tolerance_, 0.0);
     private_nh.param("min_distance_waypoints", min_distance_waypoints_, 2.0);
 
@@ -110,6 +111,11 @@ void OmplPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
     {
       ROS_WARN("[Ompl Planner] Odometry topic not specified");
       odometry_topic = "/odometry_test";
+    }
+    else
+    {
+      ROS_INFO_STREAM(
+          "[Ompl Planner] Subscribing to odom topic: " << odometry_topic);
     }
 
     // ROS communication
@@ -181,6 +187,14 @@ void OmplPlanner::collisionTimerCallback(const ros::TimerEvent&)
 {
   if (global_path_.empty())
   {
+    return;
+  }
+
+  // Check distance to goal
+  double dist_to_goal = (odometry_ - goal_).norm();
+  if (dist_to_goal <= dist_goal_reached_)
+  {
+    ROS_INFO_THROTTLE(5, "[Ompl Planner] Goal reached!");
     return;
   }
 

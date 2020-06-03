@@ -43,12 +43,12 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_core/base_global_planner.h>
 #include <nav_msgs/GetPlan.h>
-#include <nav_msgs/Path.h>
 #include <nav_msgs/Odometry.h>
+#include <nav_msgs/Path.h>
 #include <ros/ros.h>
 
-#include "smb_ompl_planner/rrt_planner.h"
 #include "smb_ompl_planner/orientation_filter.h"
+#include "smb_ompl_planner/rrt_planner.h"
 
 namespace smb_ompl_planner
 {
@@ -68,7 +68,7 @@ public:
    * @param  frame_id Frame of the costmap
    */
   OmplPlanner(std::string name, costmap_2d::Costmap2D* costmap,
-                std::string frame_id);
+              std::string frame_id);
 
   /**
    * @brief  Default deconstructor for the PlannerCore object
@@ -106,8 +106,7 @@ public:
    * @return True if a valid plan was found, false otherwise
    */
   bool makePlan(const geometry_msgs::PoseStamped& start,
-                const geometry_msgs::PoseStamped& goal,
-                const double tolerance,
+                const geometry_msgs::PoseStamped& goal, const double tolerance,
                 std::vector<geometry_msgs::PoseStamped>& plan);
   /**
    * @brief  Publish a path for visualization purposes
@@ -119,7 +118,7 @@ public:
    */
   bool makePlanService(nav_msgs::GetPlan::Request& req,
                        nav_msgs::GetPlan::Response& resp);
-  void odometryCallback(const nav_msgs::OdometryConstPtr &odom_msg);
+  void odometryCallback(const nav_msgs::OdometryConstPtr& odom_msg);
   void collisionTimerCallback(const ros::TimerEvent&);
 
 protected:
@@ -161,6 +160,7 @@ private:
 
   double default_tolerance_;
   double min_distance_waypoints_;
+  double dist_goal_reached_;
 
   bool old_navfn_behavior_;
   float convert_offset_;
