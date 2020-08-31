@@ -40,7 +40,7 @@ add_dependencies(path_interceptor
     ${catkin_EXPORTED_TARGETS})
 
 add_executable(path_interceptor_node
-    src/path_interceptor_node.cpp)
+    src/nodes/path_interceptor_node.cpp)
 
 add_dependencies(path_interceptor_node
     path_interceptor
@@ -61,7 +61,7 @@ add_dependencies(gridmap_converter
     ${catkin_EXPORTED_TARGETS})
 
 add_executable(gridmap_converter_node
-    src/gridmap_converter_node.cpp)
+    src/nodes/gridmap_converter_node.cpp)
 
 add_dependencies(gridmap_converter_node
     gridmap_converter
@@ -72,7 +72,7 @@ target_link_libraries(gridmap_converter_node
 
 ### Odometry interceptor
 add_executable(odometry_interceptor_node
-    src/odom_interceptor_node.cpp)
+    src/nodes/odom_interceptor_node.cpp)
 
 add_dependencies(odometry_interceptor_node
     ${catkin_EXPORTED_TARGETS})
