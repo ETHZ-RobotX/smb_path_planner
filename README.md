@@ -20,7 +20,7 @@ This is what should be done if something changes in the software stack of the su
 # Installation instructions  
 Install the following packages first:
 ```
-sudo apt-get install ros-melodic-cmake-modules ros-melodic-velodyne-gazebo-plugins python-wstool python-catkin-tools ros-melodic-ompl ros-melodic-move-base ros-melodic-dwa-local-planner ros-melodic-costmap-2d ros-melodic-teb-local-planner ros-melodic-robot-self-filter ros-melodic-pointcloud-to-laserscan
+sudo apt-get install ros-melodic-cmake-modules ros-melodic-velodyne-gazebo-plugins python-wstool python-catkin-tools ros-melodic-ompl ros-melodic-move-base ros-melodic-navfn ros-melodic-dwa-local-planner ros-melodic-costmap-2d ros-melodic-teb-local-planner ros-melodic-robot-self-filter ros-melodic-pointcloud-to-laserscan
 ```
 Create a catkin workspace:  
 ```
