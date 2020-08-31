@@ -4,13 +4,12 @@ set(CMAKE_BUILD_TYPE Release)
 
 add_compile_options(-std=c++11 -Wall)
 
+# Set dependencies
 set(PACKAGE_DEPENDENCIES
-        roscpp
-        move_base
-        teb_local_planner
-        pointcloud_to_laserscan
-        robot_self_filter
-        smb_ompl_planner
+    roscpp
+    move_base
+    grid_map_costmap_2d
+    grid_map_ros
 )
 
 find_package(catkin REQUIRED COMPONENTS 
@@ -30,9 +29,9 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
+### Path interceptor
 add_library(path_interceptor
-    src/path_interceptor.cpp
-)
+    src/path_interceptor.cpp)
 
 target_link_libraries(path_interceptor
     ${catkin_LIBRARIES})
@@ -48,16 +47,49 @@ add_dependencies(path_interceptor_node
     ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(path_interceptor_node
-    path_interceptor
+    path_interceptor)
+
+### Grid Map converter
+add_library(gridmap_converter
+    src/gridmap_converter.cpp
 )
 
-# Install
+target_link_libraries(gridmap_converter
+    ${catkin_LIBRARIES})
+
+add_dependencies(gridmap_converter
+    ${catkin_EXPORTED_TARGETS})
+
+add_executable(gridmap_converter_node
+    src/gridmap_converter_node.cpp)
+
+add_dependencies(gridmap_converter_node
+    gridmap_converter
+    ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(gridmap_converter_node
+    gridmap_converter)
+
+### Odometry interceptor
+add_executable(odometry_interceptor_node
+    src/odom_interceptor_node.cpp)
+
+add_dependencies(odometry_interceptor_node
+    ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(odometry_interceptor_node
+    ${catkin_LIBRARIES})
+
+### Install
 install(DIRECTORY include/${PROJECT_NAME}/
     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
     PATTERN ".svn" EXCLUDE
 )
 
-install(TARGETS path_interceptor path_interceptor_node
+install(TARGETS path_interceptor
+                path_interceptor_node
+                gridmap_converter
+                gridmap_converter_node
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

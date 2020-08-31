@@ -12,13 +12,16 @@
   
   <depend>roscpp</depend>
   <depend>move_base</depend>
-  <depend>teb_local_planner</depend>
-  <depend>pointcloud_to_laserscan</depend>
-  <depend>robot_self_filter</depend>
-  <depend>smb_ompl_planner</depend>
+  <depend>grid_map_costmap_2d</depend>
+  <depend>grid_map_ros</depend>
   
   <exec_depend>point_cloud_processor</exec_depend>
   <exec_depend>smb_path_following_controller</exec_depend>
+  <exec_depend>pointcloud_to_laserscan</exec_depend>
+  <exec_depend>robot_self_filter</exec_depend>
+  <exec_depend>teb_local_planner</exec_depend>
+  <exec_depend>traversability_estimation</exec_depend>
+  <exec_depend>smb_ompl_planner</exec_depend>
   
   <export>
   </export>
