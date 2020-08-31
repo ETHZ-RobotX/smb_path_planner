@@ -1,0 +1,19 @@
+# more on http://wiki.ros.org/navigation/Tutorials/RobotSetup
+
+# The "static_map" parameter determines whether or not the costmap should initialize itself 
+# based on a map served by the map_server. If you aren't using an existing map or map server, 
+# set the static_map parameter to false.
+
+global_costmap:
+  global_frame: world
+  robot_base_frame: base
+  update_frequency: 5.0
+  publish_frequency: 2.0
+  
+  static_map: false
+  map_topic: /traversability_occ_map
+
+  plugins:
+    - 
+      name: static
+      type: "costmap_2d::StaticLayer"

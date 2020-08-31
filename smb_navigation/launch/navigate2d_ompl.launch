@@ -2,22 +2,36 @@
 
 <launch>
   
-  <arg name="simulation" 	default="true"/>
-  <arg name="icp_running" default="false"/>
+  <arg name="simulation"         default="true"/>
+  <arg name="icp_running"        default="false"/>
+  <arg name="run_traversability" default="true"/>
 
+  <!-- Mapping -->
   <group unless="$(arg icp_running)">
-    <include file="$(find smb_navigation)/launch/point_cloud_processing.launch">
+    <include file="$(find smb_navigation)/launch/mapping/point_cloud_processing.launch">
       <arg name="config_files_folder" value="$(find smb_navigation)/config/point_cloud_processing_no_icp"/>
     </include>
     <group unless="$(arg simulation)">
-      <include file="$(find smb_navigation)/launch/robosense.launch"/>
+      <include file="$(find smb_navigation)/launch/mapping/robosense.launch"/>
     </group>
   </group>
 
-
-  <include file="$(find smb_navigation)/launch/point_cloud_to_scan.launch"/>
+  <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
   
-  <!-- move_base -->
-  <include file="$(find smb_ompl_planner)/launch/move_base_ompl.launch"/>
+  <!-- Path Planning -->
+  <group unless="$(arg run_traversability)"> 
+    <!-- This is the standard move base -->
+    <include file="$(find smb_ompl_planner)/launch/move_base_ompl.launch"/>
+  </group>
+  
+  <group if="$(arg run_traversability)">
+    <!-- This is move base with traversability estimation -->
+    <include file="$(find smb_ompl_planner)/launch/move_base_ompl_traversability.launch"/>
+
+    <!-- Traversability mapping -->
+    <include file="$(find smb_navigation)/launch/mapping/traversability_mapping.launch"/>
+  </group>
+  
   <include file="$(find smb_navigation)/launch/path_interceptor.launch"/>
+  
 </launch> 

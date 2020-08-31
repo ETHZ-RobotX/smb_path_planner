@@ -1,0 +1,6 @@
+gridmap_converter:
+  traversability_topic: "/traversability_estimation/traversability_map"
+  layer: "traversability"  # layer of Gridmap to transform in costmap2d 
+  occupancy_map_topic: "traversability_occ_map"
+  max_value_grid_map: 1.0  # max value of traversability_map gridMap
+  min_value_grid_map: 0.0  # min value of traversability_map gridMap
