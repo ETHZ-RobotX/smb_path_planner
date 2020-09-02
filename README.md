@@ -47,7 +47,8 @@ Additional documentation on `move_base` can be found [here](https://wiki.ros.org
 The `smb_path_planner` package is composed by 3 packages:
 * `smb_ompl_planner`: global planner for `move_base` based on the [OMPL library](http://ompl.kavrakilab.org/) for motion planning;
 * `smb_navigation`: package containing utilities, configurations and launch files for the planning with `move_base`;
-* `smb_navigation_rviz`: package containing the RViz plugin to put a goal for the planner easily.
+* `smb_navigation_rviz`: package containing the RViz plugin to put a goal for the planner easily;
+* `traversability_layer`: custom `costmap_2d` implementation to incorporate traversability maps.
 
 ## Planning Panel in RViz
 Make sure all the packages have built successfully. As a sanity check, 
