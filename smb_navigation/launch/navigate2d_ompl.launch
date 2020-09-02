@@ -25,7 +25,7 @@
   </group>
   
   <group if="$(arg run_traversability)">
-    <!-- This is move base with traversability estimation -->
+    <!-- This is move base with traversability estimation - you can switch cost layers on and off from dynamic rqt -->
     <include file="$(find smb_ompl_planner)/launch/move_base_ompl_traversability.launch"/>
 
     <!-- Traversability mapping -->

@@ -3,10 +3,11 @@
   <arg name="launch_prefix" default=""/>
   <arg name="odom_topic"    default="/camera/odom/sample"/>
 
-  <!-- Grid map converter -->
+  <!-- Grid map converter: if you want to use this, then you need to add a static layer to your cost layer configuration
   <node name="gridmap_converter" pkg="smb_navigation" type="gridmap_converter_node" output="screen" launch-prefix="$(arg launch_prefix)">
      <rosparam command="load" file="$(find smb_navigation)/config/traversability_estimation/gridmap_converter.yaml" />
-  </node>
+  </node> 
+  -->
   
   <!-- Odometry interceptor -->
   <node name="odometry_interceptor" pkg="smb_navigation" type="odometry_interceptor_node" output="screen">

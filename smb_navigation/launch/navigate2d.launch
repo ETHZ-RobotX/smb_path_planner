@@ -2,21 +2,23 @@
 
 <launch>
   
-  <arg name="icp_running"       default="false"/>
-  <arg name="simulation"        default="false"/>
+  <arg name="icp_running"        default="false"/>
+  <arg name="simulation"         default="true"/>
+  <arg name="run_traversability" default="true"/>
 
+  <!-- Mapping -->
   <group unless="$(arg icp_running)">
-    <include file="$(find smb_navigation)/launch/point_cloud_processing.launch">
+    <include file="$(find smb_navigation)/launch/mapping/point_cloud_processing.launch">
       <arg name="config_files_folder" value="$(find smb_navigation)/config/point_cloud_processing_no_icp"/>
     </include>
     <group unless="$(arg simulation)">
-      <include file="$(find smb_navigation)/launch/robosense.launch"/>
+      <include file="$(find smb_navigation)/launch/mapping/robosense.launch"/>
     </group>
   </group>
 
-
-  <include file="$(find smb_navigation)/launch/point_cloud_to_scan.launch"/>
+  <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
   
   <!-- move_base -->
   <include file="$(find smb_navigation)/launch/move_base.launch"/>
+  <include file="$(find smb_navigation)/launch/path_interceptor.launch"/>
 </launch> 
