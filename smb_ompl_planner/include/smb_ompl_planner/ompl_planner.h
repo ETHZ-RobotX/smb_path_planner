@@ -136,7 +136,8 @@ protected:
   bool initialized_;
   bool has_odometry_;
 
-  std::vector<Eigen::Vector2d> global_path_;
+  std::vector<Eigen::Vector2d, Eigen::aligned_allocator<Eigen::Vector2d>>
+      global_path_;
   Eigen::Vector2d odometry_;
   Eigen::Vector2d goal_;
 
