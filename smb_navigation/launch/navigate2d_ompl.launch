@@ -4,7 +4,7 @@
   
   <arg name="simulation"         default="true"/>
   <arg name="icp_running"        default="false"/>
-  <arg name="run_traversability" default="true"/>
+  <arg name="run_traversability" default="false"/>
 
   <!-- Mapping -->
   <group unless="$(arg icp_running)">

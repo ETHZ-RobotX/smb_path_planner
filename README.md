@@ -11,9 +11,9 @@ __Contact: Luca Bartolomei, lbartolomei@ethz.ch__
 This is what should be done if something changes in the software stack of the summer school.
 * ~~Adapt the planner with the new Gazebo simulation of the SMB~~ (03/06/2020)
 * ~~Adapt the planner with the new controller of the SMB~~ (03/06/2020)
-* Add possibility to estimate traversability of terrain (2.5D maps)
+* ~~Add possibility to estimate traversability of terrain (2.5D maps)~~ (02/09/2020)
 * Find proper way to increase the clearance of the global paths from costmap_2d
-* Tune the planner properly
+* ~~Tune the planner properly~~ (02/09/2020)
 * Write configuration and launch files for the real robot (if necessary)
 * ~~In order to run move_base stuff, we need odometry information. This should be added both in the simulation and in the state estimator of the real robot.~~ (03/06/2020)
 
@@ -74,7 +74,16 @@ Finally, start the local and global planners:
 $ roslaunch smb_navigation navigate2d_ompl.launch
 ```
 To send a global goal position, select it in the planning panel and press the
-button `Start Planning`.
+button `Start Planning`.  
+
+### Running with traversability estimation
+Start the simulation as in the previous case, and then run:
+```
+$ roslaunch smb_navigation navigate2d_ompl.launch run_traversability:=true
+```
+Notice that in this case, there are 3 different cost layers (traversability, laser scans and inflation layers), but **only** the traversability layer is active. To de-activate it, or to enable the other layers, run `rosrun rqt_reconfigure rqt_reconfigure` and enable/disable the layers.  
+
+Notice that it is not possible to run the obstacle layer (based on laser scans) and the traversability layer at the same time in the current configuration, as the laser scan clears the traversability map. You are more than welcome to find a proper way to fuse these two maps!
 
 ## How to run the planner on the real robot
 Start the `LPC` on the robot and the `OPC` on the operator side. To run the 
