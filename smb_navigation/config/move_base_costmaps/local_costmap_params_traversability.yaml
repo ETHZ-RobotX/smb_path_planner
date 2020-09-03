@@ -67,3 +67,9 @@ local_costmap:
 #     -
 #      name: static
 #      type: "costmap_2d::StaticLayer"
+#     - 
+#      name: obstacle_layer
+#      type: "costmap_2d::ObstacleLayer"
+#     - 
+#      name: inflation_layer
+#      type: "costmap_2d::InflationLayer"

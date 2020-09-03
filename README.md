@@ -16,6 +16,8 @@ This is what should be done if something changes in the software stack of the su
 * ~~Tune the planner properly~~ (02/09/2020)
 * Write configuration and launch files for the real robot (if necessary)
 * ~~In order to run move_base stuff, we need odometry information. This should be added both in the simulation and in the state estimator of the real robot.~~ (03/06/2020)
+* ~~Check Rowesys traversability map implementation and configuration files~~ (03/09/2020)
+* ~~Add traversability layer readme (e.g. parameter explanation)~~ (03/09/2020)
 
 # Installation instructions  
 Install the following packages first:
