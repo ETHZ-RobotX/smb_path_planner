@@ -12,6 +12,7 @@
 
   <run_depend>smb_ompl_planner</run_depend>
   <run_depend>smb_navigation</run_depend>
+  <run_depend>traversability_layer</run_depend>
   <run_depend>smb_navigation_rviz</run_depend>
 
   <export>

@@ -1,0 +1,25 @@
+submap_service: "/elevation_mapping/get_submap"
+map_frame_id: "world"     # Must be the same as the input elevation submap.
+robot_frame_id: "base"
+min_update_rate: 2.0
+map_center_x: 0.0
+map_center_y: 0.0
+map_length_x: 10.0
+map_length_y: 10.0
+footprint_yaw: 0.20
+max_gap_width: 0.20
+
+grid_map_to_initialize_traversability_map:
+  enable: false
+  grid_map_topic_name: initial_elevation_map
+
+# Footprint parameters
+footprint:
+  footprint_polygon: [[0.45, 0.30], [0.45, -0.30], [-0.45, -0.30], [-0.45, 0.30]] # Vertices of footprint polygon with coordinates [x, y] in robot footprint frame.
+  circular_footprint_radius: 0.541
+  circular_footprint_radius_inscribed: 0.30
+  circular_footprint_offset: 0.15
+  footprint_frame_id: base
+  traversability_default: 0.3
+  verify_roughness_footprint: false
+  check_robot_inclination: false

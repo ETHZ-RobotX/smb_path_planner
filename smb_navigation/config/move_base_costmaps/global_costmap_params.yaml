@@ -39,7 +39,5 @@ global_costmap:
 
   inflation_layer:
     enabled: true
-    observation_sources: laser_scan_sensor
-
- 
+    observation_sources: laser_scan_sensor 
    

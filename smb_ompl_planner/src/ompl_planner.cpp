@@ -37,6 +37,7 @@
 #include "smb_ompl_planner/ompl_planner.h"
 
 #include <pluginlib/class_list_macros.h>
+#include <tf_conversions/tf_eigen.h>
 
 // register this planner as a BaseOmplPlanner plugin
 PLUGINLIB_EXPORT_CLASS(smb_ompl_planner::OmplPlanner,
@@ -407,10 +408,12 @@ bool OmplPlanner::makePlan(const geometry_msgs::PoseStamped& start,
 
   ROS_INFO("[Ompl Planner] Planning successful");
 
-  // Interpolate the global path in between - the local planner will ignore the
-  // orientation along the global path
+  // Interpolate the global path in between
   global_path_.clear();
   global_path_.push_back(ompl_path[0]);
+
+  std::vector<double> orientations;
+  orientations.push_back(tf::getYaw(start.pose.orientation));
 
   for (size_t i = 1; i < ompl_path.size(); ++i)
   {
@@ -423,16 +426,23 @@ bool OmplPlanner::makePlan(const geometry_msgs::PoseStamped& start,
       Eigen::Vector2d wp =
           ompl_path[i - 1] + double(j) / double(n_points) * direction;
       global_path_.push_back(wp);
+
+      Eigen::Vector2d direction_normalized(direction.normalized());
+      orientations.push_back(
+          std::atan2(direction_normalized.y(), direction_normalized.x()));
     }
   }
 
   // Save the path in the right format
   geometry_msgs::PoseStamped pose_path = start;
   plan.push_back(pose_path);
-  for (auto waypoint : global_path_)
+  for (int i = 0; i < global_path_.size(); ++i)
   {
+    Eigen::Vector2d waypoint = global_path_[i];
     pose_path.pose.position.x = waypoint.x();
     pose_path.pose.position.y = waypoint.y();
+    pose_path.pose.orientation =
+        tf::createQuaternionMsgFromYaw(orientations[i]);
     plan.push_back(pose_path);
   }
 

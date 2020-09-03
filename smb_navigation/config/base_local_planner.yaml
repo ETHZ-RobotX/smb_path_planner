@@ -1,15 +1,15 @@
 # more on http://wiki.ros.org/move_base
 
-controller_frequency: 0.3
+controller_frequency: 0.1
 recovery_behaviour_enabled: true
 
 NavfnROS:
   allow_unknown: true # Specifies whether or not to allow navfn to create plans that traverse unknown space.
-  default_tolerance: 0.1 # A tolerance on the goal point for the planner.
+  default_tolerance: 0.2 # A tolerance on the goal point for the planner.
 
 TrajectoryPlannerROS:
   # Robot Configuration Parameters
-  max_vel_x: 0.5
+  max_vel_x: 1.0
   min_vel_x: 0.0
   max_vel_y: 0.0
   min_vel_y: 0.0
@@ -26,7 +26,7 @@ TrajectoryPlannerROS:
   sim_granularity: 0.1
 
   yaw_goal_tolerance: 0.3
-  xy_goal_tolerance: 0.2
+  xy_goal_tolerance: 0.3
   latch_xy_goal_tolerance: true
 
   holonomic_robot: false
@@ -40,14 +40,14 @@ TebLocalPlannerROS:
   teb_autosize: True
   dt_ref: 0.3
   dt_hysteresis: 0.1
-  global_plan_overwrite_orientation: True
+  global_plan_overwrite_orientation: true
   max_global_plan_lookahead_dist: 3.0
   feasibility_check_no_poses: 5
-  allow_init_with_backwards_motion: False
+  allow_init_with_backwards_motion: false
   global_plan_viapoint_sep: 0.5
 
   # Robot
-  max_vel_x: 0.6
+  max_vel_x: 1.0
   max_vel_y: 0.0
   max_vel_x_backwards: 0.3
   max_vel_y_backwards: 0.3
