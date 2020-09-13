@@ -436,13 +436,23 @@ bool OmplPlanner::makePlan(const geometry_msgs::PoseStamped& start,
   // Save the path in the right format
   geometry_msgs::PoseStamped pose_path = start;
   plan.push_back(pose_path);
-  for (int i = 0; i < global_path_.size(); ++i)
+  for (size_t i = 0; i < global_path_.size(); ++i)
   {
     Eigen::Vector2d waypoint = global_path_[i];
     pose_path.pose.position.x = waypoint.x();
     pose_path.pose.position.y = waypoint.y();
-    pose_path.pose.orientation =
-        tf::createQuaternionMsgFromYaw(orientations[i]);
+
+    // Set the right orientation for every point (the last point has to have
+    // the goal orientation!)
+    if (i != global_path_.size() - 1)
+    {
+      pose_path.pose.orientation =
+          tf::createQuaternionMsgFromYaw(orientations[i]);
+    }
+    else
+    {
+      pose_path.pose.orientation = goal.pose.orientation;
+    }
     plan.push_back(pose_path);
   }
 
