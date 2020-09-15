@@ -75,6 +75,9 @@ void PoseWidget::setPose(const geometry_msgs::Pose& pose)
   table_widget_->item(0, 2)->setText(
       QString::number(tf::getYaw(pose.orientation) * kRadToDeg, 'f', 2));
   table_widget_->blockSignals(false);
+
+  geometry_msgs::Pose pose_copy(pose);
+  Q_EMIT poseUpdated(id_, pose_copy);
 }
 
 void PoseWidget::itemChanged(QTableWidgetItem* item)

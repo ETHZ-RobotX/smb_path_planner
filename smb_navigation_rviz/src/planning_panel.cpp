@@ -108,6 +108,8 @@ void PlanningPanel::createLayout()
 
   odometry_sub_ = nh_.subscribe(odometry_topic_.toStdString(), 1,
                                 &PlanningPanel::odometryCallback, this);
+  move_base_sub_ = nh_.subscribe("/move_base_simple/goal", 1,
+                                 &PlanningPanel::moveBaseGoalCallback, this);
   move_base_pub_ =
       nh_.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal", 100);
 
@@ -252,6 +254,11 @@ void PlanningPanel::odometryCallback(const nav_msgs::Odometry& msg)
 {
   ROS_INFO_ONCE("Got odometry callback.");
   pose_widget_map_["start"]->setPose(msg.pose.pose);
+}
+
+void PlanningPanel::moveBaseGoalCallback(const geometry_msgs::PoseStamped& msg)
+{
+  goal_pose_widget_->setPose(msg.pose);
 }
 
 void PlanningPanel::callMoveBasePlanner()

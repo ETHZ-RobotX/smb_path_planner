@@ -11,8 +11,8 @@
 #include "smb_planner_rviz/edit_button.h"
 #include "smb_planner_rviz/planning_interactive_markers.h"
 #include "smb_planner_rviz/pose_widget.h"
-#include <ros/ros.h>
 #include <nav_msgs/Odometry.h>
+#include <ros/ros.h>
 #include <rviz/panel.h>
 #endif
 
@@ -51,6 +51,8 @@ public:
   void updateInteractiveMarkerPose(const geometry_msgs::Pose& pose);
   // And when we get robot odometry:
   void odometryCallback(const nav_msgs::Odometry& msg);
+  // When we get a move base goal
+  void moveBaseGoalCallback(const geometry_msgs::PoseStamped& msg);
 
   // Next come a couple of public Qt slots.
 public Q_SLOTS:
@@ -69,6 +71,7 @@ protected:
   ros::NodeHandle nh_;
   ros::Publisher move_base_pub_;
   ros::Subscriber odometry_sub_;
+  ros::Subscriber move_base_sub_;
 
   // QT stuff:
   QLineEdit* frame_id_editor_;
