@@ -444,6 +444,7 @@ bool OmplPlanner::makePlan(const geometry_msgs::PoseStamped& start,
 
   // Save the path in the right format
   geometry_msgs::PoseStamped pose_path = start;
+  pose_path.header.stamp = ros::Time::now();
   plan.push_back(pose_path);
   for (size_t i = 0; i < global_path_.size(); ++i)
   {
@@ -462,6 +463,8 @@ bool OmplPlanner::makePlan(const geometry_msgs::PoseStamped& start,
     {
       pose_path.pose.orientation = goal.pose.orientation;
     }
+
+    pose_path.header.stamp = ros::Time::now();
     plan.push_back(pose_path);
   }
 
