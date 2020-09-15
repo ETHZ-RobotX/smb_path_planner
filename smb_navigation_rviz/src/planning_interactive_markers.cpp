@@ -101,14 +101,14 @@ void PlanningInteractiveMarkers::createMarkers()
   control.name = "arrow";
   control.interaction_mode = visualization_msgs::InteractiveMarkerControl::NONE;
   visualization_msgs::Marker default_marker;
-  default_marker.type = visualization_msgs::Marker::SPHERE;
+  default_marker.type = visualization_msgs::Marker::ARROW;
   default_marker.color.a = 1.0;
   default_marker.color.r = 0.5;
   default_marker.color.g = 0.0;
   default_marker.color.b = 1.0;
-  default_marker.scale.x = 0.15;
+  default_marker.scale.x = 0.25;
   default_marker.scale.y = 0.15;
-  default_marker.scale.z = 0.15;
+  default_marker.scale.z = 0.10;
   control.markers.push_back(default_marker);
   visualization_msgs::Marker text_marker;
   text_marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
