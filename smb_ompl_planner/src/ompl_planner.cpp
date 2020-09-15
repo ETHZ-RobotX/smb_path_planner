@@ -94,7 +94,10 @@ void OmplPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
 
     private_nh.param("distance_threshold", rrt_params.distance_threshold, 1.1);
     private_nh.param("goal_bias", rrt_params.goal_bias, 0.05);
+    private_nh.param("tree_range", rrt_params.tree_range, 0.05);
     private_nh.param("robot_radius", rrt_params.robot_radius, 0.5);
+    private_nh.param("interpolation_factor", rrt_params.interpolation_factor,
+                     0.05);
     private_nh.param("num_seconds_to_plan", rrt_params.num_seconds_to_plan,
                      5.0);
     private_nh.param("dist_goal_reached", dist_goal_reached_, 0.3);
@@ -103,6 +106,9 @@ void OmplPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
 
     int planner_type;
     private_nh.param("planner_type", planner_type, 1);
+
+    bool enable_timer_collisions;
+    private_nh.param("enable_timer_collisions", enable_timer_collisions, false);
 
     double replanning_rate;
     private_nh.param("replanning_rate", replanning_rate, 5.0);
@@ -127,9 +133,12 @@ void OmplPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
         "make_plan", &OmplPlanner::makePlanService, this);
 
     // Now start the ROS timer - every time the path is in collision, we replan
-    timer_collisions_ =
-        private_nh.createTimer(ros::Duration(1 / replanning_rate),
-                               &OmplPlanner::collisionTimerCallback, this);
+    if (enable_timer_collisions)
+    {
+      timer_collisions_ =
+          private_nh.createTimer(ros::Duration(1 / replanning_rate),
+                                 &OmplPlanner::collisionTimerCallback, this);
+    }
 
     ompl_planner_ = std::make_shared<smb_ompl_planner::RrtPlanner>(
         rrt_params, RrtPlannerType(planner_type));

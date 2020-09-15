@@ -52,7 +52,8 @@ void RrtPlanner::setupProblem(const Eigen::Vector2d& start,
 {
   problem_setup_.clear();
 
-  problem_setup_.setGridmapCollisionChecking(params_.robot_radius, costmap_);
+  problem_setup_.setGridmapCollisionChecking(
+      params_.robot_radius, params_.interpolation_factor, costmap_);
 
   if (!params_.use_distance_threshold)
   {
@@ -72,6 +73,8 @@ void RrtPlanner::setupProblem(const Eigen::Vector2d& start,
     problem_setup_.setRrtStar();
     problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()->setGoalBias(
         params_.goal_bias);
+    problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()->setRange(
+        params_.tree_range);
   }
   else if (planner_type_ == kPrm)
   {
@@ -82,6 +85,8 @@ void RrtPlanner::setupProblem(const Eigen::Vector2d& start,
     problem_setup_.setDefaultPlanner();
     problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()->setGoalBias(
         params_.goal_bias);
+    problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()->setRange(
+        params_.tree_range);
   }
 
   if (lower_bound_ != upper_bound_)
@@ -165,8 +170,7 @@ bool RrtPlanner::getPathBetweenWaypoints(const Eigen::Vector2d& start,
     }
     else
     {
-      OMPL_ERROR("[Ompl Planner] OMPL could not find an exact "
-                 "solution.");
+      OMPL_ERROR("[Ompl Planner] OMPL could not find an exact solution.");
       return false;
     }
   }

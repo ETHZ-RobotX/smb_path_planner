@@ -56,19 +56,22 @@ global_costmap:
 #### OMPL Planner Parameters ####
 OmplPlanner:
   use_distance_threshold: true
-  simplify_solution: true
+  simplify_solution: false       # If 'true', some nodes in the path will be pruned
   trust_approx_solution: false
   verbose_planner: false
+  enable_timer_collisions: false # If 'true', the global planner will check for collision at 'replanning rate' and will replan if in collision
   
-  distance_threshold: 1.05     # [m]
-  goal_bias: 0.05
-  robot_radius: 0.45           # [m]
-  num_seconds_to_plan: 2.5     # [s]
-  min_distance_waypoints: 3.0  # [m]
+  distance_threshold: 1.50     # [m]
+  goal_bias: 0.05              # [m]
+  tree_range: 0.05             # [%]
+  robot_radius: 0.50           # [m]
+  interpolation_factor: 0.10   # [-]
+  num_seconds_to_plan: 3.0     # [s]
+  min_distance_waypoints: 0.05 # [m]
   dist_goal_reached: 0.3       # [m] Threshold to consider the goal reached
 
-  planner_type: 1 # 0: RRT Connect, 1: RRT*, 2: PRM
-  replanning_rate: 5.0 # [Hz]
+  planner_type: 1              # 0: RRT Connect, 1: RRT*, 2: PRM
+  replanning_rate: 5.0         # [Hz] useless if 'enable_timer_collisions' is False
   
   odometry_topic: "/camera/odom/sample"
 

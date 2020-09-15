@@ -126,11 +126,12 @@ public:
   }
 
   void setGridmapCollisionChecking(double robot_radius,
+                                   double interpolation_factor,
                                    costmap_2d::Costmap2D* costmap)
   {
     std::shared_ptr<GridmapValidityChecker> validity_checker(
         new GridmapValidityChecker(getSpaceInformation(), robot_radius,
-                                   costmap));
+                                   interpolation_factor, costmap));
 
     setStateValidityChecker(base::StateValidityCheckerPtr(validity_checker));
     si_->setMotionValidator(base::MotionValidatorPtr(

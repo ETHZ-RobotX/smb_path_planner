@@ -61,7 +61,9 @@ struct RrtParameters
 
   double distance_threshold;
   double goal_bias;
+  double tree_range;
   double robot_radius;
+  double interpolation_factor;
   double num_seconds_to_plan;
 };
 

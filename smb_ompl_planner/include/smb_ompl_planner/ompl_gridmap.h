@@ -57,9 +57,10 @@ class GridmapValidityChecker : public base::StateValidityChecker
 public:
   GridmapValidityChecker(const base::SpaceInformationPtr& space_info,
                          const double robot_radius,
+                         const double interpolation_factor,
                          costmap_2d::Costmap2D* costmap)
       : base::StateValidityChecker(space_info), robot_radius_(robot_radius),
-        costmap_(costmap)
+        interpolation_factor_(interpolation_factor), costmap_(costmap)
   {
   }
 
@@ -87,33 +88,17 @@ public:
       // We are out of the map
       return false;
     }
-    return true;
+    return checkCost(cost);
   }
 
   /**
-   * @brief Method to query the cost map to get the cost. Return true if we
-   *        manage to extract the cost. The position to be check is also
-   *        "inflated" by the robot radius.
-   * @param[in] state: (x,y) position in Eigen format
-   * @param[out] cost: result from costmap
-   * @return True if we can get the cost, False otherwise
+   * @brief Method to check the cost given the costmap 2D
+   * @param[in] cost : cost to check
+   * @return True if there is no collision or if we are in unknown space,
+   *         False otherwise
    */
-  virtual bool getCostAtState(const Eigen::Vector2d& state,
-                              unsigned char& cost) const
+  bool checkCost(const unsigned char& cost) const
   {
-    unsigned int state_x_i, state_y_i;
-    Eigen::Vector2d inflated_state(state.x() + robot_radius_,
-                                   state.y() + robot_radius_);
-    if (!costmap_->worldToMap(inflated_state.x(), inflated_state.y(), state_x_i,
-                              state_y_i))
-    {
-      // We are out of the map
-      return false;
-    }
-
-    // Get the cost
-    cost = costmap_->getCost(state_x_i, state_y_i);
-
     // Check the cost - not all these checks are necessary, but we explicitly
     // add them for teaching purposes
     // Doc:https://wiki.ros.org/costmap_2d?action=AttachFile&do=get&target=costmapspec.png
@@ -140,10 +125,39 @@ public:
     return true;
   }
 
+  /**
+   * @brief Method to query the cost map to get the cost. Return true if we
+   *        manage to extract the cost. The position to be check is also
+   *        "inflated" by the robot radius.
+   * @param[in] state: (x,y) position in Eigen format
+   * @param[out] cost: result from costmap
+   * @return True if we can get the cost, False otherwise
+   */
+  virtual bool getCostAtState(const Eigen::Vector2d& state,
+                              unsigned char& cost) const
+  {
+    unsigned int state_x_i, state_y_i;
+    Eigen::Vector2d inflated_state(state.x() + robot_radius_,
+                                   state.y() + robot_radius_);
+    if (!costmap_->worldToMap(inflated_state.x(), inflated_state.y(), state_x_i,
+                              state_y_i))
+    {
+      // We are out of the map
+      return false;
+    }
+
+    // Get the cost
+    cost = costmap_->getCost(state_x_i, state_y_i);
+    return true;
+  }
+
   double getRobotRadius() const { return robot_radius_; }
+
+  double getInterpolationFactor() const { return interpolation_factor_; }
 
 protected:
   double robot_radius_;
+  double interpolation_factor_;
   costmap_2d::Costmap2D* costmap_;
 };
 
@@ -155,7 +169,7 @@ public:
       std::shared_ptr<GridmapValidityChecker> validity_checker)
       : base::MotionValidator(space_info), validity_checker_(validity_checker)
   {
-    robot_radius_ = validity_checker_->getRobotRadius();
+    interpolation_factor_ = validity_checker_->getInterpolationFactor();
   }
 
   virtual bool checkMotion(const base::State* s1, const base::State* s2) const
@@ -182,7 +196,7 @@ public:
 
     // Discretize the connection s1-s2
     Eigen::Vector2d direction(s2_eigen - s1_eigen);
-    int n_states = std::floor(direction.norm() / robot_radius_);
+    int n_states = std::floor(direction.norm() / interpolation_factor_);
 
     // Check the particular case where n_states is 0. In this case, check just
     // the start and end states
@@ -193,39 +207,18 @@ public:
 
     // Iterate over the states along the connection
     bool valid = true;
-    const unsigned char k_threshold = 50;
     for (int i = 0; i <= n_states; ++i)
     {
       Eigen::Vector2d state_i =
           s1_eigen + double(i) / double(n_states) * direction;
       unsigned char cost;
-
       if (!validity_checker_->getCostAtState(state_i, cost))
       {
-        // Out of map - directly return
-        return false;
-      }
-
-      // Check the cost - not all these checks are necessary, but we explicitly
-      // add them for teaching purposes
-      // Doc:https://wiki.ros.org/costmap_2d?action=AttachFile&do=get&target=costmapspec.png
-      if (cost == costmap_2d::LETHAL_OBSTACLE)
-      {
-        // In this case, we are in collision
         valid = false;
       }
-      else if (cost <= costmap_2d::INSCRIBED_INFLATED_OBSTACLE &&
-               cost >= k_threshold)
+      else
       {
-        // In this case, we are not completly in collision, but we may be very
-        // close to an obstacle
-        valid = false;
-      }
-      else if (cost <= k_threshold || cost == costmap_2d::NO_INFORMATION)
-      {
-        // In this case we are not in collision so we keep going with the checks
-        // We plan also in unknown space, because it is a global planner
-        continue;
+        valid = validity_checker_->checkCost(cost);
       }
 
       if (!valid)
@@ -249,7 +242,7 @@ public:
 
 protected:
   typename std::shared_ptr<GridmapValidityChecker> validity_checker_;
-  double robot_radius_;
+  double interpolation_factor_;
 };
 
 } // end namespace ompl
