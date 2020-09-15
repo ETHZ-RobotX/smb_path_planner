@@ -72,10 +72,14 @@ $ roslaunch smb_sim sim_path_planner.launch
 In the controller panel, select `SmbPathFollowingController` from 
 the list. If this controller does not show up, press the refresh button and 
 try again. To start the controller, press the play button.  
-Finally, start the local and global planners:
+Finally, start the local and global planners. If you want to use RRTs as global planner, run:
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch
+```  
+Otherwise, to use a standard global planner from `move_base`, run:
 ```
+$ roslaunch smb_navigation navigate2d.launch
+```  
 To send a global goal position there a set of different possibilities:
 * Set a goal with the planning panel and press the button `Start Planning`;
 * Use RViz direcly by using the button `2D Nav Goal` and setting the goal pose;
