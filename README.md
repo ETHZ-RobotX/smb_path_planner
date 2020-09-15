@@ -12,7 +12,7 @@ This is what should be done if something changes in the software stack of the su
 * ~~Adapt the planner with the new Gazebo simulation of the SMB~~ (03/06/2020)
 * ~~Adapt the planner with the new controller of the SMB~~ (03/06/2020)
 * ~~Add possibility to estimate traversability of terrain (2.5D maps)~~ (02/09/2020)
-* Find proper way to increase the clearance of the global paths from costmap_2d
+* ~~Find proper way to increase the clearance of the global paths from costmap_2d~~ (15/09/2020)
 * ~~Tune the planner properly~~ (02/09/2020)
 * Write configuration and launch files for the real robot (if necessary)
 * ~~In order to run move_base stuff, we need odometry information. This should be added both in the simulation and in the state estimator of the real robot.~~ (03/06/2020)
@@ -76,8 +76,10 @@ Finally, start the local and global planners:
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch
 ```
-To send a global goal position, select it in the planning panel and press the
-button `Start Planning`.  
+To send a global goal position there a set of different possibilities:
+* Set a goal with the planning panel and press the button `Start Planning`;
+* Use RViz direcly by using the button `2D Nav Goal` and setting the goal pose;
+* Publish directly on the topic `/move_base_simple/goal`.  
 
 ### Running with traversability estimation
 Start the simulation as in the previous case, and then run:
