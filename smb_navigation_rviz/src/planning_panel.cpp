@@ -61,7 +61,7 @@ void PlanningPanel::createLayout()
 
   topic_layout->addWidget(new QLabel("Odometry topic:"), 1, 0);
   odometry_topic_editor_ = new QLineEdit;
-  odometry_topic_editor_->setText("/camera/odom/sample");
+  odometry_topic_editor_->setText("/odometry");
   topic_layout->addWidget(odometry_topic_editor_, 1, 1);
 
   // Goal poses.

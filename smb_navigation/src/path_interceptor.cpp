@@ -141,7 +141,7 @@ void PathInterceptor::moveBasePathCallback(
       continue;
     }
 
-    pose_stamped.header.stamp = ros::Time(wp(4));
+    pose_stamped.header.stamp = ros::Time(0.0);
     pose_stamped.pose.position.x = wp(0);
     pose_stamped.pose.position.y = wp(1);
     pose_stamped.pose.position.z = wp(2);
