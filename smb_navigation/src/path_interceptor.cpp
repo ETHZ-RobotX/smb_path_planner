@@ -133,6 +133,7 @@ void PathInterceptor::moveBasePathCallback(
 
   // In order to avoid trying to track a bad path, we skip the first waypoint
   bool skip_first = true;
+  double initial_time = interpolated_path_msg.header.stamp.toSec();
   for (auto wp : interpolated_waypoints)
   {
     if (skip_first)
@@ -141,7 +142,7 @@ void PathInterceptor::moveBasePathCallback(
       continue;
     }
 
-    pose_stamped.header.stamp = ros::Time(0.0);
+    pose_stamped.header.stamp = ros::Time(initial_time + wp(4));
     pose_stamped.pose.position.x = wp(0);
     pose_stamped.pose.position.y = wp(1);
     pose_stamped.pose.position.z = wp(2);

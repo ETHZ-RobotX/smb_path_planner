@@ -61,7 +61,7 @@ OmplPlanner:
   verbose_planner: false
   enable_timer_collisions: false # If 'true', the global planner will check for collision at 'replanning rate' and will replan if in collision
   
-  distance_threshold: 1.50     # [m]
+  distance_threshold: 1.10     # [m]
   goal_bias: 0.05              # [m]
   tree_range: 0.05             # [%]
   robot_radius: 0.50           # [m]

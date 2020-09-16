@@ -20,12 +20,12 @@ TrajectoryPlannerROS:
 
   acc_lim_theta: 3.2
   acc_lim_x: 2.5
-  acc_lim_y: 0.0
+  acc_lim_y: 2.5
 
   sim_time: 3
   sim_granularity: 0.1
 
-  yaw_goal_tolerance: 0.3
+  yaw_goal_tolerance: 0.2
   xy_goal_tolerance: 0.3
   latch_xy_goal_tolerance: true
 
@@ -43,7 +43,7 @@ TebLocalPlannerROS:
   global_plan_overwrite_orientation: true
   max_global_plan_lookahead_dist: 3.0
   feasibility_check_no_poses: 5
-  allow_init_with_backwards_motion: false
+  allow_init_with_backwards_motion: true
   global_plan_viapoint_sep: 0.5
 
   # Robot
@@ -70,7 +70,7 @@ TebLocalPlannerROS:
 
   # GoalTolerance
   xy_goal_tolerance: 0.3
-  yaw_goal_tolerance: 0.6
+  yaw_goal_tolerance: 0.2
   free_goal_vel: False
 
   # Obstacles
@@ -84,10 +84,10 @@ TebLocalPlannerROS:
 
   # Optimization
   no_inner_iterations: 10
-  no_outer_iterations: 6
+  no_outer_iterations: 50
   optimization_activate: True
   optimization_verbose: False
-  penalty_epsilon: 0.1
+  penalty_epsilon: 0.05
   weight_max_vel_x: 2
   weight_max_vel_theta: 1
   weight_acc_lim_x: 1
