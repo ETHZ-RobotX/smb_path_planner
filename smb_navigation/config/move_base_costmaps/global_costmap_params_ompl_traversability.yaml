@@ -10,6 +10,7 @@ global_costmap:
   update_frequency: 5.0
   publish_frequency: 2.0
   
+  resolution: 0.1
   static_map: false
   rolling_window: true # Map moves with robot
   map_topic: /traversability_occ_map
