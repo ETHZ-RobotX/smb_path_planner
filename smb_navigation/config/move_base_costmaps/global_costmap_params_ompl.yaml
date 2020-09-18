@@ -60,7 +60,7 @@ OmplPlanner:
   planner_type: 1              # 0: RRT Connect, 1: RRT*, 2: PRM
   replanning_rate: 5.0         # [Hz] useless if 'enable_timer_collisions' is False
   
-  odometry_topic: "/camera/odom/sample"
+  odometry_topic: "/base_ground_truth"
 
  
    

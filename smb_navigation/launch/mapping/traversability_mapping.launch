@@ -1,7 +1,7 @@
 <launch>
 
   <arg name="launch_prefix" default=""/>
-  <arg name="odom_topic"    default="/camera/odom/sample"/>
+  <arg name="odom_topic"    default="/base_ground_truth"/>
 
   <!-- Grid map converter: if you want to use this, then you need to add a static layer to your cost layer configuration
   <node name="gridmap_converter" pkg="smb_navigation" type="gridmap_converter_node" output="screen" launch-prefix="$(arg launch_prefix)">
