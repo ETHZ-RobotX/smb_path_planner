@@ -31,7 +31,7 @@ catkin build smb_path_planner
 ```  
 
 ## Additional documentation
-Additional documentation on `move_base` can be found [here](https://wiki.ros.org/move_base), while for the local planner, refer to the TEB Local Planner instructions [here](https://wiki.ros.org/teb_local_planner).
+Additional documentation on `move_base` can be found [here](https://wiki.ros.org/move_base), while for the local planner, refer to the TEB Local Planner instructions [here](https://wiki.ros.org/teb_local_planner). Finally, the documentation about `costmap_2d` is available [here](https://wiki.ros.org/costmap_2d).
 
 ## Structure of the code
 The `smb_path_planner` package is composed by 3 packages:
