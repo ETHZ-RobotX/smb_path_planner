@@ -3,21 +3,9 @@
 Package for path planning of Super Mega Bots for the ETH Robotics Summer School. 
 The package has been tested under ROS Melodic and Ubuntu 18.04.
 
-__Author: Luca Bartolomei__  
-__Affiliation: Vision For Robotics Lab, ETH Zurich__  
-__Contact: Luca Bartolomei, lbartolomei@ethz.ch__
-
-# TO-DO list
-This is what should be done if something changes in the software stack of the summer school.
-* ~~Adapt the planner with the new Gazebo simulation of the SMB~~ (03/06/2020)
-* ~~Adapt the planner with the new controller of the SMB~~ (03/06/2020)
-* ~~Add possibility to estimate traversability of terrain (2.5D maps)~~ (02/09/2020)
-* ~~Find proper way to increase the clearance of the global paths from costmap_2d~~ (15/09/2020)
-* ~~Tune the planner properly~~ (02/09/2020)
-* Write configuration and launch files for the real robot (if necessary)
-* ~~In order to run move_base stuff, we need odometry information. This should be added both in the simulation and in the state estimator of the real robot.~~ (03/06/2020)
-* ~~Check Rowesys traversability map implementation and configuration files~~ (03/09/2020)
-* ~~Add traversability layer readme (e.g. parameter explanation)~~ (03/09/2020)
+__Author__: Luca Bartolomei  
+__Affiliation__: Vision For Robotics Lab, ETH Zurich  
+__Contact__: Luca Bartolomei, lbartolomei@ethz.ch  
 
 # Installation instructions  
 Install the following packages first:
@@ -53,15 +41,9 @@ The `smb_path_planner` package is composed by 3 packages:
 * `traversability_layer`: custom `costmap_2d` implementation to incorporate traversability maps.
 
 ## Planning Panel in RViz
-Make sure all the packages have built successfully. As a sanity check, 
-re-source your workspace (`$ source ~/catkin_ws/devel/setup.bash`) and start 
-up RViz (`$ rviz`).
-In RViz, select `Panels -> Add New Panel` and select `Planning Panel` under 
-`smb_navigation_rviz`.
+Make sure all the packages have built successfully. As a sanity check, re-source your workspace (`$ source ~/catkin_ws/devel/setup.bash`) and start up RViz (`$ rviz`). In RViz, select `Panels -> Add New Panel` and select `Planning Panel` under `smb_navigation_rviz`.
 
-Next, under `Displays`, add an `InteractiveMarkers` display with the topic 
-`/planning_markers/update`. You should be able to see the interactive markers
- and the planning panel.
+Next, under `Displays`, add an `InteractiveMarkers` display with the topic `/planning_markers/update`. You should be able to see the interactive markers and the planning panel.
 
 ## How to run the planner in simulation
 First, start the simulation in Gazebo, RViz and RQT Plugin to select the 
@@ -69,10 +51,7 @@ controller, by running:
 ```
 $ roslaunch smb_sim sim_path_planner.launch
 ```
-In the controller panel, select `SmbPathFollowingController` from 
-the list. If this controller does not show up, press the refresh button and 
-try again. To start the controller, press the play button.  
-Finally, start the local and global planners. If you want to use RRTs as global planner, run:
+In the controller panel, select `MpcTrackLocalPlan` from the list. If this controller does not show up, press the refresh button and try again. To start the controller, press the play button. Finally, start the local and global planners. If you want to use RRTs as global planner, run:
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch
 ```  
@@ -95,6 +74,7 @@ Notice that in this case, there are 3 different cost layers (traversability, las
 Notice that it is not possible to run the obstacle layer (based on laser scans) and the traversability layer at the same time in the current configuration, as the laser scan clears the traversability map. You are more than welcome to find a proper way to fuse these two maps!
 
 ## How to run the planner on the real robot
+__THIS PART HAS TO BE UPDATED__
 Start the `LPC` on the robot and the `OPC` on the operator side. To run the 
 `LPC`, run the following commands in the PC of the robot in multiple terminals:
 ```
@@ -115,5 +95,6 @@ PC to the `rosmaster` of the robot and then run in a terminal:
 $ roslaunch smb_opc opc.launch
 ```
 To send a global goal position, follow the same procedure as in simulation:
-1. Select the `SmbPathFollowingController` in the control panel and start it;
-2. Send the global goal using the `Planning Panel` in RViz.
+1. Select the `MpcTrackLocalPlan` in the control panel and start it;
+2. Send the global goal via RViz or via terminal.  
+
