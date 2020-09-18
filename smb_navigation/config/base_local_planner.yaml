@@ -18,9 +18,9 @@ TrajectoryPlannerROS:
   min_in_place_vel_theta: 0.0
   escape_vel: -1
 
-  acc_lim_theta: 3.2
-  acc_lim_x: 2.5
-  acc_lim_y: 2.5
+  acc_lim_theta: 0.6
+  acc_lim_x: 1.5
+  acc_lim_y: 0.0
 
   sim_time: 3
   sim_granularity: 0.1
@@ -47,19 +47,19 @@ TebLocalPlannerROS:
   global_plan_viapoint_sep: 0.5
 
   # Robot
-  max_vel_x: 1.0
+  max_vel_x: 0.5
   max_vel_y: 0.0
-  max_vel_x_backwards: 0.3
-  max_vel_y_backwards: 0.3
-  max_vel_theta: 1.0
-  acc_lim_x: 0.15
+  max_vel_x_backwards: 0.0
+  max_vel_y_backwards: 0.0
+  max_vel_theta: 0.3
+  acc_lim_x: 0.5
   acc_lim_y: 0.0
   acc_lim_theta: 0.6
-  wheel_base: 0.5
+  wheelbase: 0.5
   min_turning_radius: 0.5
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
-    type: "polygon"
-    radius: 0.2 # for type "circular"
+    type: "circular"
+    radius: 0.75 # for type "circular"
     line_start: [-0.3, 0.0] # for type "line"
     line_end: [0.3, 0.0] # for type "line"
     front_offset: 0.2 # for type "two_circles"
@@ -70,21 +70,22 @@ TebLocalPlannerROS:
 
   # GoalTolerance
   xy_goal_tolerance: 0.3
-  yaw_goal_tolerance: 0.2
-  free_goal_vel: False
+  yaw_goal_tolerance: 0.1
+  free_goal_vel: false
+  complete_global_plan: false
 
   # Obstacles
   min_obstacle_dist: 0.4
   include_costmap_obstacles: True
-  costmap_obstacles_behind_robot_dist: 50.0
-  obstacle_poses_affected: 30
+  costmap_obstacles_behind_robot_dist: 3.0
+  obstacle_poses_affected: 50
   costmap_converter_plugin: ""
   costmap_converter_spin_thread: True
   costmap_converter_rate: 5
 
   # Optimization
-  no_inner_iterations: 10
-  no_outer_iterations: 50
+  no_inner_iterations: 5
+  no_outer_iterations: 25
   optimization_activate: True
   optimization_verbose: False
   penalty_epsilon: 0.05
@@ -93,7 +94,7 @@ TebLocalPlannerROS:
   weight_acc_lim_x: 1
   weight_acc_lim_theta: 1
   weight_kinematics_nh: 1000
-  weight_kinematics_forward_drive: 10.0
+  weight_kinematics_forward_drive: 100.0
   weight_kinematics_turning_radius: 0.0
   weight_optimaltime: 1
   weight_obstacle: 50
@@ -112,6 +113,8 @@ TebLocalPlannerROS:
   obstacle_keypoint_offset: 0.1
   obstacle_heading_threshold: 0.45
   visualize_hc_graph: False
+  delete_detours_backwards: True
+  max_ratio_detours_duration_best_duration: 3.0
 
 
 DWAPlannerROS:
