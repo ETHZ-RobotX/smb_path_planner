@@ -1,7 +1,7 @@
 <launch>
 
-  <arg name="launch_prefix" default=""/>
-  <arg name="odom_topic"    default="/camera/odom/sample"/>
+  <arg name="launch_prefix" default="gdb --args"/>
+  <arg name="odom_topic"    default="/odometry"/>
 
   <node name="path_interceptor" pkg="smb_navigation" type="path_interceptor_node" output="screen" launch-prefix="$(arg launch_prefix)">
      <!-- Parameters -->

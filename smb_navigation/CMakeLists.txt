@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(smb_navigation)
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
 add_compile_options(-std=c++11 -Wall)
 
@@ -78,6 +78,16 @@ add_dependencies(odometry_interceptor_node
     ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(odometry_interceptor_node
+    ${catkin_LIBRARIES})
+
+### Pose Stamped interceptor
+add_executable(pose_interceptor_node
+    src/nodes/pose_interceptor_node.cpp)
+
+add_dependencies(pose_interceptor_node
+    ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(pose_interceptor_node
     ${catkin_LIBRARIES})
 
 ### Install

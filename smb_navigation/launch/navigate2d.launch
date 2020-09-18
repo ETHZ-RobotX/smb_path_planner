@@ -20,5 +20,9 @@
   
   <!-- move_base -->
   <include file="$(find smb_navigation)/launch/move_base.launch"/>
-  <include file="$(find smb_navigation)/launch/path_interceptor.launch"/>
+  
+  <!-- Utility for communication with MPC - Comment this back in if you plan to use standard ROS planners -->
+  <!--
+  <include file="$(find smb_navigation)/launch/utility/path_interceptor.launch"/>
+  -->
 </launch> 
