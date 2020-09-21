@@ -45,10 +45,10 @@
 
     <!-- global costmap with laser, for odom_navigation_demo -->
     <rosparam file="$(find smb_navigation)/config/move_base_costmaps/global_costmap_params_ompl_traversability.yaml" command="load"/>
-    <param name="global_costmap/width"       			value="100.0"/>
-    <param name="global_costmap/height"     			value="100.0"/>
-    <param name="global_costmap/origin_x" 	  		value="-50.0"/>
-    <param name="global_costmap/origin_y" 		  	value="-50.0"/>
+    <param name="global_costmap/width"            value="100.0"/>
+    <param name="global_costmap/height"           value="100.0"/>
+    <param name="global_costmap/origin_x"         value="-50.0"/>
+    <param name="global_costmap/origin_y"         value="-50.0"/>
     <param name="global_costmap/robot_base_frame"	value="$(arg robot_base_frame)"/>
   </node>
 
