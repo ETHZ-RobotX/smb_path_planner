@@ -33,7 +33,7 @@ TrajectoryPlannerROS:
 
 TebLocalPlannerROS:
 
-  odom_topic: /base_ground_truth
+  odom_topic: /base_odom
   map_frame: /world
 
   # Trajectory
