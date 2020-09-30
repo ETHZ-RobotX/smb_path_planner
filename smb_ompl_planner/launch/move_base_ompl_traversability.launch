@@ -7,7 +7,7 @@
   <arg name="no_static_map"         default="false"/>
   <arg name="cmd_vel_topic"         default="/cmd_vel_autonomous"/>
   <arg name="tf_topic"              default="/tf"/>
-  <arg name="odom_topic"            default="/base_ground_truth"/>
+  <arg name="odom_topic"            default="/base_odom"/>
   <arg name="obstacle_scan_topic"   default="/scan"/>
   <arg name="robot_base_frame"		  default="base"/>
 

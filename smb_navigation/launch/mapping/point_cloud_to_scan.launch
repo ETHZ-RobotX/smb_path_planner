@@ -2,7 +2,7 @@
 
 <launch>
 
-<arg name="cloud_in_topic" default="/velodyne_points"/>
+<arg name="cloud_in_topic" default="/rslidar_points"/>
 <arg name="scan_out_topic" default="/scan"/>
 
 <!-- push pointcloud_to_laserscan nodelet into sensor's nodelet manager-->

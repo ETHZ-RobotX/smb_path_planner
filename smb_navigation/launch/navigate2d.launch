@@ -11,9 +11,6 @@
     <include file="$(find smb_navigation)/launch/mapping/point_cloud_processing.launch">
       <arg name="config_files_folder" value="$(find smb_navigation)/config/point_cloud_processing_no_icp"/>
     </include>
-    <group unless="$(arg simulation)">
-      <include file="$(find smb_navigation)/launch/mapping/robosense.launch"/>
-    </group>
   </group>
 
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
