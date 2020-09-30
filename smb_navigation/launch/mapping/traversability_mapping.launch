@@ -16,8 +16,8 @@
   
   <!-- Nodes for traversability: we need elevation mapping -->  
   <node pkg="elevation_mapping" type="elevation_mapping" name="elevation_mapping" output="screen">
-    <rosparam command="load" file="$(find smb_navigation)/config/traversability_estimation/elevation_mapping_smb_lidar.yaml" />
-    <rosparam command="load" file="$(find elevation_mapping)/config/sensor_processors/velodyne_HDL-32E.yaml" />
+    <rosparam command="load" file="$(find smb_navigation)/config/traversability_estimation/elevation_mapping_smb_realsense.yaml" />
+    <rosparam command="load" file="$(find elevation_mapping)/config/sensor_processors/realsense_d435.yaml" />
   </node>
   
   <node pkg="traversability_estimation" type="traversability_estimation_node" name="traversability_estimation" output="screen">

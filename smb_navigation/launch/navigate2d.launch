@@ -4,7 +4,6 @@
   
   <arg name="icp_running"        default="false"/>
   <arg name="simulation"         default="true"/>
-  <arg name="run_traversability" default="true"/>
   
   <arg name="global_frame"       default="world"/>
   <arg name="robot_base_frame"   default="base"/>
