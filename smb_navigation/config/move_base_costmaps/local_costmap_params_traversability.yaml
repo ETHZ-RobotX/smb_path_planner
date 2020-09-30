@@ -1,8 +1,6 @@
 # more on http://wiki.ros.org/navigation/Tutorials/RobotSetup
 
 local_costmap:
-  global_frame: world
-  robot_base_frame: base
   update_frequency: 5.0
   publish_frequency: 2.0
   static_map: false

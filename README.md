@@ -74,27 +74,14 @@ Notice that in this case, there are 3 different cost layers (traversability, las
 Notice that it is not possible to run the obstacle layer (based on laser scans) and the traversability layer at the same time in the current configuration, as the laser scan clears the traversability map. You are more than welcome to find a proper way to fuse these two maps!
 
 ## How to run the planner on the real robot
-__THIS PART HAS TO BE UPDATED__
-Start the `LPC` on the robot and the `OPC` on the operator side. To run the 
-`LPC`, run the following commands in the PC of the robot in multiple terminals:
+Connect to the robot and start the state estimation and control pipeline. Once it is started, run the planner as before:
 ```
-$ roscore # terminal 1
-$ roslaunch smb_lpc lpc.launch # terminal 2
+$ roslaunch smb_navigation navigate2d_ompl.launch
 ```
-Start the LiDAR and the mapping in another terminal in the robot PC:
+
+## How to run the planner in another frame
+If the `world` frame is not available, it is possible to use the odometry frame for planning. for example, if the frame in use is called `odom`, run:
 ```
-$ roslaunch ethzasl_icp_mapper supermegabot_robosense_dynamic_mapper.launch # terminal 3
-``` 
- Then to start the planners, run on the PC of the robot in a separate terminal:
-```
-$ roslaunch smb_navigation navigate2d_ompl.launch # terminal 5
-```
-On the operator side, start the `OPC`. First connect the `rosmaster` of the 
-PC to the `rosmaster` of the robot and then run in a terminal:
-```
-$ roslaunch smb_opc opc.launch
-```
-To send a global goal position, follow the same procedure as in simulation:
-1. Select the `MpcTrackLocalPlan` in the control panel and start it;
-2. Send the global goal via RViz or via terminal.  
+$ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=odom
+```  
 

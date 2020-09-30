@@ -5,6 +5,9 @@
   <arg name="icp_running"        default="false"/>
   <arg name="simulation"         default="true"/>
   <arg name="run_traversability" default="true"/>
+  
+  <arg name="global_frame"       default="world"/>
+  <arg name="robot_base_frame"   default="base"/>
 
   <!-- Mapping -->
   <group unless="$(arg icp_running)">
@@ -16,7 +19,10 @@
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
   
   <!-- move_base -->
-  <include file="$(find smb_navigation)/launch/move_base.launch"/>
+  <include file="$(find smb_navigation)/launch/move_base.launch">
+    <arg name="global_frame"     value="$(arg global_frame)"/>
+    <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
+  </include>
   
   <!-- Utility for communication with MPC - Comment this back in if you plan to use standard ROS planners -->
   <!--

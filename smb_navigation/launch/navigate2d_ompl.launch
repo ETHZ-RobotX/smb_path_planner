@@ -5,6 +5,9 @@
   <arg name="simulation"         default="true"/>
   <arg name="icp_running"        default="false"/>
   <arg name="run_traversability" default="false"/>
+  
+  <arg name="global_frame"       default="world"/>
+  <arg name="robot_base_frame"   default="base"/>
 
   <!-- Mapping -->
   <group unless="$(arg icp_running)">
@@ -18,12 +21,18 @@
   <!-- Path Planning -->
   <group unless="$(arg run_traversability)"> 
     <!-- This is the standard move base -->
-    <include file="$(find smb_ompl_planner)/launch/move_base_ompl.launch"/>
+    <include file="$(find smb_ompl_planner)/launch/move_base_ompl.launch">
+      <arg name="global_frame"     value="$(arg global_frame)"/>
+      <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
+    </include>
   </group>
   
   <group if="$(arg run_traversability)">
     <!-- This is move base with traversability estimation - you can switch cost layers on and off from dynamic rqt -->
-    <include file="$(find smb_ompl_planner)/launch/move_base_ompl_traversability.launch"/>
+    <include file="$(find smb_ompl_planner)/launch/move_base_ompl_traversability.launch">
+      <arg name="global_frame"     value="$(arg global_frame)"/>
+      <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
+    </include>
 
     <!-- Traversability mapping -->
     <include file="$(find smb_navigation)/launch/mapping/traversability_mapping.launch"/>
