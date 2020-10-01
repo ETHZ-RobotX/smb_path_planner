@@ -44,10 +44,10 @@ OmplPlanner:
   
   distance_threshold: 1.10     # [m]
   goal_bias: 0.05              # [m]
-  tree_range: 0.50             # [%]
+  tree_range: 0.10             # [%]
   robot_radius: 0.50           # [m]
   interpolation_factor: 0.10   # [-]
-  num_seconds_to_plan: 3.0     # [s]
+  num_seconds_to_plan: 5.0     # [s]
   min_distance_waypoints: 0.05 # [m]
   dist_goal_reached: 0.3       # [m] Threshold to consider the goal reached
 

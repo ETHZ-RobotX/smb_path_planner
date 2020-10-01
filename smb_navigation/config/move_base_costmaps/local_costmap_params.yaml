@@ -4,8 +4,8 @@ local_costmap:
   update_frequency: 5.0
   publish_frequency: 2.0
   rolling_window: true
-  width: 6.0
-  height: 6.0
+  width: 8.0
+  height: 8.0
   resolution: 0.1
   
   plugins:
