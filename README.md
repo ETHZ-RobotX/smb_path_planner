@@ -64,24 +64,26 @@ To send a global goal position there a set of different possibilities:
 * Use RViz direcly by using the button `2D Nav Goal` and setting the goal pose;
 * Publish directly on the topic `/move_base_simple/goal`.  
 
+### How to run the planner in another frame
+If the `world` frame is not available, it is possible to use the odometry frame for planning. for example, if the frame in use is called `odom`, run:
+```
+$ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=odom
+```  
+
 ### Running with traversability estimation
 Start the simulation as in the previous case, and then run:
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch run_traversability:=true
 ```
-Notice that in this case, there are 3 different cost layers (traversability, laser scans and inflation layers), but **only** the traversability layer is active. To de-activate it, or to enable the other layers, run `rosrun rqt_reconfigure rqt_reconfigure` and enable/disable the layers.  
+Notice that in this case, there are 3 different cost layers (static, laser scans and inflation layers), but **only** the static layer is active. 
 
-Notice that it is not possible to run the obstacle layer (based on laser scans) and the traversability layer at the same time in the current configuration, as the laser scan clears the traversability map. You are more than welcome to find a proper way to fuse these two maps!
+It is also possible to use a custom layer (`traversability_layer`). To use it, follow the instructions in the configuration file `smb_navigation/config/move_base_costmaps/local_costmap_params_traversability.yaml`.  
+In this case, notice that it is not possible to run the obstacle layer (based on laser scans) and the traversability layer at the same time in the current configuration, as the laser scan clears the traversability map. You are more than welcome to find a proper way to fuse these two maps!
 
 ## How to run the planner on the real robot
 Connect to the robot and start the state estimation and control pipeline. Once it is started, run the planner as before:
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch
-```
-
-## How to run the planner in another frame
-If the `world` frame is not available, it is possible to use the odometry frame for planning. for example, if the frame in use is called `odom`, run:
-```
-$ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=odom
 ```  
+If necessary, set the right global frame used for planning.
 
