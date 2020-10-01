@@ -67,15 +67,14 @@ void GridMapConverter::traversabilityMapCallback(
     const grid_map_msgs::GridMap& grid_map_msg)
 {
   // Convert the grid map ROS message to a grid map
-  grid_map::GridMap grid_map;
-  grid_map::GridMapRosConverter::fromMessage(grid_map_msg, grid_map);
+  grid_map::GridMapRosConverter::fromMessage(grid_map_msg, grid_map_);
 
   // Convert from grid map to costmap_2d
   nav_msgs::OccupancyGrid occupancy_map_msg;
   try
   {
     grid_map::GridMapRosConverter::toOccupancyGrid(
-        grid_map, trav_layer_, min_value_grid_map_, max_value_grid_map_,
+        grid_map_, trav_layer_, min_value_grid_map_, max_value_grid_map_,
         occupancy_map_msg);
 
     // The traversability map is in [0,1] where 0 is untraversable and 1 fully

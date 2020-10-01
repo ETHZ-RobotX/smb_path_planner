@@ -81,10 +81,8 @@ protected:
 
   ros::Subscriber traversability_map_sub_;
   ros::Publisher occupancy_map_pub_;
-
-  grid_map::Costmap2DConverter<grid_map::GridMap> gridmap_converter_;
-  costmap_2d::Costmap2D trav_costmap_2d_;
-
+  
+  grid_map::GridMap grid_map_;
   float max_value_grid_map_;
   float min_value_grid_map_;
 

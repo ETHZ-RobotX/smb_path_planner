@@ -20,7 +20,7 @@
   
   <!-- Path Planning -->
   <group unless="$(arg run_traversability)"> 
-    <!-- This is the standard move base -->
+    <!-- This is the standard move base (without traversability) -->
     <include file="$(find smb_ompl_planner)/launch/move_base_ompl.launch">
       <arg name="global_frame"     value="$(arg global_frame)"/>
       <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
