@@ -6,9 +6,9 @@ stream_sources:
     queue_size:             1                                                       # Queue size of point cloud subscriber.
     latch:                  false                                                   # Whether the output topic will be latched.
     input_topic:            "/rslidar_points"                                       # Name of input topic.
-    output_topic:           "/intermediate_cloud"                                 # Name of output topic.
+    output_topic:           "/intermediate_cloud"                                   # Name of output topic.
     filter:                 true                                                    # Whether intput point clouds will be filtered.
-    filters_config:         "smb_velodyne_filters.yaml"                           # Name of the filter parameters config file.
+    filters_config:         "smb_lidar_filters.yaml"                                # Name of the filter parameters config file.
     robot_description:      "/smb_description_for_gazebo"
 
 subscribers_check_period: 1.0                                                       # A time period (in seconds) for checking if streams have any subscribers can be specified with the parameter **subscribers_check_period**.
