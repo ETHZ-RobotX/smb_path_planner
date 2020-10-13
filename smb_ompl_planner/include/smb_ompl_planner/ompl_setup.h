@@ -1,12 +1,4 @@
 /*
- * smb_ompl_setup.h
- * @brief Header for useful ompl operations with voxblox for the robot
- * @author: Helen Oleynikova, ASL
- *          Modified by Luca Bartolomei, V4RL
- * Modified on: Jan 23, 2019
- */
-
-/*
  * Copyright (c) 2020, Vision for Robotics Lab
  * All rights reserved.
  *
