@@ -15,7 +15,6 @@
   <depend>grid_map_costmap_2d</depend>
   <depend>grid_map_ros</depend>
   
-  <exec_depend>point_cloud_processor</exec_depend>
   <exec_depend>smb_path_following_controller</exec_depend>
   <exec_depend>pointcloud_to_laserscan</exec_depend>
   <exec_depend>robot_self_filter</exec_depend>
