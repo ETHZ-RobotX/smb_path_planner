@@ -1,0 +1,17 @@
+# Stream sources -> Point cloud data sources that the node listens to. Optional filtering can be set to occur as soon as a point cloud is received.
+stream_sources:
+  - id:                     0                                                       # Id of stream. Integer used to identify the source stream. Must be different to other source stream IDs.
+    source_name:            "vlp-16"                                                # Name of stream.
+    source_type:            "lidar"                                                 # Type of stream (e.g. lidar, depth camera).
+    queue_size:             1                                                       # Queue size of point cloud subscriber.
+    latch:                  false                                                   # Whether the output topic will be latched.
+    input_topic:            "/rslidar_points"                                       # Name of input topic.
+    output_topic:           "/intermediate_cloud"                                   # Name of output topic.
+    filter:                 true                                                    # Whether intput point clouds will be filtered.
+    filters_config:         "smb_lidar_filters.yaml"                                # Name of the filter parameters config file.
+    robot_description:      "/smb_description_for_gazebo"
+
+subscribers_check_period: 1.0                                                       # A time period (in seconds) for checking if streams have any subscribers can be specified with the parameter **subscribers_check_period**.
+                                                                                    # Streams without a "consumer" (a merged stream or external subscribers) won't be processed.
+
+log_level: "INFO"                                                                   # Log level. Options: DEBUG, INFO, WARN, ERROR, FATAL and COUNT

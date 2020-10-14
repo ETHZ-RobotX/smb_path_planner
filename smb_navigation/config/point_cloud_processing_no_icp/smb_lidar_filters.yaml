@@ -1,0 +1,16 @@
+- RandomSamplingDataPointsFilter:
+    prob: 0.1
+# - MaxDistDataPointsFilter:
+#       maxDist: 100.0
+#- MaxDensityDataPointsFilter:
+#    maxDensity: 8000.0
+
+- BoundingBoxDataPointsFilter:
+    xMin : -1.0
+    xMax : 0.6
+    yMin : -1.0
+    yMax : 0.6
+    zMin : -2.0
+    zMax : 2.0
+    removeInside : 1
+

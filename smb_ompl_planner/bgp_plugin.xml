@@ -1,0 +1,7 @@
+<library path="lib/libsmb_ompl_planner">
+  <class name="smb_ompl_planner/OmplPlanner" type="smb_ompl_planner::OmplPlanner" base_class_type="nav_core::BaseGlobalPlanner">
+    <description>
+      An implementation of a grid base planner based on OMPL
+    </description>
+  </class>
+</library>

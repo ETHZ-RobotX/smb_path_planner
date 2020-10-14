@@ -1,0 +1,22 @@
+# more on http://wiki.ros.org/navigation/Tutorials/RobotSetup
+
+obstacle_range: 20       # obstacles put in map up to obstacle_range
+raytrace_range: 25       # raytrace free space up to raytrace_range
+
+footprint: [[0.4, 0.4], [0.4, -0.4], [-0.4, -0.4], [-0.4, 0.4]]  # footprint fo the robot, centered in robot centre
+#robot_radius: ir_of_robot
+
+cost_scaling_factor: 1.0
+lethal_cost_threshold: 70 # which value is a deadly obstacle
+
+observation_sources: laser_scan_sensor 
+
+laser_scan_sensor: 
+  data_type: 'LaserScan'
+  topic: scan
+  marking: true
+  clearing: true
+  min_obstacle_height: -100.0
+  max_obstacle_height: 100.0
+  observation_persistence: 0.4
+  inf_is_valid: true

@@ -1,0 +1,94 @@
+# more on http://wiki.ros.org/navigation/Tutorials/RobotSetup
+
+local_costmap:
+  update_frequency: 5.0
+  publish_frequency: 2.0
+  rolling_window: true
+  width: 8.0
+  height: 8.0
+  resolution: 0.1
+  map_topic: /traversability_occ_map
+  
+  plugins:
+    -
+     name: static
+     type: "costmap_2d::StaticLayer"
+    - 
+     name: obstacle_layer
+     type: "costmap_2d::ObstacleLayer"  
+    -
+     name: inflation_layer
+     type: "costmap_2d::InflationLayer"
+
+  virtual_obstacles:
+    observation_sources: laser_scan_sensor
+    
+  obstacle_layer:
+    enabled: false # Change this to make this layer active
+    observation_sources: laser_scan_sensor 
+    laser_scan_sensor:
+      data_type: 'LaserScan'
+      topic: scan
+      marking: true
+      clearing: true
+      min_obstacle_height: -100.0
+      max_obstacle_height: 100.0
+      observation_persistence: 0.4
+      inf_is_valid: true   
+
+  inflation_layer:
+    enabled: false # Change this to make this layer active
+    inflation_radius: 0.3
+    observation_sources: laser_scan_sensor  
+  
+# The configuration below is to be used when you want to use a custom costmap_2d
+# plugin. In this case, the node gridmap_converter_node in the launch file
+# traversability_mapping.launch has to be commented out!
+#
+#local_costmap:
+#  update_frequency: 5.0
+#  publish_frequency: 2.0
+#  rolling_window: true
+#  width: 6.0
+#  height: 6.0
+#  resolution: 0.1
+#  map_topic: /traversability_occ_map
+#  plugins:
+#    -
+#     name: traversability_layer
+#     type: "traversability_layer::TraversabilityLayer"
+#    - 
+#     name: obstacle_layer
+#     type: "costmap_2d::ObstacleLayer"  
+#    -
+#     name: inflation_layer
+#     type: "costmap_2d::InflationLayer"
+#
+#  virtual_obstacles:
+#    observation_sources: laser_scan_sensor
+#    
+#  obstacle_layer:
+#    enabled: false # Change this to make this layer active
+#    observation_sources: laser_scan_sensor 
+#    laser_scan_sensor:
+#      data_type: 'LaserScan'
+#      topic: scan
+#      marking: true
+#      clearing: true
+#      min_obstacle_height: -100.0
+#      max_obstacle_height: 100.0
+#      observation_persistence: 0.4
+#      inf_is_valid: true   
+#
+#  inflation_layer:
+#    enabled: false # Change this to make this layer active
+#    observation_sources: laser_scan_sensor
+#    
+#  traversability_layer:
+#    enabled: true
+#    topic: /traversability_estimation/traversability_map
+#    marking: true
+#    clearing: true
+#    traversability_layer: "traversability"
+#    traversable_threshold: 0.75
+

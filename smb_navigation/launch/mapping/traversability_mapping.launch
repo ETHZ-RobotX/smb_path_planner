@@ -1,0 +1,32 @@
+<launch>
+
+  <arg name="launch_prefix" default=""/>
+  <arg name="odom_topic"    default="/base_odom"/>
+
+  <!-- Grid map converter: if you want to use this, then you need to add a static layer to your cost layer configuration -->
+  <node name="gridmap_converter" pkg="smb_navigation" type="gridmap_converter_node" output="screen" launch-prefix="$(arg launch_prefix)">
+     <rosparam command="load" file="$(find smb_navigation)/config/traversability_estimation/gridmap_converter.yaml" />
+  </node> 
+  
+  <!-- Odometry interceptor -->
+  <node name="odometry_interceptor" pkg="smb_navigation" type="odometry_interceptor_node" output="screen">
+     <remap from="odometry" to="$(arg odom_topic)"/>
+  </node>
+  
+  <!-- Nodes for traversability: we need elevation mapping -->  
+  <node pkg="elevation_mapping" type="elevation_mapping" name="elevation_mapping" output="screen">
+    <rosparam command="load" file="$(find smb_navigation)/config/traversability_estimation/elevation_mapping_smb_realsense.yaml" />
+    <rosparam command="load" file="$(find elevation_mapping)/config/sensor_processors/realsense_d435.yaml" />
+  </node>
+  
+  <node pkg="traversability_estimation" type="traversability_estimation_node" name="traversability_estimation" output="screen">
+    <rosparam command="load" file="$(find smb_navigation)/config/traversability_estimation/traversability_estimation_smb.yaml"/>
+    <rosparam command="load" file="$(find smb_navigation)/config/traversability_estimation/robot_filter_parameter.yaml"/>
+  </node>
+  
+  <!-- Launch visualizations for the resulting elevation map -->
+  <node pkg="grid_map_visualization" type="grid_map_visualization" name="traversability_map_visualization" output="screen">
+	  <rosparam command="load" file="$(find traversability_estimation)/config/visualization/traversability.yaml"/>
+  </node>
+
+</launch>

@@ -1,0 +1,13 @@
+<launch>
+
+  <arg name="launch_prefix" default=""/>
+  <arg name="odom_topic"    default="/odometry"/>
+ 
+  <param name="frame_id"    value="world"/>
+
+  <node name="pose_interceptor" pkg="smb_navigation" type="pose_interceptor_node" output="screen" launch-prefix="$(arg launch_prefix)">
+     <!-- Topics -->
+     <remap from="odometry" to="$(arg odom_topic)" />
+  </node>
+
+</launch>

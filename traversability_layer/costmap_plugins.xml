@@ -1,0 +1,7 @@
+<library path="libtraversability_layer">
+  <class name="traversability_layer::TraversabilityLayer"
+         type="traversability_layer::TraversabilityLayer"
+         base_class_type="costmap_2d::Layer">
+    <description>A traversability-based layer for costmap_2d</description>
+  </class>
+</library>

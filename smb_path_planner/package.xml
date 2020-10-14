@@ -2,7 +2,7 @@
   <name>smb_path_planner</name>
   <version>1.0.0</version>
   <description>
-  	Global and local planning for SMB, based on voxblox as the map representation.
+  	Path planner for SMB, based on ROS move_base.
 	</description>
 	
   <maintainer email="lbartolomei@mavt.ethz.ch">Luca Bartolomei</maintainer>
@@ -10,10 +10,10 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <run_depend>smb_local_planner</run_depend>
-  <run_depend>smb_global_planner</run_depend>
-  <run_depend>smb_planner_common</run_depend>
-  <run_depend>smb_planner_rviz</run_depend>
+  <run_depend>smb_ompl_planner</run_depend>
+  <run_depend>smb_navigation</run_depend>
+  <run_depend>traversability_layer</run_depend>
+  <run_depend>smb_navigation_rviz</run_depend>
 
   <export>
     <metapackage/>

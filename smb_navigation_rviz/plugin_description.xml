@@ -1,0 +1,9 @@
+<library path="libsmb_navigation_rviz">
+  <class name="smb_navigation_rviz/PlanningPanel"
+         type="smb_navigation_rviz::PlanningPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      A panel that allows easy control for SMB path planning.
+    </description>
+  </class>
+</library>
