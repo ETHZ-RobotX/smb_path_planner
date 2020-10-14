@@ -5,6 +5,7 @@ global_costmap:
   update_frequency: 5.0
   publish_frequency: 2.0
   rolling_window: true
+  inflation_radius: 0.8
 
   plugins:
     - 
@@ -33,6 +34,5 @@ global_costmap:
 
   inflation_layer:
     enabled: true
-    inflation_radius: 0.4
     observation_sources: laser_scan_sensor 
    

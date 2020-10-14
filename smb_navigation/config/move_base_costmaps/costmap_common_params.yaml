@@ -6,7 +6,6 @@ raytrace_range: 25       # raytrace free space up to raytrace_range
 footprint: [[0.4, 0.4], [0.4, -0.4], [-0.4, -0.4], [-0.4, 0.4]]  # footprint fo the robot, centered in robot centre
 #robot_radius: ir_of_robot
 
-inflation_radius: 0.8 # obstacles inflation
 cost_scaling_factor: 1.0
 lethal_cost_threshold: 70 # which value is a deadly obstacle
 

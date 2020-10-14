@@ -38,6 +38,7 @@ local_costmap:
 
   inflation_layer:
     enabled: false # Change this to make this layer active
+    inflation_radius: 0.3
     observation_sources: laser_scan_sensor  
   
 # The configuration below is to be used when you want to use a custom costmap_2d

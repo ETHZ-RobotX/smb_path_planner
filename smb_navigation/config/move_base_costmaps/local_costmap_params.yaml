@@ -6,7 +6,8 @@ local_costmap:
   rolling_window: true
   width: 8.0
   height: 8.0
-  resolution: 0.1
+  resolution: 0.05
+  inflation_radius: 0.3
   
   plugins:
     - 
@@ -34,5 +35,4 @@ local_costmap:
 
   inflation_layer:
     enabled: true
-    inflation_radius: 0.1
     observation_sources: laser_scan_sensor

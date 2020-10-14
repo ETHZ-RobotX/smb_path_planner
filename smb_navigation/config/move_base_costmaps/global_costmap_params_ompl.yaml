@@ -4,7 +4,8 @@ global_costmap:
   update_frequency: 5.0
   publish_frequency: 2.0
   
-  resolution: 0.1
+  resolution: 0.2
+  inflation_radius: 0.4
 
   plugins:
     - 
@@ -44,7 +45,7 @@ OmplPlanner:
   
   distance_threshold: 1.10     # [m]
   goal_bias: 0.05              # [m]
-  tree_range: 0.10             # [%]
+  tree_range: 0.30             # [%] Increase this to have longer branches in the RRT path (in sim: 0.1, in real: 0.3)
   robot_radius: 0.50           # [m]
   interpolation_factor: 0.10   # [-]
   num_seconds_to_plan: 5.0     # [s]
