@@ -1,7 +1,5 @@
 # more on http://wiki.ros.org/navigation/Tutorials/RobotSetup
 
-
-
 global_costmap:
   update_frequency: 5.0
   publish_frequency: 2.0
