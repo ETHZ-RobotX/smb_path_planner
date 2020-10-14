@@ -38,7 +38,7 @@ global_costmap:
 #### OMPL Planner Parameters ####
 OmplPlanner:
   use_distance_threshold: true
-  simplify_solution: true       # If 'true', some nodes in the path will be pruned
+  simplify_solution: false       # If 'true', some nodes in the path will be pruned
   trust_approx_solution: false
   verbose_planner: false
   enable_timer_collisions: false # If 'true', the global planner will check for collision at 'replanning rate' and will replan if in collision
