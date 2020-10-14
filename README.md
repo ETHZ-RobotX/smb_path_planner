@@ -12,7 +12,7 @@ Install the following packages first:
 ```
 sudo apt-get install ros-melodic-cmake-modules ros-melodic-velodyne-gazebo-plugins python-wstool python-catkin-tools ros-melodic-ompl ros-melodic-move-base ros-melodic-navfn ros-melodic-dwa-local-planner ros-melodic-costmap-2d ros-melodic-teb-local-planner ros-melodic-robot-self-filter ros-melodic-pointcloud-to-laserscan
 ```
-Then follow the instructions [here](https://github.com/ETHZ-RobotX/SMB_dev). <br>Note that the project may not be publicly available yet. If not refer to the original ETHZ Summer School [repository](https://github.com/ethz-asl/eth_supermegabot).</br>
+Then follow the instructions [here](https://github.com/ETHZ-RobotX/SMB_dev). **Note:** the project may not be publicly available yet. If not refer to the original ETHZ Summer School [repository](https://github.com/ethz-asl/eth_supermegabot).
 
 ## Additional documentation
 Additional documentation on `move_base` can be found [here](https://wiki.ros.org/move_base), while for the local planner, refer to the TEB Local Planner instructions [here](https://wiki.ros.org/teb_local_planner). Finally, the documentation about `costmap_2d` is available [here](https://wiki.ros.org/costmap_2d).
