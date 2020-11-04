@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>smb_navigation_scripts</name>
+  <version>1.0.0</version>
+  <description>
+     A bunch of utility scripts.
+  </description>
+
+  <maintainer email="lbartolomei@ethz.ch">Luca Bartolomei</maintainer>
+  <license>BSD</license>
+
+  <author email="lbartolomei@ethz.ch">Luca Bartolomei</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>  
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+
+</package>
