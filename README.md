@@ -72,3 +72,9 @@ $ roslaunch smb_navigation navigate2d_ompl.launch
 ```  
 If necessary, set the right global frame used for planning.
 
+## Troubleshooting
+If there are problems due to linking against `pthread` or `boost`, build with following command:
+```
+$ catkin build --cmake-args -DBUILD_SHARED_LIBS=ON
+```
+
