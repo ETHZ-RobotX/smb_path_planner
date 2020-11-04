@@ -20,7 +20,7 @@ from mpl_toolkits.mplot3d import Axes3D
 do_plots = False
 frame_id = "world"
 distance_from_wall = 5.0
-incoming = 1  # This decides the normal direction we consider
+normal_direction = 1  # This decides the normal direction we consider
 
 
 def planeFit(points):
@@ -67,13 +67,13 @@ def path_callback(path_msg):
     goal_msg.header.frame_id = frame_id
     goal_msg.header.stamp = rospy.Time.now()
     
-    goal_msg.pose.position.x = incoming * distance_from_wall * normal[0] + centroid[0]
-    goal_msg.pose.position.y = incoming * distance_from_wall * normal[1] + centroid[1]
-    goal_msg.pose.position.z = incoming * distance_from_wall * normal[2] + centroid[2]
+    goal_msg.pose.position.x = normal_direction * distance_from_wall * normal[0] + centroid[0]
+    goal_msg.pose.position.y = normal_direction * distance_from_wall * normal[1] + centroid[1]
+    goal_msg.pose.position.z = normal_direction * distance_from_wall * normal[2] + centroid[2]
     
     # Since the path is in CAD world frame, we can project the normal on the 
     # (x,y) plane and compute the yaw from that.
-    normal_xy = -incoming * normal[0:2] / np.linalg.norm(normal[0:2])
+    normal_xy = -normal_direction * normal[0:2] / np.linalg.norm(normal[0:2])
     yaw = math.atan2(normal_xy[1], normal_xy[0])
     rot = Rotation.from_euler('xyz', [0, 0, yaw], degrees=False)
     rot_quat = rot.as_quat()
@@ -114,9 +114,9 @@ if __name__ == '__main__':
         if rospy.has_param('~distance_from_wall'):
             distance_from_wall = rospy.get_param("~distance_from_wall")
             
-        if rospy.has_param('~incoming'):
-            incoming = rospy.get_param("~incoming")
-            assert(incoming == 1 or incoming == -1)
+        if rospy.has_param('~normal_direction'):
+            normal_direction = rospy.get_param("~normal_direction")
+            assert(normal_direction == 1 or normal_direction == -1)
             
         if rospy.has_param('~do_plots'):
             do_plots = rospy.get_param("~do_plots")
