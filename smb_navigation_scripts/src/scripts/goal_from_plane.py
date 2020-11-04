@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+""" 
+@file   goal_from_plane.py
+@brief  ROS Node that generates a goal for move base from a path on a plane
+@author Luca Bartolomei, V4RL
+@date   04.11.2020
+"""
 
 import numpy as np
 from numpy.linalg import svd
@@ -109,8 +115,7 @@ if __name__ == '__main__':
             do_plots = rospy.get_param("~do_plots")
         
         # Subscribers and Publishers
-        path_sub = rospy.Subscriber("input_path", 
-                                    Path, path_callback)
+        path_sub = rospy.Subscriber("input_path", Path, path_callback)
         goal_pub = rospy.Publisher('goal', PoseStamped, queue_size=10,)
         rospy.loginfo("Waiting for path message...")
         rospy.spin()
