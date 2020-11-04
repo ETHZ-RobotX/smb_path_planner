@@ -53,6 +53,11 @@ def path_callback(path_msg):
         else:
             points = np.vstack((points, position))
     
+    # Debug
+    # points = np.array(
+    #   [[0.0, 1.0, 1.0], [0.0, 2.0, 2.0], [0.0, 3.0, 3.0], [0.0, 4.0, 4.0],
+    #    [0.0, 5.0, 1.0], [0.0, 6.0, 2.0], [0.0, 7.0, 3.0], [0.0, 8.0, 4.0]])
+    
     rospy.loginfo("This path has {} points".format(points.shape[0]))
     centroid, normal = planeFit(points.T)
     
@@ -68,7 +73,7 @@ def path_callback(path_msg):
     
     # Since the path is in CAD world frame, we can project the normal on the 
     # (x,y) plane and compute the yaw from that.
-    normal_xy = incoming * normal[0:2] / np.linalg.norm(normal[0:2])
+    normal_xy = -incoming * normal[0:2] / np.linalg.norm(normal[0:2])
     yaw = math.atan2(normal_xy[1], normal_xy[0])
     rot = Rotation.from_euler('xyz', [0, 0, yaw], degrees=False)
     rot_quat = rot.as_quat()
@@ -92,6 +97,8 @@ def path_callback(path_msg):
         ax.scatter(points[:, 0], points[:, 1], points[:, 2])
         ax.scatter(goal_msg.pose.position.x, goal_msg.pose.position.y,
                    goal_msg.pose.position.z)
+        ax.quiver(goal_msg.pose.position.x, goal_msg.pose.position.y,
+                  goal_msg.pose.position.z, yaw, 0.0, 0.0, length=1.0, normalize=True)
         ax.set_xlabel('X'), ax.set_ylabel('Y'), ax.set_zlabel('Z')
         plt.show()
 
