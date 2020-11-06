@@ -11,6 +11,7 @@
 
   <!-- Mapping -->
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
+  <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud.launch"/>
   
   <!-- Path Planning -->
   <group unless="$(arg run_traversability)"> 

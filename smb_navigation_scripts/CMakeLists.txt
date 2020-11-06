@@ -7,6 +7,7 @@ find_package(catkin REQUIRED
       rospy
       geometry_msgs
       nav_msgs
+      sensor_msgs
 )
 
 catkin_package()

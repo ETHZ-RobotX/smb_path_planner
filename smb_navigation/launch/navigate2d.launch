@@ -10,6 +10,7 @@
 
   <!-- Mapping -->
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
+  <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud.launch"/>
   
   <!-- move_base -->
   <include file="$(find smb_navigation)/launch/move_base.launch">
