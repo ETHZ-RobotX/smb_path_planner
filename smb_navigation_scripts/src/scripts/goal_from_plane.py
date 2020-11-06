@@ -42,6 +42,13 @@ def planeFit(points):
     return ctr, svd(M)[0][:,-1]
     
 def path_callback(path_msg):
+    # Check path frame
+    path_frame = path_msg.header.frame_id
+    if frame_id != path_frame:
+        rospy.logerr("Path frame ID is different from specified frame")
+        rospy.logerr("No goal will be generated")
+        return
+
     rospy.loginfo("Received path on the plane")
     points = np.array([])
     for pose in path_msg.poses:
