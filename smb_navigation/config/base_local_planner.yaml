@@ -9,7 +9,7 @@ NavfnROS:
 
 TrajectoryPlannerROS:
   # Robot Configuration Parameters
-  max_vel_x: 1.0
+  max_vel_x: 0.5
   min_vel_x: 0.0
   max_vel_y: 0.0
   min_vel_y: 0.0
