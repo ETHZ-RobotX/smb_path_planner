@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="smb_navigation_scripts" type="goal_from_plane.py" name="goal_from_plane" output="screen" required="true" >
+    <param name="frame_id"           value="world"/> <!-- This is the reference frame of the input path, that has to coincide with the planning frame -->
+    <param name="distance_from_wall" value="5.0"/>
+    <param name="normal_direction"   value="1"/> <!-- This has to be 1 or -1 -->
+    <param name="do_plots"           value="False"/>
+    
+    <!-- Remapping -->
+    <remap from="input_path" to="/mabi_highlevel_controller/path_direct"/>
+    <remap from="goal"       to="/move_base_simple/goal"/>
+  </node>
+</launch>
