@@ -102,9 +102,9 @@ TebLocalPlannerROS:
   selection_alternative_time_cost: False # not in use yet
 
   # Homotopy Class Planner
-  enable_homotopy_class_planning: True
+  enable_homotopy_class_planning: False
   enable_multithreading: True
-  simple_exploration: False
+  simple_exploration: True
   max_number_classes: 4
   roadmap_graph_no_samples: 15
   roadmap_graph_area_width: 5
