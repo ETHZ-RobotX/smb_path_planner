@@ -11,6 +11,7 @@ import numpy as np
 import rospy
 from sensor_msgs.msg import PointCloud2
 import ros_numpy
+import time
  
 clear_radius = 2.0
     
@@ -19,14 +20,14 @@ def pcl_callback(pcl_in_msg):
     
     # Get the point in numpy format and filter them
     pcl_in_numpy = ros_numpy.point_cloud2.pointcloud2_to_xyz_array(pcl_in_msg)
-    pcl_out_numpy = np.array([], dtype=np.float32)
+    pcl_out_numpy = []
     for p in pcl_in_numpy:
         if np.linalg.norm(p) > clear_radius:
-            if pcl_out_numpy.shape[0] == 0:
-                pcl_out_numpy = p
-            else:
-                pcl_out_numpy = np.vstack((pcl_out_numpy, p))
-                
+            pcl_out_numpy.append(p)
+            
+    # Transform into array
+    pcl_out_numpy = np.array(pcl_out_numpy)    
+    
     # Generate a PointCloud2 message and publish it
     pcl_out_msg = pcl_in_msg
     pcl_out_msg.header.stamp = rospy.Time.now()
@@ -49,7 +50,8 @@ if __name__ == '__main__':
             clear_radius = rospy.get_param("~clear_radius")
         
         # Subscribers and Publishers
-        pcl_sub = rospy.Subscriber("rslidar_points", PointCloud2, pcl_callback)
+        pcl_sub = rospy.Subscriber("rslidar_points", PointCloud2, pcl_callback, 
+                                  queue_size=1)
         pcl_pub = rospy.Publisher('rslidar_points_filtered', PointCloud2, 
                                   queue_size=1)
         rospy.loginfo("Waiting for first PCL message...")
