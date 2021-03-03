@@ -95,7 +95,6 @@ void OmplPlanner::initialize(std::string name, costmap_2d::Costmap2D* costmap,
     private_nh.param("distance_threshold", rrt_params.distance_threshold, 1.1);
     private_nh.param("goal_bias", rrt_params.goal_bias, 0.05);
     private_nh.param("tree_range", rrt_params.tree_range, 0.05);
-    private_nh.param("robot_radius", rrt_params.robot_radius, 0.5);
     private_nh.param("interpolation_factor", rrt_params.interpolation_factor,
                      0.05);
     private_nh.param("num_seconds_to_plan", rrt_params.num_seconds_to_plan,
@@ -525,3 +524,4 @@ void OmplPlanner::outlineMap(unsigned char* costarr, int nx, int ny,
 }
 
 } // end namespace smb_ompl_planner
+

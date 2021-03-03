@@ -56,10 +56,9 @@ class GridmapValidityChecker : public base::StateValidityChecker
 {
 public:
   GridmapValidityChecker(const base::SpaceInformationPtr& space_info,
-                         const double robot_radius,
                          const double interpolation_factor,
                          costmap_2d::Costmap2D* costmap)
-      : base::StateValidityChecker(space_info), robot_radius_(robot_radius),
+      : base::StateValidityChecker(space_info),
         interpolation_factor_(interpolation_factor), costmap_(costmap)
   {
   }
@@ -137,8 +136,7 @@ public:
                               unsigned char& cost) const
   {
     unsigned int state_x_i, state_y_i;
-    Eigen::Vector2d inflated_state(state.x() + robot_radius_,
-                                   state.y() + robot_radius_);
+    Eigen::Vector2d inflated_state(state.x(), state.y());
     if (!costmap_->worldToMap(inflated_state.x(), inflated_state.y(), state_x_i,
                               state_y_i))
     {
@@ -151,12 +149,9 @@ public:
     return true;
   }
 
-  double getRobotRadius() const { return robot_radius_; }
-
   double getInterpolationFactor() const { return interpolation_factor_; }
 
 protected:
-  double robot_radius_;
   double interpolation_factor_;
   costmap_2d::Costmap2D* costmap_;
 };
@@ -246,3 +241,4 @@ protected:
 };
 
 } // end namespace ompl
+
