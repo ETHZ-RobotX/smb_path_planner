@@ -38,7 +38,7 @@
 
 #include <ompl/base/objectives/PathLengthOptimizationObjective.h>
 #include <ompl/geometric/SimpleSetup.h>
-#include <ompl/geometric/planners/bitstar/BITstar.h>
+#include <ompl/geometric/planners/informedtrees/BITstar.h>
 #include <ompl/geometric/planners/prm/PRM.h>
 #include <ompl/geometric/planners/rrt/InformedRRTstar.h>
 #include <ompl/geometric/planners/rrt/RRTConnect.h>
