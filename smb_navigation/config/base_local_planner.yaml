@@ -85,10 +85,10 @@ TebLocalPlannerROS:
 
   # Optimization
   no_inner_iterations: 5
-  no_outer_iterations: 25
+  no_outer_iterations: 4
   optimization_activate: True
   optimization_verbose: False
-  penalty_epsilon: 0.05
+  penalty_epsilon: 0.1
   weight_max_vel_x: 2
   weight_max_vel_theta: 1
   weight_acc_lim_x: 1
@@ -97,6 +97,7 @@ TebLocalPlannerROS:
   weight_kinematics_forward_drive: 100.0
   weight_kinematics_turning_radius: 0.0
   weight_optimaltime: 1
+  weight_shortest_path: 1.0
   weight_obstacle: 50
   weight_dynamic_obstacle: 10 # not in use yet
   selection_alternative_time_cost: False # not in use yet
