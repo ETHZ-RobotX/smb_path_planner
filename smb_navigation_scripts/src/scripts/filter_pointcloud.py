@@ -14,6 +14,7 @@ import ros_numpy
 import time
  
 clear_radius = 2.0
+ground_th = -0.5
     
 def pcl_callback(pcl_in_msg):
     rospy.loginfo_once("Received first pointcloud")
@@ -22,11 +23,16 @@ def pcl_callback(pcl_in_msg):
     pcl_in_numpy = ros_numpy.point_cloud2.pointcloud2_to_xyz_array(pcl_in_msg)
     pcl_out_numpy = []
     for p in pcl_in_numpy:
-        if np.linalg.norm(p) > clear_radius:
+        if np.linalg.norm(p) > clear_radius and p[2] > ground_th:
             pcl_out_numpy.append(p)
             
     # Transform into array
-    pcl_out_numpy = np.array(pcl_out_numpy)    
+    pcl_out_numpy = np.array(pcl_out_numpy)  
+    
+    # Check size
+    if pcl_out_numpy.shape[0] == 0:
+        rospy.logwarn_throttle(5, "No points in filtered point cloud!")
+        return
     
     # Generate a PointCloud2 message and publish it
     pcl_out_msg = pcl_in_msg
