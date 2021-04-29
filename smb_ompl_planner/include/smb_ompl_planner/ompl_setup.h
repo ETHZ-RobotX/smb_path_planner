@@ -117,13 +117,12 @@ public:
     getProblemDefinition()->setOptimizationObjective(obj);
   }
 
-  void setGridmapCollisionChecking(double robot_radius,
-                                   double interpolation_factor,
+  void setGridmapCollisionChecking(double interpolation_factor,
                                    costmap_2d::Costmap2D* costmap)
   {
     std::shared_ptr<GridmapValidityChecker> validity_checker(
-        new GridmapValidityChecker(getSpaceInformation(), robot_radius,
-                                   interpolation_factor, costmap));
+        new GridmapValidityChecker(getSpaceInformation(), interpolation_factor,
+                                   costmap));
 
     setStateValidityChecker(base::StateValidityCheckerPtr(validity_checker));
     si_->setMotionValidator(base::MotionValidatorPtr(
@@ -201,3 +200,4 @@ public:
 };
 
 } // end namespace ompl
+
