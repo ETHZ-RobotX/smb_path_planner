@@ -1,7 +1,7 @@
 # Super Mega Bot Path Planner
 
 Package for path planning of Super Mega Bots for the ETH Robotics Summer School. 
-The package has been tested under ROS Noetic and Ubuntu 18.04.
+The package has been tested under ROS Noetic and Ubuntu 20.04.
 
 __Author__: Luca Bartolomei  
 __Affiliation__: Vision For Robotics Lab, ETH Zurich  
@@ -54,10 +54,6 @@ If the `world` frame is not available, it is possible to use the odometry frame 
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=odom
 ```  
-For the testing of the SMB with the `smb_control` stack, run the following command:
-```
-$ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=tracking_camera_odom robot_base_frame:=base_link
-```
 
 ### Running with traversability estimation
 Start the simulation as in the previous case, and then run:
@@ -74,7 +70,12 @@ Connect to the robot and start the state estimation and control pipeline. Once i
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch
 ```  
-If necessary, set the right global frame used for planning.
+If necessary, set the right global frame used for planning.  
+For the testing of the SMB with the `smb_control` stack, run the following command:
+```
+$ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=tracking_camera_odom robot_base_frame:=base_link
+```
+
 
 ## Troubleshooting
 If there are problems due to linking against `pthread` or `boost`, build with following command:
