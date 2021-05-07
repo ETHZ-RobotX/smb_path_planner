@@ -5,7 +5,7 @@ global_costmap:
   update_frequency: 5.0
   publish_frequency: 2.0
   rolling_window: true
-  inflation_radius: 0.8
+  inflation_radius: 0.4
 
   plugins:
     - 

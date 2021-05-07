@@ -1,7 +1,8 @@
 # more on http://wiki.ros.org/move_base
 
 controller_frequency: 0.1
-recovery_behaviour_enabled: false
+recovery_behavior_enabled: true
+clearing_rotation_allowed: true
 
 NavfnROS:
   allow_unknown: true # Specifies whether or not to allow navfn to create plans that traverse unknown space.
@@ -75,7 +76,8 @@ TebLocalPlannerROS:
   complete_global_plan: false
 
   # Obstacles
-  min_obstacle_dist: 0.4
+  min_obstacle_dist: 0.3
+  inflation_dist: 0.2
   include_costmap_obstacles: True
   costmap_obstacles_behind_robot_dist: 3.0
   obstacle_poses_affected: 50
@@ -98,7 +100,7 @@ TebLocalPlannerROS:
   weight_kinematics_turning_radius: 0.0
   weight_optimaltime: 1
   weight_shortest_path: 1.0
-  weight_obstacle: 50
+  weight_obstacle: 1
   weight_dynamic_obstacle: 10 # not in use yet
   selection_alternative_time_cost: False # not in use yet
 
