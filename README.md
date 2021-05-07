@@ -54,6 +54,10 @@ If the `world` frame is not available, it is possible to use the odometry frame 
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=odom
 ```  
+For the testing of the SMB with the `smb_control` stack, run the following command:
+```
+$ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=tracking_camera_odom robot_base_frame:=base_link
+```
 
 ### Running with traversability estimation
 Start the simulation as in the previous case, and then run:
