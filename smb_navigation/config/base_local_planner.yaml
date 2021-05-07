@@ -1,7 +1,7 @@
 # more on http://wiki.ros.org/move_base
 
 controller_frequency: 0.1
-recovery_behaviour_enabled: true
+recovery_behaviour_enabled: false
 
 NavfnROS:
   allow_unknown: true # Specifies whether or not to allow navfn to create plans that traverse unknown space.
@@ -47,15 +47,15 @@ TebLocalPlannerROS:
   global_plan_viapoint_sep: 0.5
 
   # Robot
-  max_vel_x: 0.5
+  max_vel_x: 1.0
   max_vel_y: 0.0
-  max_vel_x_backwards: 0.2
-  max_vel_y_backwards: 0.0
-  max_vel_theta: 0.3
-  acc_lim_x: 0.5
+  max_vel_x_backwards: 1.0
+  max_vel_y_backwards: 1.0
+  max_vel_theta: 5.0
+  acc_lim_x: 1.0
   acc_lim_y: 0.0
   acc_lim_theta: 0.6
-  wheelbase: 0.5
+  wheelbase: 1.0
   min_turning_radius: 0.5
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
     type: "circular"

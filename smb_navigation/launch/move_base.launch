@@ -4,7 +4,7 @@
 
   <arg name="launch_prefix"         default=""/>
 
-  <arg name="cmd_vel_topic"         default="/cmd_vel_autonomous"/>
+  <arg name="cmd_vel_topic"         default="/teb_planner_twist"/>
   <arg name="tf_topic"              default="/tf"/>
   <arg name="odom_topic"            default="/base_odom"/>
   <arg name="obstacle_scan_topic"   default="/scan"/>
