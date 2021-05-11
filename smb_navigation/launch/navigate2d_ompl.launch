@@ -8,10 +8,18 @@
   
   <arg name="global_frame"       default="world"/>
   <arg name="robot_base_frame"   default="base"/>
+  
+  <arg name="sim"                default="false"/>
 
   <!-- Mapping -->
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
-  <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud.launch"/>
+  
+  <group if="$(arg sim)">
+    <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud.launch"/>
+  </group>
+  <group unless="$(arg sim)">
+    <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud_ground.launch"/>
+  </group>
   
   <!-- Path Planning -->
   <group unless="$(arg run_traversability)"> 

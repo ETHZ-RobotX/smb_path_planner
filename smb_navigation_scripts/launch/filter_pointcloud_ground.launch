@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="smb_navigation_scripts" type="filter_pcl_node" name="filter_pointcloud_ground" output="screen" required="true" >
+    <param name="ground_removal_th" value="-0.5"/>
+    <param name="clear_radius"      value="0.25"/>
+    
+    <!-- Remapping -->
+    <remap from="rslidar_points"          to="rslidar_points"/>
+    <remap from="rslidar_points_filtered" to="rslidar_points_filtered"/>
+  </node>
+</launch>

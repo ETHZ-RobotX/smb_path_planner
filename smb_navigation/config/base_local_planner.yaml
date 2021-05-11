@@ -1,7 +1,8 @@
 # more on http://wiki.ros.org/move_base
 
 controller_frequency: 0.1
-recovery_behaviour_enabled: true
+recovery_behavior_enabled: true
+clearing_rotation_allowed: true
 
 NavfnROS:
   allow_unknown: true # Specifies whether or not to allow navfn to create plans that traverse unknown space.
@@ -47,15 +48,15 @@ TebLocalPlannerROS:
   global_plan_viapoint_sep: 0.5
 
   # Robot
-  max_vel_x: 0.5
+  max_vel_x: 1.0
   max_vel_y: 0.0
-  max_vel_x_backwards: 0.2
-  max_vel_y_backwards: 0.0
-  max_vel_theta: 0.3
-  acc_lim_x: 0.5
+  max_vel_x_backwards: 1.0
+  max_vel_y_backwards: 1.0
+  max_vel_theta: 5.0
+  acc_lim_x: 1.0
   acc_lim_y: 0.0
   acc_lim_theta: 0.6
-  wheelbase: 0.5
+  wheelbase: 1.0
   min_turning_radius: 0.5
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
     type: "circular"
@@ -75,7 +76,8 @@ TebLocalPlannerROS:
   complete_global_plan: false
 
   # Obstacles
-  min_obstacle_dist: 0.4
+  min_obstacle_dist: 0.3
+  inflation_dist: 0.2
   include_costmap_obstacles: True
   costmap_obstacles_behind_robot_dist: 3.0
   obstacle_poses_affected: 50
@@ -85,10 +87,10 @@ TebLocalPlannerROS:
 
   # Optimization
   no_inner_iterations: 5
-  no_outer_iterations: 25
+  no_outer_iterations: 4
   optimization_activate: True
   optimization_verbose: False
-  penalty_epsilon: 0.05
+  penalty_epsilon: 0.1
   weight_max_vel_x: 2
   weight_max_vel_theta: 1
   weight_acc_lim_x: 1
@@ -97,14 +99,15 @@ TebLocalPlannerROS:
   weight_kinematics_forward_drive: 100.0
   weight_kinematics_turning_radius: 0.0
   weight_optimaltime: 1
-  weight_obstacle: 50
+  weight_shortest_path: 1.0
+  weight_obstacle: 1
   weight_dynamic_obstacle: 10 # not in use yet
   selection_alternative_time_cost: False # not in use yet
 
   # Homotopy Class Planner
-  enable_homotopy_class_planning: True
+  enable_homotopy_class_planning: False
   enable_multithreading: True
-  simple_exploration: False
+  simple_exploration: True
   max_number_classes: 4
   roadmap_graph_no_samples: 15
   roadmap_graph_area_width: 5

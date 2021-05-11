@@ -52,8 +52,8 @@ void RrtPlanner::setupProblem(const Eigen::Vector2d& start,
 {
   problem_setup_.clear();
 
-  problem_setup_.setGridmapCollisionChecking(
-      params_.robot_radius, params_.interpolation_factor, costmap_);
+  problem_setup_.setGridmapCollisionChecking(params_.interpolation_factor,
+                                             costmap_);
 
   if (!params_.use_distance_threshold)
   {
@@ -347,3 +347,4 @@ double RrtPlanner::getDistanceEigenToState(const Eigen::Vector2d& eigen,
 }
 
 } // end namespace smb_ompl_planner
+

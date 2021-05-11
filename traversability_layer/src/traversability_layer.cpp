@@ -205,7 +205,7 @@ void TraversabilityLayer::processTraversabilityMap(
     listener.lookupTransform(trav_map_msg.info.header.frame_id, global_frame_,
                              ros::Time(0), transform);
   }
-  catch (tf::TransformException ex)
+  catch (const tf::TransformException & ex)
   {
     ROS_ERROR_THROTTLE(5.0, "[Traversability Layer] %s", ex.what());
     return;

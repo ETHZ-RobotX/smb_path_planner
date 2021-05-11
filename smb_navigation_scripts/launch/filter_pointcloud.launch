@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <node pkg="smb_navigation_scripts" type="filter_pointcloud.py" name="filter_pointcloud" output="screen" required="true" >
-    <param name="clear_radius" value="1.5"/>
+    <param name="clear_radius" value="0.25"/>
     
     <!-- Remapping -->
     <remap from="rslidar_points"          to="rslidar_points"/>

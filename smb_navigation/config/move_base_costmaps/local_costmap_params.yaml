@@ -1,12 +1,12 @@
 # more on http://wiki.ros.org/navigation/Tutorials/RobotSetup
 
 local_costmap:
-  update_frequency: 5.0
+  update_frequency: 10.0
   publish_frequency: 2.0
   rolling_window: true
   width: 8.0
   height: 8.0
-  resolution: 0.05
+  resolution: 0.10
   inflation_radius: 0.3
   
   plugins:

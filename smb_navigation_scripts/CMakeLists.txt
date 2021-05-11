@@ -8,6 +8,7 @@ find_package(catkin REQUIRED
       geometry_msgs
       nav_msgs
       sensor_msgs
+      pcl_ros
 )
 
 catkin_package()
@@ -15,4 +16,12 @@ catkin_package()
 # Build
 include_directories(
   ${catkin_INCLUDE_DIRS}
+)
+
+add_executable(filter_pcl_node
+  src/filter_pcl_node.cpp
+)
+
+target_link_libraries(filter_pcl_node
+   ${catkin_LIBRARIES}
 )

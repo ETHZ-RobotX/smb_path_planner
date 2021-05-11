@@ -1,7 +1,7 @@
 # Super Mega Bot Path Planner
 
 Package for path planning of Super Mega Bots for the ETH Robotics Summer School. 
-The package has been tested under ROS Melodic and Ubuntu 18.04.
+The package has been tested under ROS Noetic and Ubuntu 20.04.
 
 __Author__: Luca Bartolomei  
 __Affiliation__: Vision For Robotics Lab, ETH Zurich  
@@ -10,7 +10,7 @@ __Contact__: Luca Bartolomei, lbartolomei@ethz.ch
 # Installation instructions  
 Install the following packages first:
 ```
-$ sudo apt-get install ros-melodic-cmake-modules ros-melodic-velodyne-gazebo-plugins python-wstool python-catkin-tools ros-melodic-ompl ros-melodic-move-base ros-melodic-navfn ros-melodic-dwa-local-planner ros-melodic-costmap-2d ros-melodic-teb-local-planner ros-melodic-robot-self-filter ros-melodic-pointcloud-to-laserscan ros-melodic-ros-numpy
+$ sudo apt-get install ros-noetic-cmake-modules ros-noetic-velodyne-gazebo-plugins python-wstool python-catkin-tools ros-noetic-ompl ros-noetic-move-base ros-noetic-navfn ros-noetic-dwa-local-planner ros-noetic-costmap-2d ros-noetic-teb-local-planner ros-noetic-robot-self-filter ros-noetic-pointcloud-to-laserscan ros-noetic-ros-numpy
 $ pip install numpy matplotlib scipy
 ```
 Then follow the instructions [here](https://github.com/ETHZ-RobotX/SMB_dev). **Note:** the project may not be publicly available yet. If not refer to the original ETHZ Summer School [repository](https://github.com/ethz-asl/eth_supermegabot).
@@ -38,11 +38,11 @@ $ roslaunch smb_sim sim_path_planner.launch
 ```
 In the controller panel, select `MpcTrackLocalPlan` from the list. If this controller does not show up, press the refresh button and try again. To start the controller, press the play button. Finally, start the local and global planners. If you want to use RRTs as global planner, run:
 ```
-$ roslaunch smb_navigation navigate2d_ompl.launch
+$ roslaunch smb_navigation navigate2d_ompl.launch sim:=true
 ```  
 Otherwise, to use a standard global planner from `move_base`, run:
 ```
-$ roslaunch smb_navigation navigate2d.launch
+$ roslaunch smb_navigation navigate2d.launch sim:=true
 ```  
 To send a global goal position there a set of different possibilities:
 * Set a goal with the planning panel and press the button `Start Planning`;
@@ -70,7 +70,12 @@ Connect to the robot and start the state estimation and control pipeline. Once i
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch
 ```  
-If necessary, set the right global frame used for planning.
+If necessary, set the right global frame used for planning.  
+For the testing of the SMB with the `smb_control` stack, run the following command:
+```
+$ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=tracking_camera_odom robot_base_frame:=base_link
+```
+
 
 ## Troubleshooting
 If there are problems due to linking against `pthread` or `boost`, build with following command:
