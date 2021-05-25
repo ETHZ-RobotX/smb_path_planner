@@ -21,6 +21,7 @@
   <exec_depend>teb_local_planner</exec_depend>
   <exec_depend>traversability_estimation</exec_depend>
   <exec_depend>smb_ompl_planner</exec_depend>
+  <exec_depend>smb_navigation_scripts</exec_depend>
   
   <export>
   </export>

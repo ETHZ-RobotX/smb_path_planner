@@ -13,7 +13,7 @@ Install the following packages first:
 $ sudo apt-get install ros-noetic-cmake-modules ros-noetic-velodyne-gazebo-plugins python-wstool python-catkin-tools ros-noetic-ompl ros-noetic-move-base ros-noetic-navfn ros-noetic-dwa-local-planner ros-noetic-costmap-2d ros-noetic-teb-local-planner ros-noetic-robot-self-filter ros-noetic-pointcloud-to-laserscan ros-noetic-ros-numpy
 $ pip install numpy matplotlib scipy
 ```
-Then follow the instructions [here](https://github.com/ETHZ-RobotX/SMB_dev). **Note:** the project may not be publicly available yet. If not refer to the original ETHZ Summer School [repository](https://github.com/ethz-asl/eth_supermegabot).
+Then follow the instructions [here](https://github.com/ETHZ-RobotX/SMB_dev).
 
 ## Additional documentation
 Additional documentation on `move_base` can be found [here](https://wiki.ros.org/move_base), while for the local planner, refer to the TEB Local Planner instructions [here](https://wiki.ros.org/teb_local_planner). Finally, the documentation about `costmap_2d` is available [here](https://wiki.ros.org/costmap_2d).
