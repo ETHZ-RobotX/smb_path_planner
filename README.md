@@ -56,6 +56,7 @@ $ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=odom
 ```  
 
 ### Running with traversability estimation
+**Note**: This component has not been fully tested yet!  
 Start the simulation as in the previous case, and then run:
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch run_traversability:=true
