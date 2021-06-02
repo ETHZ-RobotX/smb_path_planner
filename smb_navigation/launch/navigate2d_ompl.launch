@@ -6,8 +6,8 @@
   <arg name="icp_running"        default="false"/>
   <arg name="run_traversability" default="false"/>
   
-  <arg name="global_frame"       default="world"/>
-  <arg name="robot_base_frame"   default="base"/>
+  <arg name="global_frame"       default="tracking_camera_odom"/>
+  <arg name="robot_base_frame"   default="base_link"/>
   
   <arg name="sim"                default="false"/>
 
