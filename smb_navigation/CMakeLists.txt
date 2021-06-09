@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(smb_navigation)
 set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
-add_compile_options(-std=c++11 -Wall)
+add_compile_options(-std=c++14 -Wall)
 
 # Set dependencies
 set(PACKAGE_DEPENDENCIES
