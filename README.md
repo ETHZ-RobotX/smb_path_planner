@@ -12,7 +12,10 @@ Install the following packages first:
 ```
 $ sudo apt install ros-noetic-cmake-modules ros-noetic-velodyne-gazebo-plugins ros-noetic-ompl ros-noetic-move-base ros-noetic-navfn ros-noetic-dwa-local-planner ros-noetic-costmap-2d ros-noetic-teb-local-planner ros-noetic-robot-self-filter ros-noetic-pointcloud-to-laserscan ros-noetic-ros-numpy ros-noetic-octomap-ros ros-noetic-octomap-server ros-noetic-pcl-ros ros-noetic-pcl-conversions ros-noetic-grid-map-costmap-2d ros-noetic-grid-map-ros ros-noetic-map-server ros-noetic-global-planner
 ```
-Then follow the instructions [here](https://github.com/ETHZ-RobotX/SMB_dev).
+Then follow the instructions [here](https://github.com/ETHZ-RobotX/SMB_dev) to set up the simulation. Then, to build the planner:
+```
+$ catkin build smb_path_planner
+```
 
 ## Additional documentation
 Additional documentation on `move_base` can be found [here](https://wiki.ros.org/move_base), while for the local planner, refer to the TEB Local Planner instructions [here](https://wiki.ros.org/teb_local_planner). Finally, the documentation about `costmap_2d` is available [here](https://wiki.ros.org/costmap_2d).
@@ -30,12 +33,11 @@ Make sure all the packages have built successfully. As a sanity check, re-source
 Next, under `Displays`, add an `InteractiveMarkers` display with the topic `/planning_markers/update`. You should be able to see the interactive markers and the planning panel.
 
 ## How to run the planner in simulation
-First, start the simulation in Gazebo, RViz and RQT Plugin to select the 
-controller, by running:
+First, start the simulation in Gazebo and RViz, by running:
 ```
-$ roslaunch smb_sim sim_path_planner.launch
+$ roslaunch smb_gazebo sim.launch
 ```
-In the controller panel, select `MpcTrackLocalPlan` from the list. If this controller does not show up, press the refresh button and try again. To start the controller, press the play button. Finally, start the local and global planners. If you want to use RRTs as global planner, run:
+Then, start the local and global planners. If you want to use RRTs as global planner, run:
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch sim:=true
 ```  
@@ -54,6 +56,13 @@ If the `world` frame is not available, it is possible to use the odometry frame 
 $ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=odom
 ```  
 
+## How to run the planner on the real robot
+Connect to the robot and start the state estimation and control pipeline. Once it is started, run the planner as before:
+```
+$ roslaunch smb_navigation navigate2d_ompl.launch
+```  
+If necessary, set the right global and local frames used for planning.  
+
 ### Running with traversability estimation
 **Note**: This component has not been fully tested yet!  
 Start the simulation as in the previous case, and then run:
@@ -64,18 +73,6 @@ Notice that in this case, there are 3 different cost layers (static, laser scans
 
 It is also possible to use a custom layer (`traversability_layer`). To use it, follow the instructions in the configuration file `smb_navigation/config/move_base_costmaps/local_costmap_params_traversability.yaml`.  
 In this case, notice that it is not possible to run the obstacle layer (based on laser scans) and the traversability layer at the same time in the current configuration, as the laser scan clears the traversability map. You are more than welcome to find a proper way to fuse these two maps!
-
-## How to run the planner on the real robot
-Connect to the robot and start the state estimation and control pipeline. Once it is started, run the planner as before:
-```
-$ roslaunch smb_navigation navigate2d_ompl.launch
-```  
-If necessary, set the right global frame used for planning.  
-For the testing of the SMB with the `smb_control` stack, run the following command:
-```
-$ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=tracking_camera_odom robot_base_frame:=base_link
-```
-
 
 ## Troubleshooting
 If there are problems due to linking against `pthread` or `boost`, build with following command:
