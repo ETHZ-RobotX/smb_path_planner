@@ -12,8 +12,11 @@
   <arg name="global_frame"          default="world"/>
   <arg name="robot_base_frame"      default="base"/>
 
-  <arg name="base_global_planner" default="smb_ompl_planner/OmplPlanner"/>
-  <arg name="base_local_planner"  default="teb_local_planner/TebLocalPlannerROS"/>
+  <arg name="base_global_planner"   default="smb_ompl_planner/OmplPlanner"/>
+  <arg name="base_local_planner"    default="teb_local_planner/TebLocalPlannerROS"/>
+  
+  <!-- Argument to swap between launch files (sim or real robot) -->
+  <arg name="file_suffix"           default=""/>
 
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" launch-prefix="$(arg launch_prefix)">
 
@@ -25,7 +28,9 @@
 
     <param name="base_global_planner" value="$(arg base_global_planner)"/>
     <param name="base_local_planner"  value="$(arg base_local_planner)"/>
-    <rosparam file="$(find smb_navigation)/config/base_local_planner.yaml" command="load"/>
+    
+    <!-- Load the right config file for local planner (suffix is either "" or "_sim") -->
+    <rosparam file="$(find smb_navigation)/config/base_local_planner$(arg file_suffix).yaml" command="load"/>
     
     <!-- Additional parameters -->
     <param name="footprint_padding"         value="0.01" />

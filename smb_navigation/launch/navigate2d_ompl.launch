@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
 
 <launch>
-  
-  <arg name="simulation"         default="true"/>
-  <arg name="icp_running"        default="false"/>
+  <!-- Arguments -->
   <arg name="run_traversability" default="false"/>
   
   <arg name="global_frame"       default="tracking_camera_odom"/>
@@ -14,20 +12,27 @@
   <!-- Mapping -->
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
   
-  <group if="$(arg sim)">
-    <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud.launch"/>
-  </group>
-  <group unless="$(arg sim)">
-    <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud_ground.launch"/>
-  </group>
+  <!-- Robot self-filtering and ground removal -->
+  <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud_ground.launch"/>
   
   <!-- Path Planning -->
   <group unless="$(arg run_traversability)"> 
-    <!-- This is the standard move base (without traversability) -->
-    <include file="$(find smb_ompl_planner)/launch/move_base_ompl.launch">
-      <arg name="global_frame"     value="$(arg global_frame)"/>
-      <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
-    </include>
+    <!-- This is the standard move base (without traversability) for the SIMULATED robot -->
+    <group if="$(arg sim)">
+      <include file="$(find smb_ompl_planner)/launch/move_base_ompl.launch">
+        <arg name="global_frame"     value="$(arg global_frame)"/>
+        <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
+        <arg name="file_suffix"      value="_sim"/>
+      </include>
+    </group>
+    
+    <!-- This is the standard move base (without traversability) for the REAL robot -->
+    <group unless="$(arg sim)">
+      <include file="$(find smb_ompl_planner)/launch/move_base_ompl.launch">
+        <arg name="global_frame"     value="$(arg global_frame)"/>
+        <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
+      </include>
+    </group>
   </group>
   
   <group if="$(arg run_traversability)">

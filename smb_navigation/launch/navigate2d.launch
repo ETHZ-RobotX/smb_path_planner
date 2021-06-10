@@ -1,10 +1,7 @@
 <?xml version="1.0"?>
 
 <launch>
-  
-  <arg name="icp_running"        default="false"/>
-  <arg name="simulation"         default="true"/>
-  
+  <!-- Arguments -->  
   <arg name="global_frame"       default="tracking_camera_odom"/>
   <arg name="robot_base_frame"   default="base_link"/>
   
@@ -13,18 +10,26 @@
   <!-- Mapping -->
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
   
-  <group if="$(arg sim)">
-    <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud.launch"/>
-  </group>
-  <group unless="$(arg sim)">
-    <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud_ground.launch"/>
-  </group>
+  <!-- Robot self-filtering and ground removal -->
+  <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud_ground.launch"/>
   
   <!-- move_base -->
-  <include file="$(find smb_navigation)/launch/move_base.launch">
-    <arg name="global_frame"     value="$(arg global_frame)"/>
-    <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
-  </include>
+  <!-- This is the standard move base (without traversability) for the SIMULATED robot -->
+  <group if="$(arg sim)">
+    <include file="$(find smb_navigation)/launch/move_base.launch">
+      <arg name="global_frame"     value="$(arg global_frame)"/>
+      <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
+      <arg name="file_suffix"      value="_sim"/>
+    </include>
+  </group>
+    
+  <!-- This is the standard move base (without traversability) for the REAL robot -->
+  <group unless="$(arg sim)">
+    <include file="$(find smb_navigation)/launch/move_base.launch">
+      <arg name="global_frame"     value="$(arg global_frame)"/>
+      <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
+    </include>
+  </group>
   
   <!-- Utility for communication with MPC - Comment this back in if you plan to use standard ROS planners -->
   <!--
