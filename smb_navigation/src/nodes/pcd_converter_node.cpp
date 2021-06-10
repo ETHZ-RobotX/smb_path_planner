@@ -54,8 +54,7 @@ int main(int argc, char** argv)
   {
     ROS_INFO("[PCD Converter] Node initialized");
     pcd_converter.generateMap();
-    ROS_WARN("[PCD Converter] Conversion complete! Shutdown!");
-    ROS_WARN("\n[PCD Converter] Remember to press Ctrl+C if running script\n");
+    ROS_WARN("[PCD Converter] Conversion complete! Shutdown!\n");
   }
   return 0;
 }

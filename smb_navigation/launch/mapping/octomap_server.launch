@@ -1,6 +1,6 @@
 <launch>
   <!-- Arguments and parameters -->
-  <arg name="path"       default="$(find smb_navigation)/data/wangen_2300K.bt"/>
+  <arg name="path"       default="$(find smb_navigation)/data/real/wangen_2300K.bt"/>
   <arg name="z_min"      default="-2.0"/> <!-- [m] -->
   <arg name="z_max"      default="2.0"/>  <!-- [m] -->
   

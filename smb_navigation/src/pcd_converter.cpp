@@ -138,7 +138,8 @@ void PcdConverter::generateMap()
   // Notice: this is the most expensive step. For a ~500 000 points it takes
   //         around 7 minutes
   ROS_WARN(
-      "[PCD Converter] Removing the ground -- this can take several minutes!");
+      "[PCD Converter] Removing the ground -- this can take several minutes!"
+      " It depends on map resolution");
   start_time = std::chrono::high_resolution_clock::now();
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered(
       new pcl::PointCloud<pcl::PointXYZ>);

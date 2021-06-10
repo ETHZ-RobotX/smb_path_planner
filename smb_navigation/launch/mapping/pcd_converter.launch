@@ -1,7 +1,7 @@
 <launch>
   <!-- Arguments and parameters -->
-  <arg name="input_file"   default="$(find smb_navigation)/data/wangen_2300K.pcd"/>
-  <arg name="output_file"  default="$(find smb_navigation)/data/wangen_2300K.bt"/> <!-- This has to have extension "*.bt" -->
+  <arg name="input_file"   default="$(find smb_navigation)/data/real/wangen_2300K.pcd"/>
+  <arg name="output_file"  default="$(find smb_navigation)/data/real/wangen_2300K.bt"/> <!-- This has to have extension "*.bt" -->
   
   <arg name="resolution"   default="0.15" /> <!-- [m] -->
   <arg name="frame_id"     default="world"  /> <!-- This has to match the frame id of the input point cloud -->
