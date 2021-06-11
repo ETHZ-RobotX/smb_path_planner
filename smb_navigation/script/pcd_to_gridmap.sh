@@ -10,7 +10,7 @@ print_help () {
   echo -e "\n${YELLOW}Function usage:${NC} ./pcd_to_gridmap.sh abs_path_input_file abs_path_output_folder\n"
 }
 
-if [ $1 = "-h" ] || [ $1 = "--help" ]; then
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
   print_help
   exit 1
 elif [ "$#" -lt 2 ]; then
