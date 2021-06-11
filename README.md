@@ -40,11 +40,11 @@ $ roslaunch smb_gazebo sim.launch
 Then, start the local and global planners. If you want to use RRTs as global planner, run:
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch sim:=true
-```  
+```
 Otherwise, to use a standard global planner from `move_base`, run:
 ```
 $ roslaunch smb_navigation navigate2d.launch sim:=true
-```  
+```
 To send a global goal position there a set of different possibilities:
 * Set a goal with the planning panel and press the button `Start Planning`;
 * Use RViz direcly by using the button `2D Nav Goal` and setting the goal pose;
@@ -54,17 +54,19 @@ To send a global goal position there a set of different possibilities:
 If the `world` frame is not available, it is possible to use the odometry frame for planning. for example, if the frame in use is called `odom`, run:
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch global_frame:=odom
-```  
+```
 
 ## How to run the planner on the real robot
 Connect to the robot and start the state estimation and control pipeline. Once it is started, run the planner as before:
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch
-```  
+```
 If necessary, set the right global and local frames used for planning.  
 
 ### Running with traversability estimation
 **Note**: This component has not been fully tested yet!  
+**Note**: In other to use this feature, make sure that the `traversability_estimation` package is installed ([link](https://github.com/leggedrobotics/traversability_estimation#installation)).
+
 Start the simulation as in the previous case, and then run:
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch run_traversability:=true
