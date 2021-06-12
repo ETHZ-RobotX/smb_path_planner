@@ -65,7 +65,10 @@ A script to generate a global map from a `*.pcd` file is also given. To generate
 1. Navigate to: `$ cd smb_path_planner/smb_navigation/script`
 2. Make the script exectuable: `$ chomod +x pcd_to_gridmap.sh`
 3. Set the right parameters in `pcd_to_gridmap.sh`(parameters: `resolution`, `z_min`, `z_max`)
-4. Run the script giving the input file and the output folder: `$ ./pcd_to_gridmap.sh abs_path_to_pcd abs_path_output_folder`
+4. Run the script giving the input file and the output folder: 
+```
+$ ./pcd_to_gridmap.sh abs_path_to_pcd abs_path_output_folder
+```
 5. Follow the instructions on the terminal
 6. After the script is done, a `*.pgm` and a `*.yaml` files are created in the output folder.
 The files can be used for global planning.
@@ -78,7 +81,7 @@ $ roslaunch smb_navigation navigate2d_ompl.launch
 ```
 If necessary, set the right global and local frames used for planning. It is also possible to use a map generated offline for planning.  
 
-### Running with traversability estimation
+## Running with traversability estimation
 **Note**: This component has not been fully tested yet!  
 **Note**: In other to use this feature, make sure that the `traversability_estimation` package is installed ([link](https://github.com/leggedrobotics/traversability_estimation#installation)).
 
