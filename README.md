@@ -21,7 +21,7 @@ $ catkin build smb_path_planner
 Additional documentation on `move_base` can be found [here](https://wiki.ros.org/move_base), while for the local planner, refer to the TEB Local Planner instructions [here](https://wiki.ros.org/teb_local_planner). Finally, the documentation about `costmap_2d` is available [here](https://wiki.ros.org/costmap_2d).
 
 ## Structure of the code
-The `smb_path_planner` package is composed by 3 packages:
+The `smb_path_planner` package is composed by these packages:
 * `smb_ompl_planner`: global planner for `move_base` based on the [OMPL library](http://ompl.kavrakilab.org/) for motion planning;
 * `smb_navigation`: package containing utilities, configurations and launch files for the planning with `move_base`;
 * `smb_navigation_rviz`: package containing the RViz plugin to put a goal for the planner easily;
