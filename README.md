@@ -63,9 +63,9 @@ $ roslaunch smb_navigation navigate2d_ompl.launch sim:=false use_global_map:=tru
 ```
 A script to generate a global map from a `*.pcd` file is also given. To generate a global map usable by `move_base`, follow these steps:
 1. Navigate to: `$ cd smb_path_planner/smb_navigation/script`
-2. Make the script exectuable: `chomod +x pcd_to_gridmap.sh`
+2. Make the script exectuable: `$ chomod +x pcd_to_gridmap.sh`
 3. Set the right parameters in `pcd_to_gridmap.sh`(parameters: `resolution`, `z_min`, `z_max`)
-4. Run the script giving the input file and the output folder: `./pcd_to_gridmap.sh $abs_path_to_pcd $abs_path_output_folder`
+4. Run the script giving the input file and the output folder: `$ ./pcd_to_gridmap.sh abs_path_to_pcd abs_path_output_folder`
 5. Follow the instructions on the terminal
 6. After the script is done, a `*.pgm` and a `*.yaml` files are created in the output folder.
 The files can be used for global planning.

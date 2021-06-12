@@ -5,6 +5,12 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+
+# Parameters - TODO
+resolution=0.2 # [m]
+z_min=-0.5
+z_max=1.0
+
 # Check inputs
 print_help () {
   echo -e "\n${YELLOW}Function usage:${NC} ./pcd_to_gridmap.sh abs_path_input_file abs_path_output_folder\n"
@@ -18,9 +24,6 @@ elif [ "$#" -lt 2 ]; then
   print_help
   exit -1
 fi
-
-# Parameters
-resolution=0.2 # [m]
 
 input_file="$1"  # This has to be a *.pcd file!
 data_path="$2"
@@ -40,7 +43,7 @@ echo -e "${YELLOW}Binary tree generated!${NC}"
 sleep 3s
 
 echo -e "${YELLOW}Activating OctoMap Server${NC}"
-roslaunch smb_navigation octomap_server.launch resolution:=${resolution} path:=${output_bt_file} &
+roslaunch smb_navigation octomap_server.launch resolution:=${resolution} path:=${output_bt_file} z_min:=${z_min} z_max:=${z_max} &
 
 # Sleep and then run map saver
 sleep 5s
@@ -50,9 +53,6 @@ rosrun map_server map_saver -f ${output_map_file}
 # Killall
 sleep 3s
 rosnode kill -a
-
-# Remove temporary file
-rm $output_bt_file
 
 echo -e "${YELLOW}Map has been generated in ${data_path}.${NC}"
 echo -e "\n==================================================="
