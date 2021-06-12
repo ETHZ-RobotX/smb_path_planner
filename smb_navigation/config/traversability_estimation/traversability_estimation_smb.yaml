@@ -1,6 +1,6 @@
 submap_service: "/elevation_mapping/get_submap"
-map_frame_id: "world"     # Must be the same as the input elevation submap.
-robot_frame_id: "base"
+map_frame_id: "tracking_camera_odom"     # Must be the same as the input elevation submap.
+robot_frame_id: "base_link"
 min_update_rate: 2.0
 map_center_x: 0.0
 map_center_y: 0.0
