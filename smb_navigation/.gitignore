@@ -38,3 +38,6 @@ Makefile
 # CLion
 *.idea/
 *cmake-build-debug/
+
+*.pcd
+*.bt
