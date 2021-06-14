@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """ 
 @file   goal_from_plane.py
 @brief  ROS Node that generates a goal for move base from a path on a plane
