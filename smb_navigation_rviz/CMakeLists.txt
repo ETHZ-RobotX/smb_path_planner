@@ -1,10 +1,32 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(smb_navigation_rviz)
 
-find_package(catkin_simple REQUIRED)
-catkin_simple(ALL_DEPS_REQUIRED)
-
 add_definitions(-std=c++11)
+
+find_package(catkin REQUIRED
+    COMPONENTS
+        roscpp
+        std_msgs
+        tf
+        visualization_msgs
+        rviz
+)
+
+catkin_package(
+    INCLUDE_DIRS include ${Eigen_INCLUDE_DIRS}
+    LIBRARIES ${PROJECT_NAME}
+    CATKIN_DEPENDS
+        roscpp
+        std_msgs
+        tf
+        visualization_msgs
+        rviz
+)
+
+include_directories(
+    include
+    ${catkin_INCLUDE_DIRS}
+)
 
 # These settings all stolen from visualization_tutorials:
 # This setting causes Qt's "MOC" generation to happen automatically.
@@ -53,23 +75,18 @@ add_definitions(-DQT_NO_KEYWORDS)
 #############
 # LIBRARIES #
 #############
-cs_add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME}
   ${SRC_FILES}
   ${MOC_FILES}
 )
-target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 
 
 ############
 # BINARIES #
 ############
-cs_add_executable(standalone_test
+add_executable(standalone_test
   src/standalone_test.cpp
 )
-target_link_libraries(standalone_test ${PROJECT_NAME})
+target_link_libraries(standalone_test ${PROJECT_NAME} ${catkin_LIBRARIES})
 
-##########
-# EXPORT #
-##########
-cs_install()
-cs_export()
