@@ -10,6 +10,7 @@ __Contact__: Luca Bartolomei, lbartolomei@ethz.ch
 # Installation instructions  
 Install the following packages first:
 ```
+$ sudo apt install libeigen3-dev
 $ sudo apt install ros-noetic-cmake-modules ros-noetic-velodyne-gazebo-plugins ros-noetic-ompl ros-noetic-move-base ros-noetic-navfn ros-noetic-dwa-local-planner ros-noetic-costmap-2d ros-noetic-teb-local-planner ros-noetic-robot-self-filter ros-noetic-pointcloud-to-laserscan ros-noetic-ros-numpy ros-noetic-octomap-ros ros-noetic-octomap-server ros-noetic-pcl-ros ros-noetic-pcl-conversions ros-noetic-grid-map-costmap-2d ros-noetic-grid-map-ros ros-noetic-map-server ros-noetic-global-planner ros-noetic-grid-map-filters ros-noetic-grid-map-visualization
 ```
 Then follow the instructions [here](https://github.com/ETHZ-RobotX/SMB_dev) to set up the simulation. Then, to build the planner:
@@ -61,6 +62,8 @@ If a global map has to be used (e.g. created from SLAM) for global planning, set
 ```
 $ roslaunch smb_navigation navigate2d_ompl.launch sim:=false use_global_map:=true
 ```
+This works also with the standard `move_base` global planner.  
+
 A script to generate a global map from a `*.pcd` file is also given. To generate a global map usable by `move_base`, follow these steps:
 1. Navigate to: `$ cd smb_path_planner/smb_navigation/script`
 2. Make the script exectuable: `$ chomod +x pcd_to_gridmap.sh`
@@ -70,9 +73,21 @@ A script to generate a global map from a `*.pcd` file is also given. To generate
 $ ./pcd_to_gridmap.sh abs_path_to_pcd abs_path_output_folder
 ```
 5. Follow the instructions on the terminal
-6. After the script is done, a `*.pgm` and a `*.yaml` files are created in the output folder.
-The files can be used for global planning.
+6. After the script is done, a `*.pgm` and a `*.yaml` files are created in the output folder. The files can be used for global planning.
+7. Check that the origin field in the `*.yaml` file contains NaNs. If so, replace them with zeros.
 
+### How to follow multiple waypoints
+This functionality is based on the [`follow_waypoints`](https://wiki.ros.org/follow_waypoints) package. To follow multiple waypoints, run this command:
+```
+$ roslaunch smb_navigation navigate2d_ompl.launch sim:=true follow_waypoints:=true
+```
+This works also with the standard `move_base` global planner.  
+
+The waypoints can be specified either as a `csv` file, or they can be set online using RViz.
+* To use an input file, specify the path to the file in `smb_path_planner/smb_navigation_scripts/launch/follow_waypoints.launch` (parameters: `output_folder`, `input_filename`); then call the topic: `$ rostopic pub /start_journey std_msgs/Empty -1`;
+* To specify the waypoints online, use the `2D Pose Estimate` button in RViz to specify the target poses; then call the topic: `$ rostopic pub /path_ready std_msgs/Empty -1`. In this case, the waypoints will be store in a file (parameters: `output_folder`, `output_filename` in the launch file).
+
+This tool can be used in combination with a global occupancy map created offline.
 
 ## How to run the planner on the real robot
 Connect to the robot and start the state estimation and control pipeline. Once it is started, run the planner as before:
