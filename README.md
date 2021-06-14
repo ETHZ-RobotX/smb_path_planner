@@ -84,8 +84,10 @@ $ roslaunch smb_navigation navigate2d_ompl.launch sim:=true follow_waypoints:=tr
 This works also with the standard `move_base` global planner.  
 
 The waypoints can be specified either as a `csv` file, or they can be set online using RViz.
-* To use an input file, specify the path to the file in `smb_path_planner/smb_navigation_scripts/launch/follow_waypoints.launch` (parameters: `output_folder`, `input_filename`); then call the topic: `$ rostopic pub /start_journey std_msgs/Empty -1`;
-* To specify the waypoints online, use the `2D Pose Estimate` button in RViz to specify the target poses; then call the topic: `$ rostopic pub /path_ready std_msgs/Empty -1`. In this case, the waypoints will be store in a file (parameters: `output_folder`, `output_filename` in the launch file).
+* To use an input file, specify the path to the file in `smb_path_planner/smb_navigation_scripts/launch/follow_waypoints.launch` (parameters: `output_folder`, `input_filename`); 
+then call the topic: ```$ rostopic pub /start_journey std_msgs/Empty -1```;
+* To specify the waypoints online, use the `2D Pose Estimate` button in RViz to specify the target poses; then call the topic: ```$ rostopic pub /path_ready std_msgs/Empty -1```.
+In this case, the waypoints will be stored in a file (parameters: `output_folder`, `output_filename` in the launch file).
 
 This tool can be used in combination with a global occupancy map created offline.
 
