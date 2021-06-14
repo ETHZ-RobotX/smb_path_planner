@@ -5,6 +5,7 @@ set(CMAKE_BUILD_TYPE Release)
 add_compile_options(-std=c++11 -Wall)
 
 # Find packages
+find_package(Eigen3 REQUIRED)
 find_package(ompl REQUIRED)
 find_package(catkin REQUIRED
     COMPONENTS
@@ -17,11 +18,10 @@ find_package(catkin REQUIRED
         roscpp
         tf2_geometry_msgs
         tf2_ros
-        eigen_catkin
 )
 
 catkin_package(
-    INCLUDE_DIRS include
+    INCLUDE_DIRS include ${Eigen_INCLUDE_DIRS}
     LIBRARIES ${PROJECT_NAME}
     CATKIN_DEPENDS
         costmap_2d
@@ -38,6 +38,7 @@ catkin_package(
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
+    ${Eigen_INCLUDE_DIRS}
     ${OMPL_INCLUDE_DIRS}
 )
 

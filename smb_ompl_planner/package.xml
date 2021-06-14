@@ -26,7 +26,6 @@
   <depend>pluginlib</depend>
   <depend>roscpp</depend>
   <depend>tf2_ros</depend>
-  <depend>eigen_catkin</depend>
   <depend>ompl</depend>
 
   <export>
