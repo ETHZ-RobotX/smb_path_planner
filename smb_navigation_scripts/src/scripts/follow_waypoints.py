@@ -119,9 +119,10 @@ class GetPath(State):
         self.poseArray_publisher = rospy.Publisher(self.posearray_topic, PoseArray, queue_size=1)
 
         # Path for saving and retrieving the pose.csv file
-        output_folder = os.path.join(rospkg.RosPack().get_path('smb_navigation_scripts'), 'saved_path')
+        output_folder_default = os.path.join(rospkg.RosPack().get_path('smb_navigation_scripts'), 'saved_path')
+        output_folder = rospy.get_param('~output_folder', output_folder_default)
         if not os.path.isdir(output_folder):
-            os.mkdir(output_folder)
+            os.makedirs(output_folder)
 
         input_file_name = rospy.get_param('~input_filename', 'waypoints.csv')
         self.input_file_path = os.path.join(output_folder, input_file_name)
