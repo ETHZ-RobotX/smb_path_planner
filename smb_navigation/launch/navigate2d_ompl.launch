@@ -5,6 +5,7 @@
   <arg name="sim"                default="false"/>
   <arg name="use_global_map"     default="false"/>
   <arg name="run_traversability" default="false"/>
+  <arg name="follow_waypoints"   default="false"/>
   
   <arg name="global_frame"       default="tracking_camera_odom"/>
   <arg name="robot_base_frame"   default="base_link"/>
@@ -17,6 +18,13 @@
   
   <!-- Robot self-filtering and ground removal -->
   <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud_ground.launch"/>
+  
+  <!-- Utility to publish waypoints to move base -->
+  <include file="$(find smb_navigation_scripts)/launch/follow_waypoints.launch" if="$(arg follow_waypoints)">
+    <arg name="goal_frame_id"    value="$(arg global_frame)"/>
+    <arg name="odom_frame_id"    value="$(arg global_frame)"/>
+    <arg name="base_frame_id"    value="$(arg robot_base_frame)"/>
+  </include>
   
   <!-- Path Planning -->
   <group unless="$(arg run_traversability)"> 
