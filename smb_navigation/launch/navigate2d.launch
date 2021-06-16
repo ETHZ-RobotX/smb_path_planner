@@ -11,6 +11,9 @@
   
   <!-- TODO Set right map -->
   <arg name="global_map"         default="$(find smb_navigation)/data/simulation/map_sim.yaml"/>
+  
+  <!-- TODO Topics -->
+  <arg name="odom_topic"         default="/base_odom"/>
 
   <!-- Mapping -->
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
@@ -29,6 +32,7 @@
   <include file="$(find smb_navigation)/launch/move_base.launch">
     <arg name="global_frame"      value="$(arg global_frame)"/>
     <arg name="robot_base_frame"  value="$(arg robot_base_frame)"/>
+    <arg name="odom_topic"        value="$(arg odom_topic)"/>
       
     <arg name="sim"               value="$(arg sim)"/>
     <arg name="use_global_map"    value="$(arg use_global_map)"/>
