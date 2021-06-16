@@ -8,30 +8,6 @@ NavfnROS:
   allow_unknown: true # Specifies whether or not to allow navfn to create plans that traverse unknown space.
   default_tolerance: 0.2 # A tolerance on the goal point for the planner.
 
-TrajectoryPlannerROS:
-  # Robot Configuration Parameters
-  max_vel_x: 0.5
-  min_vel_x: 0.0
-  max_vel_y: 0.0
-  min_vel_y: 0.0
-  max_vel_theta: 1.0
-  min_vel_theta: -1.0
-  min_in_place_vel_theta: 0.0
-  escape_vel: -1
-
-  acc_lim_theta: 0.6
-  acc_lim_x: 1.5
-  acc_lim_y: 0.0
-
-  sim_time: 3
-  sim_granularity: 0.1
-
-  yaw_goal_tolerance: 0.2
-  xy_goal_tolerance: 0.3
-  latch_xy_goal_tolerance: true
-
-  holonomic_robot: false
-
 TebLocalPlannerROS:
   # Trajectory
   teb_autosize: True
@@ -114,45 +90,4 @@ TebLocalPlannerROS:
   visualize_hc_graph: False
   delete_detours_backwards: True
   max_ratio_detours_duration_best_duration: 3.0
-
-
-DWAPlannerROS:
-  # Robot configuration parameters
-  acc_lim_x: 0.5
-  acc_lim_y: 0.0
-  acc_lim_th: 1.0
-
-  max_vel_x: 0.5
-  min_vel_x: 0.0
-  max_vel_y: 0
-  min_vel_y: 0
-  max_trans_vel: 0.5
-  min_trans_vel: 0.0
-
-  max_rot_vel: 1.0
-  min_rot_vel: 0.0
-
-  # Goal Tolerance Parameters
-  yaw_goal_tolerance: 0.05
-  xy_goal_tolerance: 0.1
-  latch_xy_goal_tolerance: false # If goal tolerance is latched, if the robot ever reaches the goal xy location it will simply rotate in place, even if it ends up outside the goal tolerance while it is doing so.
-
-  # Forward Simulation Parameters
-  sim_time: 2.5 # The amount of time to forward-simulate trajectories in seconds
-  sim_granularity: 0.25 # The step size, in meters, to take between points on a given trajectory, small = computational expensive
-  vx_samples: 10 # The number of samples to use when exploring the x velocity space
-  vy_samples: 1 # The number of samples to use when exploring the y velocity space
-  vtheta_samples: 30 # The number of samples to use when exploring the theta velocity space
-
-  # Trajectory scoring parameters
-  path_distance_bias: 0.0 # The weighting for how much the controller should stay close to the path it was given
-  goal_distance_bias: 20.0 # The weighting for how much the controller should attempt to reach its local goal, also controls speed
-  occdist_scale: 0.02 # The weighting for how much the controller should attempt to avoid obstacles
-  forward_point_distance: 0.325 # The distance from the center point of the robot to place an additional scoring point, in meters
-  stop_time_buffer: 0.2  # The amount of time that the robot must stThe absolute value of the veolicty at which to start scaling the robot's footprint, in m/sop before a collision in order for a trajectory to be considered valid in seconds
-  scaling_speed: 0.25 # The absolute value of the veolicty at which to start scaling the robot's footprint, in m/s
-  max_scaling_factor: 0.2 # The maximum factor to scale the robot's footprint by
-
-  # Oscillation Prevention Parameters
-  oscillation_reset_dist: 0.25 # How far the robot must travel in meters before oscillation flags are reset (double, default: 0.05)
 
