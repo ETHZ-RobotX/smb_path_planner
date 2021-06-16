@@ -37,6 +37,9 @@
     <param name="base_global_planner" value="$(arg base_global_planner)"/>
     <param name="base_local_planner"  value="$(arg base_local_planner)"/>
     
+    <!-- Load the global planner parameters -->
+    <rosparam file="$(find smb_navigation)/config/move_base_global_planner.yaml" command="load"/>
+    
     <!-- Load the right config file for local planner (suffix is either "" or "_sim") -->
     <rosparam file="$(find smb_navigation)/config/base_local_planner$(arg config_file_suffix).yaml" command="load"/>
     

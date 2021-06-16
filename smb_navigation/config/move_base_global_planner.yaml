@@ -1,0 +1,19 @@
+#### Move base global planner ####
+# Documentation: https://wiki.ros.org/global_planner
+GlobalPlanner:
+  use_dijkstra: false # If false, A* is used
+  use_quadratic: true # If true, use quadratic calculation of potential
+
+  allow_unknown: true 
+  default_tolerance: 0.0
+  visualize_potential: false
+  use_grid_path: false
+  old_navfn_behavior: false
+  publish_potential: true
+  
+  orientation_mode: 1 # Check doc: Orientation Filter (https://wiki.ros.org/global_planner)
+  orientation_window_size: 1
+  outline_map: true
+  
+  
+  
