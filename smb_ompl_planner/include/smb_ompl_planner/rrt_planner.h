@@ -46,6 +46,7 @@ enum RrtPlannerType
 {
   kRrtConnect = 0,
   kRrtStar,
+  kInformedRrtStar,
   kPrm
 };
 

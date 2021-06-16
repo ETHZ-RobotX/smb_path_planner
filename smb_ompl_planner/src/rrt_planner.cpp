@@ -76,6 +76,14 @@ void RrtPlanner::setupProblem(const Eigen::Vector2d& start,
     problem_setup_.getPlanner()->as<ompl::geometric::RRTstar>()->setRange(
         params_.tree_range);
   }
+  else if (planner_type_ == kInformedRrtStar)
+  {
+    problem_setup_.setInformedRrtStar();
+    problem_setup_.getPlanner()->as<ompl::geometric::InformedRRTstar>()->setGoalBias(
+        params_.goal_bias);
+    problem_setup_.getPlanner()->as<ompl::geometric::InformedRRTstar>()->setRange(
+        params_.tree_range);
+  }
   else if (planner_type_ == kPrm)
   {
     problem_setup_.setPrm();
