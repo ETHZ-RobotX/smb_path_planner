@@ -15,9 +15,6 @@
   <!-- TODO Set right map -->
   <arg name="global_map"         default="$(find smb_navigation)/data/test/map.yaml"/>
   
-  <!-- TODO Topics -->
-  <arg name="odom_topic"         default="/base_odom"/>
-  
   <!-- Mapping -->
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
   
@@ -43,8 +40,6 @@
       
       <arg name="sim"               value="$(arg sim)"/>
       <arg name="use_global_map"    value="$(arg use_global_map)"/>
-      
-      <arg name="odom_topic"        value="$(arg odom_topic)"/>
     </include>
     
     <!-- Run the map server -->
