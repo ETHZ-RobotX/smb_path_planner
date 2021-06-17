@@ -37,6 +37,9 @@
     <param name="base_global_planner" value="$(arg base_global_planner)"/>
     <param name="base_local_planner"  value="$(arg base_local_planner)"/>
     
+    <!-- Load the global planner parameters -->
+    <rosparam file="$(find smb_navigation)/config/move_base_global_planner.yaml" command="load"/>
+    
     <!-- Load the right config file for local planner (suffix is either "" or "_sim") -->
     <rosparam file="$(find smb_navigation)/config/base_local_planner$(arg config_file_suffix).yaml" command="load"/>
     
@@ -49,12 +52,16 @@
 
     <!-- local costmap, needs size -->
     <rosparam file="$(find smb_navigation)/config/move_base_costmaps/local_costmap_params.yaml" command="load" />
-
-    <!-- global costmap with laser -->
-    <rosparam file="$(find smb_navigation)/config/move_base_costmaps/global_costmap_params$(arg global_map_suffix).yaml" command="load"/>
     
+    <!-- Topics -->
+    <param name="OmplPlanner/odometry_topic"      value="$(arg odom_topic)"/>
+    <param name="TebLocalPlannerROS/odom_topic"   value="$(arg odom_topic)"/>
+    <param name="TebLocalPlannerROS/map_frame"    value="$(arg global_frame)"/> <!-- This is the global planning frame -->
+
+    <!-- global costmap -->
+    <rosparam file="$(find smb_navigation)/config/move_base_costmaps/global_costmap_params$(arg global_map_suffix).yaml" command="load"/>
     <param name="global_costmap/global_frame"     value="$(arg global_frame)"/>
-    <param name="global_costmap/robot_base_frame"	value="$(arg robot_base_frame)"/>
+    <param name="global_costmap/robot_base_frame" value="$(arg robot_base_frame)"/>
     <param name="global_costmap/width"            value="100.0"/>
     <param name="global_costmap/height"           value="100.0"/>
     <param name="global_costmap/origin_x"         value="-50.0"/>
