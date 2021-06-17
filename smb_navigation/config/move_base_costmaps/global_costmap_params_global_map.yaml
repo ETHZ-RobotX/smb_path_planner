@@ -12,12 +12,12 @@ global_costmap:
     - 
      name: static_layer
      type: "costmap_2d::StaticLayer" 
-    - 
-     name: obstacle_layer
-     type: "costmap_2d::ObstacleLayer"  
-    -
-     name: inflation_layer
-     type: "costmap_2d::InflationLayer"
+    #- 
+    # name: obstacle_layer
+    # type: "costmap_2d::ObstacleLayer"  
+    #-
+    # name: inflation_layer
+    # type: "costmap_2d::InflationLayer"
 
   virtual_obstacles:
     observation_sources: laser_scan_sensor

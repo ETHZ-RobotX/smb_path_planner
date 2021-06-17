@@ -35,7 +35,7 @@ TrajectoryPlannerROS:
 TebLocalPlannerROS:
 
   odom_topic: /base_odom
-  map_frame: /world
+  map_frame: /map
 
   # Trajectory
   teb_autosize: True
@@ -55,7 +55,7 @@ TebLocalPlannerROS:
   max_vel_theta: 3.0
   acc_lim_x: 4.0
   acc_lim_y: 0.0
-  acc_lim_theta: 6.0
+  acc_lim_theta: 2.0
   wheelbase: 1.0
   min_turning_radius: 0.5
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
