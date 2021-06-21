@@ -33,22 +33,28 @@ output_map_file="${data_path}/map"  # This is the file where the occupancy map i
 
 # Generate a binary tree using octomap
 echo -e "${YELLOW}Generating binary tree using OctoMap -> Press Ctrl+C when converter is done${NC}"
-sleep 5s
+sleep 3s
+
+roscore &
+sleep 3s
+
+rviz -d pcd_converter.rviz &
+sleep 2s
 
 roslaunch smb_navigation pcd_converter.launch resolution:=${resolution} input_file:=${input_file} output_file:=${output_bt_file}
 sleep 1s
 echo -e "${YELLOW}Binary tree generated!${NC}"
 
+# Sleep and then run map saver
+sleep 5s
+echo -e "${YELLOW}Saving occupancy map to image${NC}"
+rosrun map_server map_saver -f ${output_map_file} &
+
 # Once it is done, sleep and then start octomap server
 sleep 3s
 
 echo -e "${YELLOW}Activating OctoMap Server${NC}"
-roslaunch smb_navigation octomap_server.launch resolution:=${resolution} path:=${output_bt_file} z_min:=${z_min} z_max:=${z_max} &
-
-# Sleep and then run map saver
-sleep 5s
-echo -e "${YELLOW}Saving occupancy map to image${NC}"
-rosrun map_server map_saver -f ${output_map_file}
+roslaunch smb_navigation octomap_server.launch resolution:=${resolution} path:=${output_bt_file} z_min:=${z_min} z_max:=${z_max}
 
 # Killall
 sleep 3s
