@@ -234,7 +234,7 @@ void PcdConverter::generateMap()
   }
 
   ROS_WARN("[PCD Converter] Shutting down!");
-  ROS_WARN("\n[PCD Converter] Press Ctrl+C!\n");
+  ROS_WARN("[PCD Converter] Press Ctrl+C!\n");
 }
 
 bool PcdConverter::readParameters()

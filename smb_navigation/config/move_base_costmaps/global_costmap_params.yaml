@@ -8,6 +8,9 @@ global_costmap:
   rolling_window: true
   resolution: 0.20
   inflation_radius: 0.4
+  
+  width: 100.0
+  height: 100.0
 
   plugins:
     - 
