@@ -3,6 +3,7 @@
 global_costmap:
   update_frequency: 5.0
   publish_frequency: 2.0
+  transform_tolerance: 0.5 # [s]
   
   rolling_window: true
   resolution: 0.20

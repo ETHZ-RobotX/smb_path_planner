@@ -24,12 +24,12 @@ TebLocalPlannerROS:
   max_vel_y: 0.0
   max_vel_x_backwards: 1.0
   max_vel_y_backwards: 1.0
-  max_vel_theta: 3.0
+  max_vel_theta: 1.0
   acc_lim_x: 4.0
   acc_lim_y: 0.0
   acc_lim_theta: 2.0
-  wheelbase: 1.0
-  min_turning_radius: 0.5
+  wheelbase: 0.625
+  min_turning_radius: 1.0
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
     type: "circular"
     radius: 0.75 # for type "circular"
@@ -43,7 +43,7 @@ TebLocalPlannerROS:
 
   # GoalTolerance
   xy_goal_tolerance: 0.3
-  yaw_goal_tolerance: 0.1
+  yaw_goal_tolerance: 0.3
   free_goal_vel: false
   complete_global_plan: false
 
@@ -68,11 +68,12 @@ TebLocalPlannerROS:
   weight_acc_lim_x: 1
   weight_acc_lim_theta: 1
   weight_kinematics_nh: 1000
-  weight_kinematics_forward_drive: 100.0
-  weight_kinematics_turning_radius: 0.0
-  weight_optimaltime: 1
+  weight_kinematics_forward_drive: 1.0
+  weight_kinematics_turning_radius: 0.5
+  weight_optimaltime: 25.0
   weight_shortest_path: 1.0
   weight_obstacle: 1
+  weight_viapoint: 5.0 # Increase to stick closer to global plan
   weight_dynamic_obstacle: 10 # not in use yet
   selection_alternative_time_cost: False # not in use yet
 
@@ -80,6 +81,9 @@ TebLocalPlannerROS:
   enable_homotopy_class_planning: False
   enable_multithreading: True
   simple_exploration: True
+  xy_goal_tolerance: 0.3
+  yaw_goal_tolerance: 0.5
+  free_goal_vel: false
   max_number_classes: 4
   roadmap_graph_no_samples: 15
   roadmap_graph_area_width: 5
