@@ -133,6 +133,18 @@ void PcdConverter::generateMap()
   sensor_msgs::PointCloud2 pcl_msg_old;
   pcl::toROSMsg(*rotated_cloud, pcl_msg_old);
   pcl_msg_old.header.frame_id = p_frame_id_;
+  
+  // Publish the original point cloud here as well 
+  double time_pub_original = 0.0; // [s]
+  while (ros::ok() && time_pub_original < 5.0)
+  {
+    //
+    original_pcl_pub_.publish(pcl_msg_old);
+    //
+    ros::spinOnce();
+    ros::Duration(0.5).sleep();
+    time_pub_original += 0.5;
+  }
 
   // Filter the ground from the point cloud
   // Notice: this is the most expensive step. For a ~500 000 points it takes
