@@ -35,11 +35,11 @@ output_map_file="${data_path}/map"  # This is the file where the occupancy map i
 echo -e "${YELLOW}Generating binary tree using OctoMap -> Press Ctrl+C when converter is done${NC}"
 sleep 3s
 
-roscore &
-sleep 3s
+#roscore &
+#sleep 3s
 
-rviz -d pcd_converter.rviz &
-sleep 2s
+#rviz -d pcd_converter.rviz &
+#sleep 2s
 
 roslaunch smb_navigation pcd_converter.launch resolution:=${resolution} input_file:=${input_file} output_file:=${output_bt_file}
 sleep 1s
