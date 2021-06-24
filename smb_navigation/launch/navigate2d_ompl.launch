@@ -13,7 +13,7 @@
   <arg name="odom_topic"         default="/base_odom"/>
   
   <!-- TODO Set right map -->
-  <arg name="global_map"         default="$(find smb_navigation)/data/test/map.yaml"/>
+  <arg name="global_map"         default="$(find smb_navigation)/data/simulation/map.yaml"/>
   
   <!-- Mapping -->
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>

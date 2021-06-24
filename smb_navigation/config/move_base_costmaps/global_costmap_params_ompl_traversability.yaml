@@ -6,7 +6,7 @@ global_costmap:
   transform_tolerance: 0.5 # [s]
   
   resolution: 0.20
-  inflation_radius: 0.4
+  inflation_radius: 0.50
   rolling_window: true # Map moves with robot
   map_topic: /traversability_occ_map
     
