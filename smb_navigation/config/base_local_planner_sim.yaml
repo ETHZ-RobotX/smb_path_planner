@@ -20,16 +20,19 @@ TebLocalPlannerROS:
   global_plan_viapoint_sep: 0.5
 
   # Robot
-  max_vel_x: 0.75
+  max_vel_x: 1.0
   max_vel_y: 0.0
-  max_vel_x_backwards: 0.75
+  max_vel_x_backwards: 1.0
   max_vel_y_backwards: 1.0
   max_vel_theta: 0.1
-  acc_lim_x: 0.75
+  acc_lim_x: 4.0
   acc_lim_y: 0.0
   acc_lim_theta: 0.6
-  wheelbase: 1.0
-  min_turning_radius: 0.0
+  
+  use_proportional_saturation: true
+  
+  wheelbase: 0.625
+  min_turning_radius: 1.0
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
     type: "circular"
     radius: 0.75 # for type "circular"
@@ -42,14 +45,14 @@ TebLocalPlannerROS:
     vertices: [ [0.4, 0.4], [0.4, -0.4], [-0.4, -0.4], [-0.4, 0.4] ] # for type "polygon"
 
   # GoalTolerance
-  xy_goal_tolerance: 0.3
-  yaw_goal_tolerance: 0.1
+  xy_goal_tolerance: 0.5
+  yaw_goal_tolerance: 0.2
   free_goal_vel: false
   complete_global_plan: false
 
   # Obstacles
   min_obstacle_dist: 0.3
-  inflation_dist: 0.2
+  inflation_dist: 0.4
   include_costmap_obstacles: True
   costmap_obstacles_behind_robot_dist: 3.0
   obstacle_poses_affected: 50
@@ -62,17 +65,18 @@ TebLocalPlannerROS:
   no_outer_iterations: 4
   optimization_activate: True
   optimization_verbose: False
-  penalty_epsilon: 0.09
+  penalty_epsilon: 0.1
   weight_max_vel_x: 2
   weight_max_vel_theta: 1
   weight_acc_lim_x: 1
   weight_acc_lim_theta: 1
   weight_kinematics_nh: 1000
-  weight_kinematics_forward_drive: 100.0
-  weight_kinematics_turning_radius: 0.0
-  weight_optimaltime: 1
+  weight_kinematics_forward_drive: 1.0
+  weight_kinematics_turning_radius: 0.5
+  weight_optimaltime: 25.0
   weight_shortest_path: 1.0
   weight_obstacle: 1
+  weight_viapoint: 5.0 # Increase to stick closer to global plan
   weight_dynamic_obstacle: 10 # not in use yet
   selection_alternative_time_cost: False # not in use yet
 
@@ -90,4 +94,4 @@ TebLocalPlannerROS:
   visualize_hc_graph: False
   delete_detours_backwards: True
   max_ratio_detours_duration_best_duration: 3.0
-
+  
