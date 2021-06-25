@@ -13,7 +13,7 @@ z_max=1.0
 
 # Check inputs
 print_help () {
-  echo -e "\n${YELLOW}Function usage:${NC} ./pcd_to_gridmap.sh abs_path_input_file abs_path_output_folder\n"
+  echo -e "\n${YELLOW}Function usage:${NC} ./pcd_to_gridmap.sh abs_path_input_file abs_path_output_folder [run_rviz]\n"
 }
 
 if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
@@ -28,6 +28,13 @@ fi
 input_file="$1"  # This has to be a *.pcd file!
 data_path="$2"
 
+if [ "$#" -eq 3 ]; then
+  run_rviz=$3
+else
+  run_rviz=false
+fi
+
+
 output_bt_file="${data_path}/temp_binary_tree.bt"
 output_map_file="${data_path}/map"  # This is the file where the occupancy map is saved
 
@@ -35,11 +42,10 @@ output_map_file="${data_path}/map"  # This is the file where the occupancy map i
 echo -e "${YELLOW}Generating binary tree using OctoMap -> Press Ctrl+C when converter is done${NC}"
 sleep 3s
 
-#roscore &
-#sleep 3s
-
-#rviz -d pcd_converter.rviz &
-#sleep 2s
+if [ $run_rviz = true ] ; then
+  rviz -d pcd_converter.rviz &
+  sleep 2s
+fi
 
 roslaunch smb_navigation pcd_converter.launch resolution:=${resolution} input_file:=${input_file} output_file:=${output_bt_file}
 sleep 1s
@@ -56,9 +62,9 @@ sleep 3s
 echo -e "${YELLOW}Activating OctoMap Server${NC}"
 roslaunch smb_navigation octomap_server.launch resolution:=${resolution} path:=${output_bt_file} z_min:=${z_min} z_max:=${z_max}
 
-# Killall
+# Make sure that these nodes are shut down
 sleep 3s
-rosnode kill -a
+rosnode kill /pcd_converter_node /octomap_server /map_saver /rviz
 
 echo -e "${YELLOW}Map has been generated in ${data_path}.${NC}"
 echo -e "\n==================================================="
