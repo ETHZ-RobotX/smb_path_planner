@@ -34,9 +34,7 @@ else
   run_rviz=false
 fi
 
-
 output_bt_file="${data_path}/temp_binary_tree.bt"
-output_map_file="${data_path}/map"  # This is the file where the occupancy map is saved
 
 # Generate a binary tree using octomap
 echo -e "${YELLOW}Generating binary tree using OctoMap -> Press Ctrl+C when converter is done${NC}"
@@ -54,7 +52,7 @@ echo -e "${YELLOW}Binary tree generated!${NC}"
 # Sleep and then run map saver
 sleep 5s
 echo -e "${YELLOW}Saving occupancy map to image${NC}"
-rosrun map_server map_saver -f ${output_map_file} &
+rosrun map_server map_saver &
 
 # Once it is done, sleep and then start octomap server
 sleep 3s
@@ -62,11 +60,15 @@ sleep 3s
 echo -e "${YELLOW}Activating OctoMap Server${NC}"
 roslaunch smb_navigation octomap_server.launch resolution:=${resolution} path:=${output_bt_file} z_min:=${z_min} z_max:=${z_max}
 
+# Move the generated files to the output folder - the map is first generated and then moved (instead of being generated in the output folder directly) so that the relative path in the yaml file is correct by default
+mv map.yaml ${data_path}/map.yaml
+mv map.pgm ${data_path}/map.pgm
+
 # Make sure that these nodes are shut down
 sleep 3s
 rosnode kill /pcd_converter_node /octomap_server /map_saver /rviz
 
-echo -e "${YELLOW}Map has been generated in ${data_path}.${NC}"
+echo -e "\n${YELLOW}Map has been generated in ${data_path}.${NC}"
 echo -e "\n==================================================="
 echo -e "${YELLOW}WARNING!${NC} Check that the output yaml file has no"
 echo -e " 'nan' in the origin - otherwise replace with 0"
