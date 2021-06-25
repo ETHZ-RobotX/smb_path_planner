@@ -12,6 +12,11 @@
   <!-- TODO Set right map -->
   <arg name="global_map"         default="$(find smb_navigation)/data/simulation/map_sim.yaml"/>
   
+  <!-- Parameters for follow-waypoint -->
+  <arg name="output_folder"      default="$(find smb_navigation_scripts)/saved_path"/>
+  <arg name="input_filename"     default="waypoints.csv"/> <!-- This has to have csv extension! -->
+  <arg name="output_filename"    default="waypoints_out.csv"/> <!-- This has to have csv extension! -->
+  
   <!-- TODO Topics -->
   <arg name="odom_topic"         default="/base_odom"/>
 
@@ -26,6 +31,10 @@
     <arg name="goal_frame_id"    value="$(arg global_frame)"/>
     <arg name="odom_frame_id"    value="$(arg global_frame)"/>
     <arg name="base_frame_id"    value="$(arg robot_base_frame)"/>
+    
+    <arg name="output_folder"    value="$(arg output_folder)"/>
+    <arg name="input_filename"   value="$(arg input_filename)"/>
+    <arg name="output_filename"  value="$(arg output_filename)"/>
   </include>
   
   <!-- Move base -->
