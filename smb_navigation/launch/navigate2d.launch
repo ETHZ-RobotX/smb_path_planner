@@ -10,7 +10,7 @@
   <arg name="robot_base_frame"   default="base_link"/>
   
   <!-- TODO Set right map -->
-  <arg name="global_map"         default="$(find smb_navigation)/data/simulation/map_sim.yaml"/>
+  <arg name="global_map"         default="$(find smb_navigation)/data/simulation/map.yaml"/>
   
   <!-- Parameters for follow-waypoint -->
   <arg name="output_folder"      default="$(find smb_navigation_scripts)/saved_path"/>
