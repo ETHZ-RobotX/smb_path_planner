@@ -1,0 +1,19 @@
+#### OMPL Planner Parameters ####
+OmplPlanner:
+  use_distance_threshold: true
+  simplify_solution: false       # If 'true', some nodes in the path will be pruned
+  trust_approx_solution: false
+  verbose_planner: false
+  enable_timer_collisions: false # If 'true', the global planner will check for collision at 'replanning rate' and will replan if in collision
+  
+  distance_threshold: 1.0      # [-] If we find a path whose lenght is less or equal to (distance_threshold * straight line distance start-goal), then we stop planning
+  goal_bias: 0.05              # [-] Bias in the sampling - with this probability we will sample the goal position
+  tree_range: 1.5              # [m] Increase this to have longer branches in the RRT path (influence on the runtime. It represents the maximum length of a motion to be added in the tree of motions)
+  interpolation_factor: 0.05   # [m] Factor for collision checking between two sampled poses
+  num_seconds_to_plan: 10.0    # [s] Planning budget
+  min_distance_waypoints: 0.1  # [m] Interpolation factor of the raw global path between nodes
+  dist_goal_reached: 0.3       # [m] Threshold to consider the goal reached
+
+  planner_type: 2              # 0: RRT Connect, 1: RRT*, 2: Informed RRT*, 3: PRM
+  replanning_rate: 5.0         # [Hz] useless if 'enable_timer_collisions' is False
+  

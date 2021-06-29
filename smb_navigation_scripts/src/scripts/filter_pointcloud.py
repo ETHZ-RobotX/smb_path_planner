@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """ 
 @file   filter_pointcloud.py
 @brief  ROS Node that intercepts point cloud and removes the points in a sphere

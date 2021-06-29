@@ -1,0 +1,7 @@
+image: /home/luca/workspaces/ss_ws/src/smb_path_planner/smb_navigation/data/real/garage_1400K.pgm
+resolution: 0.200000
+origin: [-15.000000, -57.600000, 0]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
+

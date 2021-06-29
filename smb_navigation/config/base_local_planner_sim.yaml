@@ -20,14 +20,17 @@ TebLocalPlannerROS:
   global_plan_viapoint_sep: 0.5
 
   # Robot
-  max_vel_x: 1.0
+  max_vel_x: 0.75
   max_vel_y: 0.0
-  max_vel_x_backwards: 1.0
+  max_vel_x_backwards: 0.75
   max_vel_y_backwards: 1.0
-  max_vel_theta: 1.0
-  acc_lim_x: 4.0
+  max_vel_theta: 0.15
+  acc_lim_x: 1.0
   acc_lim_y: 0.0
-  acc_lim_theta: 2.0
+  acc_lim_theta: 0.3
+  
+  use_proportional_saturation: true
+  
   wheelbase: 0.625
   min_turning_radius: 1.0
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
@@ -42,8 +45,8 @@ TebLocalPlannerROS:
     vertices: [ [0.4, 0.4], [0.4, -0.4], [-0.4, -0.4], [-0.4, 0.4] ] # for type "polygon"
 
   # GoalTolerance
-  xy_goal_tolerance: 0.3
-  yaw_goal_tolerance: 0.3
+  xy_goal_tolerance: 0.5
+  yaw_goal_tolerance: 0.2
   free_goal_vel: false
   complete_global_plan: false
 
@@ -81,9 +84,6 @@ TebLocalPlannerROS:
   enable_homotopy_class_planning: False
   enable_multithreading: True
   simple_exploration: True
-  xy_goal_tolerance: 0.3
-  yaw_goal_tolerance: 0.5
-  free_goal_vel: false
   max_number_classes: 4
   roadmap_graph_no_samples: 15
   roadmap_graph_area_width: 5
@@ -94,4 +94,4 @@ TebLocalPlannerROS:
   visualize_hc_graph: False
   delete_detours_backwards: True
   max_ratio_detours_duration_best_duration: 3.0
-
+  

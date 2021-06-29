@@ -5,15 +5,17 @@ global_costmap:
   publish_frequency: 2.0
   transform_tolerance: 0.5 # [s]
   
+  rolling_window: true
   resolution: 0.20
   inflation_radius: 0.50
-  rolling_window: true # Map moves with robot
-  map_topic: /traversability_occ_map
-    
+  
+  width: 200.0
+  height: 200.0
+
   plugins:
-    -
-     name: traversability_layer
-     type: "traversability_layer::TraversabilityLayer"
+    - 
+     name: static_layer
+     type: "costmap_2d::StaticLayer" 
     - 
      name: obstacle_layer
      type: "costmap_2d::ObstacleLayer"  
@@ -25,7 +27,7 @@ global_costmap:
     observation_sources: laser_scan_sensor
     
   obstacle_layer:
-    enabled: true
+    enabled: false
     observation_sources: laser_scan_sensor 
     laser_scan_sensor:
       data_type: 'LaserScan'
@@ -38,13 +40,6 @@ global_costmap:
       inf_is_valid: true   
 
   inflation_layer:
-    enabled: true
+    enabled: false
     observation_sources: laser_scan_sensor
-    
-  traversability_layer:
-    enabled: false # Change this to make this layer active
-    topic: /traversability_estimation/traversability_map
-    marking: true
-    clearing: true
-    traversability_layer: "traversability"
-    traversable_threshold: 0.6
+

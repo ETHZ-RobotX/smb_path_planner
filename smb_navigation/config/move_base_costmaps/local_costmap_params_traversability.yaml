@@ -3,6 +3,8 @@
 local_costmap:
   update_frequency: 5.0
   publish_frequency: 2.0
+  transform_tolerance: 0.5 # [s]
+  
   rolling_window: true
   width: 8.0
   height: 8.0
@@ -38,7 +40,7 @@ local_costmap:
 
   inflation_layer:
     enabled: false # Change this to make this layer active
-    inflation_radius: 0.3
+    inflation_radius: 0.15
     observation_sources: laser_scan_sensor  
   
 # The configuration below is to be used when you want to use a custom costmap_2d

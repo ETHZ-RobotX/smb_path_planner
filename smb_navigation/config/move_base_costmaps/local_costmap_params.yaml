@@ -3,11 +3,12 @@
 local_costmap:
   update_frequency: 10.0
   publish_frequency: 2.0
+  transform_tolerance: 0.5 # [s]
+  
   rolling_window: true
   width: 8.0
   height: 8.0
   resolution: 0.10
-  inflation_radius: 0.3
   
   plugins:
     - 
@@ -36,3 +37,4 @@ local_costmap:
   inflation_layer:
     enabled: true
     observation_sources: laser_scan_sensor
+    inflation_radius: 0.15

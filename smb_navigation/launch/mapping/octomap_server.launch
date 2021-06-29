@@ -1,0 +1,28 @@
+<launch>
+  <!-- Arguments and parameters -->
+  <arg name="path"       default="$(find smb_navigation)/data/real/wangen_2300K.bt"/>
+  <arg name="z_min"      default="-2.0"/> <!-- [m] -->
+  <arg name="z_max"      default="2.0"/>  <!-- [m] -->
+  
+  <!-- Make sure you are using the same parameters as in the PCD converter -->
+  <arg name="frame_id"   default="world"/>
+  <arg name="resolution" default="0.15"/> <!-- [m] -->
+
+  <!-- Main node -->
+  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server" args="$(arg path)" >		
+    <param name="resolution"      value="$(arg resolution)" />
+    <param name="occupancy_min_z" value="$(arg z_min)"/>
+    <param name="occupancy_max_z" value="$(arg z_max)" />
+
+    <!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
+    <param name="frame_id" value="$(arg frame_id)"/>
+	
+	  <!-- These parameters are used if you want to extend the offline map with new scans -->
+    <!-- maximum range to integrate (speedup!) -->
+    <param name="sensor_model/max_range" value="10.0"/>
+	
+    <!-- data source to integrate (PointCloud2) -->
+    <remap from="cloud_in"       to="/rslidar_points"/>
+    <remap from="/projected_map" to="map"/>
+  </node>
+</launch>

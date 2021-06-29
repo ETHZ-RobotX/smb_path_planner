@@ -1,0 +1,42 @@
+<launch>
+  <!-- Printouts configuration -->
+  <env name="ROSCONSOLE_FORMAT" value="[${severity}][${thread}][${node}/${function}:${line}]: ${message}"/>
+
+  <!-- Arguments -->
+  <arg name="goal_frame_id"   default="tracking_camera_odom"/>
+  <arg name="odom_frame_id"   default="tracking_camera_odom"/>
+  <arg name="base_frame_id"   default="base_link"/>
+  
+  <arg name="output_folder"   default="$(find smb_navigation_scripts)/saved_path"/>
+  <arg name="input_filename"  default="waypoints.csv"/> <!-- This has to have csv extension! -->
+  <arg name="output_filename" default="waypoints_out.csv"/> <!-- This has to have csv extension! -->
+  
+  <arg name="addpose_topic"   default="/initialpose"/>
+  <arg name="posearray_topic" default="/waypoints"/>
+
+  <!-- Main Node -->
+  <node pkg="smb_navigation_scripts" type="follow_waypoints.py" name="follow_waypoints" output="screen" clear_params="true">
+    <!-- Reference frames -->
+    <param name="goal_frame_id"    value="$(arg goal_frame_id)"/>
+    <param name="odom_frame_id"    value="$(arg odom_frame_id)"/>
+    <param name="base_frame_id"    value="$(arg base_frame_id)"/>
+    
+    <!-- Where data will be saved to / read from -->
+    <param name="output_folder"    value="$(arg output_folder)"/>
+    
+    <!-- Used if you don't want to specify new waypoints -->
+    <!-- To use these waypoints: rostopic pub /start_journey std_msgs/Empty -1 -->
+    <param name="input_filename"   value="$(arg input_filename)"/>
+    
+    <!-- In case you feed new waypoints via rviz -->
+    <!-- To use these waypoints and store them into file: rostopic pub /path_ready std_msgs/Empty -1 -->
+    <param name="output_filename"  value="$(arg output_filename)"/>
+    
+    <!-- Other parameters -->
+    <param name="wait_duration"    value="5.0"/>
+    
+    <param name="addpose_topic"    value="$(arg addpose_topic)"/>
+    <param name="posearray_topic"  value="$(arg posearray_topic)"/>
+  </node>
+</launch>
+

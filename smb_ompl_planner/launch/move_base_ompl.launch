@@ -3,6 +3,8 @@
 <launch>
 
   <arg name="launch_prefix"         default=""/>
+  <arg name="sim"                   default="false"/>
+  <arg name="use_global_map"        default="false"/>
 
   <arg name="cmd_vel_topic"         default="/teb_planner_twist"/>
   <arg name="tf_topic"              default="/tf"/>
@@ -12,20 +14,34 @@
   <arg name="global_frame"          default="world"/>
   <arg name="robot_base_frame"      default="base"/>
 
-  <arg name="base_global_planner" default="smb_ompl_planner/OmplPlanner"/>
-  <arg name="base_local_planner"  default="teb_local_planner/TebLocalPlannerROS"/>
+  <arg name="base_global_planner"   default="smb_ompl_planner/OmplPlanner"/>
+  <arg name="base_local_planner"    default="teb_local_planner/TebLocalPlannerROS"/>
+  
+  <!-- Argument to swap between config files (sim or real robot) -->
+  <arg name="config_file_suffix"    value="_sim" if="$(arg sim)"/>
+  <arg name="config_file_suffix"    value=""     unless="$(arg sim)"/>
+  
+  <!-- Argument to swap between config files (use global static map or not) -->
+  <arg name="global_map_suffix"     value="_global_map" if="$(arg use_global_map)"/>
+  <arg name="global_map_suffix"     value=""            unless="$(arg use_global_map)"/>
 
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" launch-prefix="$(arg launch_prefix)">
-
+    <!-- Topic remapping -->
     <remap from="cmd_vel"    to="$(arg cmd_vel_topic)"/>
     <remap from="/tf"        to="$(arg tf_topic)"/>
     <remap from="/tf_static" to="$(arg tf_topic)_static"/>
     <remap from="odom"       to="$(arg odom_topic)"/>
     <remap from="scan"       to="$(arg obstacle_scan_topic)"/>
 
+    <!-- Choose planners -->
     <param name="base_global_planner" value="$(arg base_global_planner)"/>
     <param name="base_local_planner"  value="$(arg base_local_planner)"/>
-    <rosparam file="$(find smb_navigation)/config/base_local_planner.yaml" command="load"/>
+    
+    <!-- Load the OMPL parameters -->
+    <rosparam file="$(find smb_navigation)/config/ompl_global_planner.yaml" command="load"/>
+    
+    <!-- Load the right config file for local planner (suffix is either "" or "_sim") -->
+    <rosparam file="$(find smb_navigation)/config/base_local_planner$(arg config_file_suffix).yaml" command="load"/>
     
     <!-- Additional parameters -->
     <param name="footprint_padding"         value="0.01" />
@@ -43,15 +59,16 @@
 
     <!-- local costmap, needs size -->
     <rosparam file="$(find smb_navigation)/config/move_base_costmaps/local_costmap_params.yaml" command="load" />
+    
+    <!-- Topics -->
+    <param name="OmplPlanner/odometry_topic"      value="$(arg odom_topic)"/>
+    <param name="TebLocalPlannerROS/odom_topic"   value="$(arg odom_topic)"/>
+    <param name="TebLocalPlannerROS/map_frame"    value="$(arg global_frame)"/> <!-- This is the global planning frame -->
 
-    <!-- global costmap with laser -->
-    <rosparam file="$(find smb_navigation)/config/move_base_costmaps/global_costmap_params_ompl.yaml" command="load"/>
+    <!-- global costmap -->
+    <rosparam file="$(find smb_navigation)/config/move_base_costmaps/global_costmap_params$(arg global_map_suffix).yaml" command="load"/>    
     <param name="global_costmap/global_frame"     value="$(arg global_frame)"/>
-    <param name="global_costmap/robot_base_frame"	value="$(arg robot_base_frame)"/>
-    <param name="global_costmap/width"            value="100.0"/>
-    <param name="global_costmap/height"           value="100.0"/>
-    <param name="global_costmap/origin_x"         value="-50.0"/>
-    <param name="global_costmap/origin_y"         value="-50.0"/>
+    <param name="global_costmap/robot_base_frame" value="$(arg robot_base_frame)"/>
     
     <!-- local costmap -->
     <param name="local_costmap/global_frame"      value="$(arg global_frame)"/>

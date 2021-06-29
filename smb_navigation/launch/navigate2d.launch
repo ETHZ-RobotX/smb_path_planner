@@ -1,33 +1,55 @@
 <?xml version="1.0"?>
 
 <launch>
-  
-  <arg name="icp_running"        default="false"/>
-  <arg name="simulation"         default="true"/>
-  
-  <arg name="global_frame"       default="world"/>
-  <arg name="robot_base_frame"   default="base"/>
-  
+  <!-- Arguments -->  
   <arg name="sim"                default="false"/>
+  <arg name="use_global_map"     default="false"/>
+  <arg name="follow_waypoints"   default="false"/>
+  
+  <arg name="global_frame"       default="map"/>
+  <arg name="robot_base_frame"   default="base_link"/>
+  
+  <!-- TODO Set right map -->
+  <arg name="global_map"         default="$(find smb_navigation)/data/simulation/map.yaml"/>
+  
+  <!-- Parameters for follow-waypoint -->
+  <arg name="output_folder"      default="$(find smb_navigation_scripts)/saved_path"/>
+  <arg name="input_filename"     default="waypoints.csv"/> <!-- This has to have csv extension! -->
+  <arg name="output_filename"    default="waypoints_out.csv"/> <!-- This has to have csv extension! -->
+  
+  <!-- TODO Topics -->
+  <arg name="odom_topic"         default="/base_odom"/>
 
   <!-- Mapping -->
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
   
-  <group if="$(arg sim)">
-    <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud.launch"/>
-  </group>
-  <group unless="$(arg sim)">
-    <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud_ground.launch"/>
-  </group>
+  <!-- Robot self-filtering and ground removal -->
+  <include file="$(find smb_navigation_scripts)/launch/filter_pointcloud_ground.launch"/>  
   
-  <!-- move_base -->
-  <include file="$(find smb_navigation)/launch/move_base.launch">
-    <arg name="global_frame"     value="$(arg global_frame)"/>
-    <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
+  <!-- Utility to publish waypoints to move base -->
+  <include file="$(find smb_navigation_scripts)/launch/follow_waypoints.launch" if="$(arg follow_waypoints)">
+    <arg name="goal_frame_id"    value="$(arg global_frame)"/>
+    <arg name="odom_frame_id"    value="$(arg global_frame)"/>
+    <arg name="base_frame_id"    value="$(arg robot_base_frame)"/>
+    
+    <arg name="output_folder"    value="$(arg output_folder)"/>
+    <arg name="input_filename"   value="$(arg input_filename)"/>
+    <arg name="output_filename"  value="$(arg output_filename)"/>
   </include>
   
-  <!-- Utility for communication with MPC - Comment this back in if you plan to use standard ROS planners -->
-  <!--
-  <include file="$(find smb_navigation)/launch/utility/path_interceptor.launch"/>
-  -->
+  <!-- Move base -->
+  <include file="$(find smb_navigation)/launch/move_base.launch">
+    <arg name="global_frame"      value="$(arg global_frame)"/>
+    <arg name="robot_base_frame"  value="$(arg robot_base_frame)"/>
+    <arg name="odom_topic"        value="$(arg odom_topic)"/>
+      
+    <arg name="sim"               value="$(arg sim)"/>
+    <arg name="use_global_map"    value="$(arg use_global_map)"/>
+  </include>
+    
+  <!-- Run the map server -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg global_map)" if="$(arg use_global_map)">
+    <param name="frame_id" value="$(arg global_frame)"/>
+  </node>
+  
 </launch> 

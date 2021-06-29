@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(smb_navigation)
 set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
-add_compile_options(-std=c++11 -Wall)
+add_compile_options(-std=c++14 -Wall)
 
 # Set dependencies
 set(PACKAGE_DEPENDENCIES
@@ -10,6 +10,8 @@ set(PACKAGE_DEPENDENCIES
     move_base
     grid_map_costmap_2d
     grid_map_ros
+    pcl_ros
+    octomap_ros
 )
 
 find_package(catkin REQUIRED COMPONENTS 
@@ -69,6 +71,27 @@ add_dependencies(gridmap_converter_node
 
 target_link_libraries(gridmap_converter_node
     gridmap_converter)
+
+### PCD converter
+add_library(pcd_converter
+    src/pcd_converter.cpp
+)
+
+target_link_libraries(pcd_converter
+    ${catkin_LIBRARIES})
+
+add_dependencies(pcd_converter
+    ${catkin_EXPORTED_TARGETS})
+
+add_executable(pcd_converter_node
+    src/nodes/pcd_converter_node.cpp)
+
+add_dependencies(gridmap_converter_node
+    gridmap_converter
+    ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(pcd_converter_node
+    pcd_converter)
 
 ### Odometry interceptor
 add_executable(odometry_interceptor_node

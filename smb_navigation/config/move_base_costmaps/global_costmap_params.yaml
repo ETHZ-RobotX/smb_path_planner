@@ -1,11 +1,16 @@
 # more on http://wiki.ros.org/navigation/Tutorials/RobotSetup
 
-
 global_costmap:
   update_frequency: 5.0
   publish_frequency: 2.0
+  transform_tolerance: 0.5 # [s]
+  
   rolling_window: true
-  inflation_radius: 0.4
+  resolution: 0.20
+  inflation_radius: 0.50
+  
+  width: 100.0
+  height: 100.0
 
   plugins:
     - 
@@ -14,7 +19,6 @@ global_costmap:
     -
      name: inflation_layer
      type: "costmap_2d::InflationLayer"
-
 
   virtual_obstacles:
     observation_sources: laser_scan_sensor
@@ -30,9 +34,9 @@ global_costmap:
       min_obstacle_height: -100.0
       max_obstacle_height: 100.0
       observation_persistence: 0.4
-      inf_is_valid: true
+      inf_is_valid: true   
 
   inflation_layer:
     enabled: true
-    observation_sources: laser_scan_sensor 
-   
+    observation_sources: laser_scan_sensor
+

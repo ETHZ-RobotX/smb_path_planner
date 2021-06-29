@@ -1,0 +1,25 @@
+<launch>
+  <!-- Arguments and parameters -->
+  <arg name="input_file"   default="$(find smb_navigation)/data/real/wangen_2300K.pcd"/>
+  <arg name="output_file"  default="$(find smb_navigation)/data/real/wangen_2300K.bt"/> <!-- This has to have extension "*.bt" -->
+  
+  <arg name="resolution"   default="0.15" /> <!-- [m] -->
+  <arg name="frame_id"     default="world"  /> <!-- This has to match the frame id of the input point cloud -->
+  
+  <arg name="rot_roll"     default="3.0"  /> <!-- [deg] -->
+  <arg name="rot_pitch"    default="0.0"  /> <!-- [deg] -->
+  <arg name="rot_yaw"      default="0.0"  /> <!-- [deg] -->
+
+	<!-- Main node -->
+  <node pkg="smb_navigation" type="pcd_converter_node" name="pcd_converter_node" output="screen">
+    <param name="input_file"   value="$(arg input_file)"/>
+    <param name="output_file"  value="$(arg output_file)"/>
+    
+    <param name="resolution"   value="$(arg resolution)"/>
+    <param name="frame_id"     value="$(arg frame_id)"/>
+    
+    <param name="rot_roll"     value="$(arg rot_roll)"/>
+    <param name="rot_pitch"    value="$(arg rot_pitch)"/>
+    <param name="rot_yaw"      value="$(arg rot_yaw)"/>
+  </node>
+</launch>
