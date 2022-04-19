@@ -1,0 +1,55 @@
+name: build
+on:
+  schedule:
+    - cron: "0 1 * * 1"
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      ROS_CI_DESKTOP: "`lsb_release -cs`" 
+      ROS_PARALLEL_JOBS: '-j8 -l6'
+      ROS_DISTRO: noetic
+      CATKIN_WS: ~/catkin_ws/
+    steps:
+      - name: Install Python and ROS 
+        run: |
+            sudo sh -c "echo \"deb http://packages.ros.org/ros/ubuntu $ROS_CI_DESKTOP main\" > /etc/apt/sources.list.d/ros-latest.list"
+            sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+            sudo apt-get update
+            sudo apt-get install dpkg
+            sudo apt-get install -y python3-catkin-pkg
+            sudo apt-get install -y python3-catkin-tools
+            sudo apt-get install -y python3-osrf-pycommon
+            sudo apt-get install -y python3-rosdep
+            sudo apt-get install -y python3-wstool
+            sudo apt-get install -y python3-pip
+            sudo apt-get install -y python3-vcstool
+            sudo apt-get install -y ros-cmake-modules
+            sudo apt-get install -y ros-$ROS_DISTRO-catkin
+      - name: Create workspace
+        run: |
+            mkdir -p $CATKIN_WS/src
+            cd $CATKIN_WS
+            catkin init
+            catkin config --extend /opt/ros/noetic -DCMAKE_BUILD_TYPE=Release
+      - uses: actions/checkout@v3
+        with:
+          path: ~/catkin_ws/src/smb_path_planner 
+      - name: Install ROS packages with rosdep
+        run: |
+          source /opt/ros/$ROS_DISTRO/setup.bash
+          sudo rosdep init
+          rosdep update
+          cd $CATKIN_WS/src
+          rosdep install --from-paths . --ignore-src --os=ubuntu:focal -r -y
+      - name: Build smb_path_planner
+        run: |
+          source /opt/ros/$ROS_DISTRO/setup.bash
+          cd $CATKIN_WS
+          catkin build smb_path_planner
+
+      
