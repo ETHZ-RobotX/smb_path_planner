@@ -16,6 +16,8 @@
   <depend>grid_map_ros</depend>
   <depend>pcl_ros</depend>
   <depend>octomap_ros</depend>
+  <depend>map_server</depend>
+  <depend>octomap_server</depend>
   
   <exec_depend>smb_path_following_controller</exec_depend>
   <exec_depend>pointcloud_to_laserscan</exec_depend>
