@@ -1,3 +1,4 @@
+[![Build](https://github.com/ETHZ-RobotX/smb_path_planner/workflows/build/badge.svg)](https://github.com/ETHZ-RobotX/smb_path_planner/actions/workflows/build.yml)
 # Super Mega Bot Path Planner
 
 Package for path planning of Super Mega Bots for the ETH Robotics Summer School. 
