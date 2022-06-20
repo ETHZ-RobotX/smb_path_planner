@@ -21,6 +21,6 @@
     <param name="rot_roll"     value="$(arg rot_roll)"/>
     <param name="rot_pitch"    value="$(arg rot_pitch)"/>
     <param name="rot_yaw"      value="$(arg rot_yaw)"/>
-    <param name="capability_group" value="localization/navigation/mapping"/>
+    <param name="capability_group" value="navigation/mapping"/>
   </node>
 </launch>

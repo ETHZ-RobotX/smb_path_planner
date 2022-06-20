@@ -54,7 +54,7 @@
     <!-- Run the map server -->
     <node name="map_server" pkg="map_server" type="map_server" args="$(arg global_map)" if="$(arg use_global_map)">
       <param name="frame_id" value="$(arg global_frame)"/>
-      <param name="capability_group" value="localization/navigation/mapping"/>
+      <param name="capability_group" value="navigation/utility"/>
     </node>
   </group>
   

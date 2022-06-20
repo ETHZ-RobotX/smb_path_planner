@@ -71,7 +71,7 @@
     <!-- local costmap -->
     <param name="local_costmap/global_frame"      value="$(arg global_frame)"/>
     <param name="local_costmap/robot_base_frame"  value="$(arg robot_base_frame)"/>
-    <param name="capability_group" value="control/navigation"/>
+    <param name="capability_group" value="navigation/planner"/>
   </node>
 
 </launch>
