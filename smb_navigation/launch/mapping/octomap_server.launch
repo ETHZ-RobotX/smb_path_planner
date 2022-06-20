@@ -24,5 +24,6 @@
     <!-- data source to integrate (PointCloud2) -->
     <remap from="cloud_in"       to="/rslidar_points"/>
     <remap from="/projected_map" to="map"/>
+    <param name="capability_group" value="localization/navigation/mapping"/>
   </node>
 </launch>

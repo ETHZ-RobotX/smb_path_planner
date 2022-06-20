@@ -31,5 +31,6 @@
     # 2->inf : Parallelism level
     concurrency_level: 1
   </rosparam>
+  <param name="capability_group" value="perception/navigation/lidar"/>
 </node>
 </launch>

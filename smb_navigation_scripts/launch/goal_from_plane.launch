@@ -9,5 +9,6 @@
     <!-- Remapping -->
     <remap from="input_path" to="/mabi_highlevel_controller/path_direct"/>
     <remap from="goal"       to="/move_base_simple/goal"/>
+    <param name="capability_group" value="control/navigation"/>
   </node>
 </launch>

@@ -37,6 +37,7 @@
     
     <param name="addpose_topic"    value="$(arg addpose_topic)"/>
     <param name="posearray_topic"  value="$(arg posearray_topic)"/>
+    <param name="capability_group" value="control/navigation"/>
   </node>
 </launch>
 
