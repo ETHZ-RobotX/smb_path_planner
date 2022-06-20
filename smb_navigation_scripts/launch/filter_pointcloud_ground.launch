@@ -7,6 +7,6 @@
     <!-- Remapping -->
     <remap from="rslidar_points"          to="rslidar_points"/>
     <remap from="rslidar_points_filtered" to="rslidar_points_filtered"/>
-    <param name="capability_group" value="navigation"/>
+    <param name="capability_group" value="navigation/scripts"/>
   </node>
 </launch>
