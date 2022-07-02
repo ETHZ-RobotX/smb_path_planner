@@ -14,7 +14,7 @@
   <arg name="global_frame"          default="world"/>
   <arg name="robot_base_frame"      default="base"/>
 
-  <arg name="base_global_planner"   default="global_planner/GlobalPlanner"/>
+  <arg name="base_global_planner"   default="navfn/NavfnROS"/>
   <arg name="base_local_planner"    default="teb_local_planner/TebLocalPlannerROS"/>
   
   <!-- Argument to swap between config files (sim or real robot) -->
