@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!-- Arguments -->
+  <arg name="sim"                default="false"/>
+  <arg name="use_global_map"     default="false"/>
+  <arg name="run_traversability" default="false"/>
+  <arg name="follow_waypoints"   default="false"/>
+  
+  <arg name="global_frame"       default="tracking_camera_odom"/>
+  <arg name="robot_base_frame"   default="base_link"/>
+  
+  <arg name="terrain_csv"   default="/home/simone/test.csv"/>
+
+  <arg name="odom_topic"         default="/base_odom"/>
+  
+  <!-- TODO Set right map -->
+  <arg name="global_map"         default="$(find smb_navigation)/data/simulation/map.yaml"/>
+  
+  <!-- Parameters for follow-waypoint -->
+  <arg name="output_folder"      default="$(find smb_navigation_scripts)/saved_path"/>
+  <arg name="input_filename"     default="waypoints.csv"/> <!-- This has to have csv extension! -->
+  <arg name="output_filename"    default="waypoints_out.csv"/> <!-- This has to have csv extension! -->
+
+  <node name="terrain_adapter" pkg="smb_navigation" type="terrain_adapter_node" output="screen">
+    <param name="terrain_adapter/csv_polygon_full_path" value="$(arg terrain_csv)"/>
+    <param name="terrain_adapter/source_frame" value="$(arg robot_base_frame)"/>
+    <param name="terrain_adapter/target_frame" value="$(arg global_frame)"/>
+    <param name="terrain_adapter/inside_param_full_path" value="$(find smb_navigation)/config/terrain_adapter/1.yaml"/>
+    <param name="terrain_adapter/outside_param_full_path" value="$(find smb_navigation)/config/terrain_adapter/2.yaml"/>
+  </node>
+
+  
+</launch> 

@@ -72,6 +72,27 @@ add_dependencies(gridmap_converter_node
 target_link_libraries(gridmap_converter_node
     gridmap_converter)
 
+### Terrain Adapter
+add_library(terrain_adapter
+    src/terrain_adapter.cpp
+)
+
+target_link_libraries(terrain_adapter
+    ${catkin_LIBRARIES})
+
+add_dependencies(terrain_adapter
+    ${catkin_EXPORTED_TARGETS})
+
+add_executable(terrain_adapter_node
+    src/nodes/terrain_adapter_node.cpp)
+
+add_dependencies(terrain_adapter_node
+terrain_adapter
+    ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(terrain_adapter_node
+terrain_adapter)
+
 ### PCD converter
 add_library(pcd_converter
     src/pcd_converter.cpp
@@ -123,6 +144,8 @@ install(TARGETS path_interceptor
                 path_interceptor_node
                 gridmap_converter
                 gridmap_converter_node
+                terrain_adapter
+                terrain_adapter_node
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
