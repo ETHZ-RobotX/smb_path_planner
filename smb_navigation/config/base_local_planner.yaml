@@ -27,7 +27,7 @@ TebLocalPlannerROS:
   max_vel_theta: 1.0
   acc_lim_x: 4.0
   acc_lim_y: 0.0
-  acc_lim_theta: 2.0
+  acc_lim_theta: 1.0
   wheelbase: 0.625
   min_turning_radius: 1.0
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
@@ -42,9 +42,9 @@ TebLocalPlannerROS:
     vertices: [ [0.4, 0.4], [0.4, -0.4], [-0.4, -0.4], [-0.4, 0.4] ] # for type "polygon"
 
   # GoalTolerance
-  xy_goal_tolerance: 0.3
-  yaw_goal_tolerance: 0.3
-  free_goal_vel: false
+  xy_goal_tolerance: 1
+  yaw_goal_tolerance: 0.8
+  free_goal_vel: true
   complete_global_plan: false
 
   # Obstacles

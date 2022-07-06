@@ -12,7 +12,7 @@ OmplPlanner:
   interpolation_factor: 0.05   # [m] Factor for collision checking between two sampled poses
   num_seconds_to_plan: 10.0    # [s] Planning budget
   min_distance_waypoints: 0.1  # [m] Interpolation factor of the raw global path between nodes
-  dist_goal_reached: 0.3       # [m] Threshold to consider the goal reached
+  dist_goal_reached: 1.0       # [m] Threshold to consider the goal reached
 
   planner_type: 2              # 0: RRT Connect, 1: RRT*, 2: Informed RRT*, 3: PRM
   replanning_rate: 5.0         # [Hz] useless if 'enable_timer_collisions' is False
