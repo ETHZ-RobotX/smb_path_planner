@@ -5,7 +5,7 @@ stream_sources:
     source_type:            "lidar"                                                 # Type of stream (e.g. lidar, depth camera).
     queue_size:             1                                                       # Queue size of point cloud subscriber.
     latch:                  false                                                   # Whether the output topic will be latched.
-    input_topic:            "/rslidar_points"                                       # Name of input topic.
+    input_topic:            "/rslidar/points"                                       # Name of input topic.
     output_topic:           "/intermediate_cloud"                                   # Name of output topic.
     filter:                 true                                                    # Whether intput point clouds will be filtered.
     filters_config:         "smb_lidar_filters.yaml"                                # Name of the filter parameters config file.

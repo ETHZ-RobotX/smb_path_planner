@@ -4,7 +4,7 @@
     <param name="clear_radius" value="0.25"/>
     
     <!-- Remapping -->
-    <remap from="rslidar_points"          to="rslidar_points"/>
-    <remap from="rslidar_points_filtered" to="rslidar_points_filtered"/>
+    <remap from="rslidar/points"          to="rslidar/points"/>
+    <remap from="rslidar/points_filtered" to="rslidar/points_filtered"/>
   </node>
 </launch>
