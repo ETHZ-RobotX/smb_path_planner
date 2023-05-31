@@ -2,23 +2,51 @@
 
 <launch>
   <!-- Arguments -->
-  <arg name="sim"                default="false"/>
-  <arg name="use_global_map"     default="false"/>
-  <arg name="run_traversability" default="false"/>
-  <arg name="follow_waypoints"   default="false"/>
+  <arg name="sim"
+       default="false"
+       doc="run on simulation or real robot?"/>
   
-  <arg name="global_frame"       default="map"/>
-  <arg name="robot_base_frame"   default="base_link"/>
+  <arg name="use_global_map"
+       default="false"
+       doc="whether to use predefined map for global planning"/>
   
-  <arg name="odom_topic"         default="/base_odom"/>
+  <arg name="run_traversability"
+       default="false"
+       doc="for turning on traversability estimation (requires extra dependencies, check documentation)"/>
+  
+  <arg name="follow_waypoints"
+       default="false"
+       doc="whether to follow multiple waypoints stored in the input file (also used to save waypoints, see SMB path planner Wiki)"/>
+  
+  <arg name="global_frame"
+       default="map"
+       doc="fixed global frame name in which odometry, map, etc are defined"/>
+  
+  <arg name="robot_base_frame"
+       default="base_link"
+       doc="robot's base frame (typically fixed frame attached to the robot)"/>
+  
+  <arg name="odom_topic"
+       default="/base_odom"
+       doc="odometry of the robot is published on this topic"/>
   
   <!-- TODO Set right map -->
-  <arg name="global_map"         default="$(find smb_navigation)/data/simulation/map.yaml"/>
+  <arg name="global_map"
+       default="$(find smb_navigation)/data/simulation/map.yaml"
+       doc="global map file path"/>
   
   <!-- Parameters for follow-waypoint -->
-  <arg name="output_folder"      default="$(find smb_navigation_scripts)/saved_path"/>
-  <arg name="input_filename"     default="waypoints.csv"/> <!-- This has to have csv extension! -->
-  <arg name="output_filename"    default="waypoints_out.csv"/> <!-- This has to have csv extension! -->
+  <arg name="output_folder"
+       default="$(find smb_navigation_scripts)/saved_path"
+       doc="Output folder of the csv file containing saved waypoints"/>
+  
+  <arg name="input_filename"
+       default="waypoints.csv"
+       doc="Input csv file name containing waypoints to be followed (This has to have csv extension!)"/>
+  
+  <arg name="output_filename"
+       default="waypoints_out.csv" 
+       doc="Output csv file name containing saved waypoints (This has to have csv extension!)"/>
   
   <!-- Mapping -->
   <include file="$(find smb_navigation)/launch/mapping/point_cloud_to_scan.launch"/>
