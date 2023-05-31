@@ -8,7 +8,7 @@
   
   <arg name="use_global_map"
        default="false"
-       doc="whether to use global map (predefined) for planning instead of the raw lidar scans"/>
+       doc="whether to use predefined map for global planning"/>
   
   <arg name="run_traversability"
        default="false"
