@@ -1,4 +1,4 @@
-point_cloud_topic: /rslidar_points
+point_cloud_topic: /rslidar/points
 sensor_frame_id: /rslidar
 map_frame_id: tracking_camera_odom
 robot_base_frame_id: base_link

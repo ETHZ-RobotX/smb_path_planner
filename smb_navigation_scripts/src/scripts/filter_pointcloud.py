@@ -56,9 +56,9 @@ if __name__ == '__main__':
             clear_radius = rospy.get_param("~clear_radius")
         
         # Subscribers and Publishers
-        pcl_sub = rospy.Subscriber("rslidar_points", PointCloud2, pcl_callback, 
+        pcl_sub = rospy.Subscriber("rslidar/points", PointCloud2, pcl_callback, 
                                   queue_size=1)
-        pcl_pub = rospy.Publisher('rslidar_points_filtered', PointCloud2, 
+        pcl_pub = rospy.Publisher('rslidar/points_filtered', PointCloud2, 
                                   queue_size=1)
         rospy.loginfo("Waiting for first PCL message...")
         rospy.spin()

@@ -54,9 +54,9 @@ public:
   {
     // Initialization
     pcl_sub_ =
-        nh_.subscribe("rslidar_points", 10, &FilterPcl::pclCallback, this);
+        nh_.subscribe("rslidar/points", 10, &FilterPcl::pclCallback, this);
     pcl_pub_ =
-        nh_.advertise<sensor_msgs::PointCloud2>("rslidar_points_filtered", 1);
+        nh_.advertise<sensor_msgs::PointCloud2>("rslidar/points_filtered", 1);
 
     // Read parameters
     nh_private_.param("ground_removal_th", k_ground_removal_th, 2.0);

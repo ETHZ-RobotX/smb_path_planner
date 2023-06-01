@@ -6,7 +6,7 @@
   <arg name="sim"                   default="false"/>
   <arg name="use_global_map"        default="false"/>
 
-  <arg name="cmd_vel_topic"         default="/teb_planner_twist"/>
+  <arg name="cmd_vel_topic"         default="/control/teb_planner_twist"/>
   <arg name="tf_topic"              default="/tf"/>
   <arg name="odom_topic"            default="/base_odom"/>
   <arg name="obstacle_scan_topic"   default="/scan"/>

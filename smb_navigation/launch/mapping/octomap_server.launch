@@ -22,7 +22,7 @@
     <param name="sensor_model/max_range" value="10.0"/>
 	
     <!-- data source to integrate (PointCloud2) -->
-    <remap from="cloud_in"       to="/rslidar_points"/>
+    <remap from="cloud_in"       to="/rslidar/points"/>
     <remap from="/projected_map" to="map"/>
   </node>
 </launch>
