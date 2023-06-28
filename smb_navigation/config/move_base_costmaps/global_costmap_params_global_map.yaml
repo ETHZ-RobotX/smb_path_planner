@@ -42,4 +42,5 @@ global_costmap:
   inflation_layer:
     enabled: false
     observation_sources: laser_scan_sensor
+    cost_scaling_factor: 1.0
 

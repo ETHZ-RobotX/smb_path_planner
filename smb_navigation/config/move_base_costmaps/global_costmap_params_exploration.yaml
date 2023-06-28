@@ -1,8 +1,8 @@
 # more on http://wiki.ros.org/navigation/Tutorials/RobotSetup
 
 global_costmap:
-  update_frequency: 5.0
-  publish_frequency: 2.0
+  update_frequency: 1.0
+  publish_frequency: 1.0
   transform_tolerance: 0.5 # [s]
   
   rolling_window: true
@@ -10,10 +10,13 @@ global_costmap:
   footprint: [[0.4, 0.4], [0.4, -0.4], [-0.4, -0.4], [-0.4, 0.4]]  # footprint fo the robot, centered in robot centre
   # robot_radius: 0.4 # Just use radius now instead of footprint (To speedup collision checking)
   
-  width: 100.0
-  height: 100.0
+  width: 30.0
+  height: 30.0
 
   plugins:
+    - 
+     name: static_layer
+     type: "costmap_2d::StaticLayer" 
     - 
      name: obstacle_layer
      type: "costmap_2d::ObstacleLayer"  
@@ -21,12 +24,14 @@ global_costmap:
      name: inflation_layer
      type: "costmap_2d::InflationLayer"
 
+
   virtual_obstacles:
     observation_sources: laser_scan_sensor
     
   obstacle_layer:
     enabled: true
-    observation_sources: laser_scan_sensor 
+    observation_sources: laser_scan_sensor
+    combination_method: 2
     laser_scan_sensor:
       data_type: 'LaserScan'
       topic: scan
@@ -40,5 +45,9 @@ global_costmap:
   inflation_layer:
     enabled: true
     observation_sources: laser_scan_sensor
-    inflation_radius: 0.4
     cost_scaling_factor: 1.0
+    inflation_radius: 0.4
+
+  static_layer:
+    map_topic: /map
+    subscribe_to_updates: true

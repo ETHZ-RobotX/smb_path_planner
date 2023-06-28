@@ -20,19 +20,19 @@ TebLocalPlannerROS:
   global_plan_viapoint_sep: 0.5
 
   # Robot
-  max_vel_x: 1.0
+  max_vel_x: 1.5
   max_vel_y: 0.0
-  max_vel_x_backwards: 1.0
-  max_vel_y_backwards: 1.0
-  max_vel_theta: 1.0
-  acc_lim_x: 4.0
+  max_vel_x_backwards: 1.5
+  max_vel_y_backwards: 0.0
+  max_vel_theta: 1.5
+  acc_lim_x: 1.5
   acc_lim_y: 0.0
   acc_lim_theta: 2.0
   wheelbase: 0.625
-  min_turning_radius: 1.0
+  min_turning_radius: 0.0
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
-    type: "circular"
-    radius: 0.75 # for type "circular"
+    type: "polygon"
+    radius: 0.4 # for type "circular"
     line_start: [-0.3, 0.0] # for type "line"
     line_end: [0.3, 0.0] # for type "line"
     front_offset: 0.2 # for type "two_circles"
@@ -42,8 +42,8 @@ TebLocalPlannerROS:
     vertices: [ [0.4, 0.4], [0.4, -0.4], [-0.4, -0.4], [-0.4, 0.4] ] # for type "polygon"
 
   # GoalTolerance
-  xy_goal_tolerance: 0.3
-  yaw_goal_tolerance: 0.3
+  xy_goal_tolerance: 0.4
+  yaw_goal_tolerance: 0.4
   free_goal_vel: false
   complete_global_plan: false
 
@@ -73,7 +73,7 @@ TebLocalPlannerROS:
   weight_optimaltime: 25.0
   weight_shortest_path: 1.0
   weight_obstacle: 1
-  weight_viapoint: 5.0 # Increase to stick closer to global plan
+  weight_viapoint: 2.0 # Increase to stick closer to global plan
   weight_dynamic_obstacle: 10 # not in use yet
   selection_alternative_time_cost: False # not in use yet
 
