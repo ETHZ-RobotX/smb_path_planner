@@ -7,6 +7,7 @@ global_costmap:
   
   rolling_window: true
   resolution: 0.20
+  footprint: [[0.43, 0.43], [0.43, -0.43], [-0.43, -0.43], [-0.43, 0.43]]  # footprint fo the robot, centered in robot centre
   inflation_radius: 0.50
   
   width: 200.0
