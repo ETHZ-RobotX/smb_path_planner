@@ -7,6 +7,7 @@ global_costmap:
   
   rolling_window: true
   resolution: 0.20
+  footprint: [[0.43, 0.43], [0.43, -0.43], [-0.43, -0.43], [-0.43, 0.43]]  # footprint fo the robot, centered in robot centre
   inflation_radius: 0.50
   
   width: 200.0
@@ -42,4 +43,5 @@ global_costmap:
   inflation_layer:
     enabled: false
     observation_sources: laser_scan_sensor
+    cost_scaling_factor: 1.0
 
