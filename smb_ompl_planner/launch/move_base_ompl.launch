@@ -5,6 +5,7 @@
   <arg name="launch_prefix"         default=""/>
   <arg name="sim"                   default="false"/>
   <arg name="use_global_map"        default="false"/>
+  <arg name="exploration"           default="false"/>
 
   <arg name="cmd_vel_topic"         default="/control/teb_planner_twist"/>
   <arg name="tf_topic"              default="/tf"/>
@@ -18,10 +19,12 @@
   <arg name="base_local_planner"    default="teb_local_planner/TebLocalPlannerROS"/>
   
   <!-- Argument to swap between config files (sim or real robot) -->
+  <!-- This arg is ignored in case of exploration-->
   <arg name="config_file_suffix"    value="_sim" if="$(arg sim)"/>
   <arg name="config_file_suffix"    value=""     unless="$(arg sim)"/>
   
   <!-- Argument to swap between config files (use global static map or not) -->
+  <!-- This arg is ignored in case of exploration-->
   <arg name="global_map_suffix"     value="_global_map" if="$(arg use_global_map)"/>
   <arg name="global_map_suffix"     value=""            unless="$(arg use_global_map)"/>
 
@@ -40,8 +43,9 @@
     <!-- Load the OMPL parameters -->
     <rosparam file="$(find smb_navigation)/config/ompl_global_planner.yaml" command="load"/>
     
-    <!-- Load the right config file for local planner (suffix is either "" or "_sim") -->
-    <rosparam file="$(find smb_navigation)/config/base_local_planner$(arg config_file_suffix).yaml" command="load"/>
+    <!-- Load the right config file for local planner (suffix is either "" or "_sim" or "exploration") -->
+    <rosparam file="$(find smb_navigation)/config/base_local_planner_exploration.yaml" command="load" if="$(arg exploration)"/>
+    <rosparam file="$(find smb_navigation)/config/base_local_planner$(arg config_file_suffix).yaml" command="load" unless="$(arg exploration)"/>
     
     <!-- Additional parameters -->
     <param name="footprint_padding"         value="0.01" />
@@ -65,8 +69,9 @@
     <param name="TebLocalPlannerROS/odom_topic"   value="$(arg odom_topic)"/>
     <param name="TebLocalPlannerROS/map_frame"    value="$(arg global_frame)"/> <!-- This is the global planning frame -->
 
-    <!-- global costmap -->
-    <rosparam file="$(find smb_navigation)/config/move_base_costmaps/global_costmap_params$(arg global_map_suffix).yaml" command="load"/>    
+    <!-- global costmap (param file suffix is either "" or "_sim" or "exploration") -->
+    <rosparam file="$(find smb_navigation)/config/move_base_costmaps/global_costmap_params_exploration.yaml" command="load" if="$(arg exploration)"/>
+    <rosparam file="$(find smb_navigation)/config/move_base_costmaps/global_costmap_params$(arg global_map_suffix).yaml" command="load" unless="$(arg exploration)"/>    
     <param name="global_costmap/global_frame"     value="$(arg global_frame)"/>
     <param name="global_costmap/robot_base_frame" value="$(arg robot_base_frame)"/>
     
