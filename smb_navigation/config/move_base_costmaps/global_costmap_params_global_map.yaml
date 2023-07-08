@@ -8,7 +8,7 @@ global_costmap:
   rolling_window: true
   resolution: 0.20
   footprint: [[0.43, 0.43], [0.43, -0.43], [-0.43, -0.43], [-0.43, 0.43]]  # footprint fo the robot, centered in robot centre
-  inflation_radius: 0.50
+  inflation_radius: 0.8
   
   width: 200.0
   height: 200.0
@@ -28,20 +28,21 @@ global_costmap:
     observation_sources: laser_scan_sensor
     
   obstacle_layer:
-    enabled: false
-    observation_sources: laser_scan_sensor 
+    enabled: true
+    observation_sources: laser_scan_sensor
+    combination_method: 1
     laser_scan_sensor:
       data_type: 'LaserScan'
       topic: scan
       marking: true
       clearing: true
-      min_obstacle_height: -100.0
-      max_obstacle_height: 100.0
+      min_obstacle_height: -1.5
+      max_obstacle_height: 1.5
       observation_persistence: 0.4
       inf_is_valid: true   
 
   inflation_layer:
-    enabled: false
+    enabled: true
     observation_sources: laser_scan_sensor
     cost_scaling_factor: 1.0
 
