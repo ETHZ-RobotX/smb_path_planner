@@ -23,8 +23,12 @@
        doc="whether to follow multiple waypoints stored in the input file (also used to save waypoints, see SMB path planner Wiki)"/>
   
   <arg name="global_frame"
-       default="map"
+       default="world"
        doc="fixed global frame name in which odometry, map, etc are defined"/>
+  
+  <arg name="map_frame"
+       default="$(arg global_frame)"
+       doc="frame name in which the global costmap is defined"/>
   
   <arg name="robot_base_frame"
        default="base_link"
@@ -86,7 +90,7 @@
     
     <!-- Run the map server -->
     <node name="map_server" pkg="map_server" type="map_server" args="$(arg global_map)" if="$(arg use_global_map)">
-      <param name="frame_id" value="$(arg global_frame)"/>
+      <param name="frame_id" value="$(arg map_frame)"/>
     </node>
   </group>
   
