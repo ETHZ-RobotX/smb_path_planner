@@ -7,7 +7,7 @@ global_costmap:
   
   rolling_window: true
   resolution: 0.05
-  footprint: [[0.43, 0.43], [0.43, -0.43], [-0.43, -0.43], [-0.43, 0.43]]  # footprint fo the robot, centered in robot centre
+  footprint: [[0.40, 0.40], [0.40, -0.40], [-0.40, -0.40], [-0.40, 0.40]]  # footprint fo the robot, centered in robot centre
   # robot_radius: 0.4 # Just use radius now instead of footprint (To speedup collision checking)
   
   width: 30.0

@@ -4,7 +4,7 @@ local_costmap:
   update_frequency: 10.0
   publish_frequency: 2.0
   transform_tolerance: 0.5 # [s]
-  footprint: [[0.43, 0.43], [0.43, -0.43], [-0.43, -0.43], [-0.43, 0.43]]  # footprint fo the robot, centered in robot centre
+  footprint: [[0.40, 0.40], [0.40, -0.40], [-0.40, -0.40], [-0.40, 0.40]]  # footprint fo the robot, centered in robot centre
   # robot_radius: 0.4 # Just use radius now instead of footprint (To speedup collision checking)
 
   rolling_window: true
