@@ -20,14 +20,14 @@ TebLocalPlannerROS:
   global_plan_viapoint_sep: 0.5
 
   # Robot
-  max_vel_x: 0.75
+  max_vel_x: 0.5
   max_vel_y: 0.0
-  max_vel_x_backwards: 0.75
+  max_vel_x_backwards: 0.5
   max_vel_y_backwards: 0.0
   max_vel_theta: 1.0
   acc_lim_x: 1.0
   acc_lim_y: 0.0
-  acc_lim_theta: 1.0
+  acc_lim_theta: 2.0
   
   use_proportional_saturation: true
   
@@ -75,7 +75,7 @@ TebLocalPlannerROS:
   weight_kinematics_turning_radius: 0.5
   weight_optimaltime: 25.0
   weight_shortest_path: 1.0
-  weight_obstacle: 1
+  weight_obstacle: 50
   weight_viapoint: 1.0 # Increase to stick closer to global plan
   weight_dynamic_obstacle: 10 # not in use yet
   selection_alternative_time_cost: False # not in use yet
