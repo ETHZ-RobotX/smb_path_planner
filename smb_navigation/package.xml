@@ -5,6 +5,7 @@
   <description>The smb_navigation package</description>
 
   <maintainer email="lbartolomei@ethz.ch">Luca Bartolomei</maintainer>
+  <maintainer email="chencha@ethz.ch">Changan Chen</maintainer>
   <author email="lbartolomei@ethz.ch">Luca Bartolomei</author>
   <license>BSD</license>
 
@@ -32,6 +33,13 @@
   <depend>vehicle_simulator</depend> <!-- needed for the rviz config-->
   <depend>waypoint_example</depend>
   <depend>waypoint_rviz_plugin</depend>
+
+  <!-- FAR Planner -->
+  <depend>boundary_handler</depend>
+  <depend>far_planner</depend>
+  <depend>goalpoint_rviz_plugin</depend>
+  <depend>graph_decoder</depend>
+  <depend>teleop_rviz_plugin</depend>
   
   <exec_depend>smb_path_following_controller</exec_depend>
   <exec_depend>pointcloud_to_laserscan</exec_depend>

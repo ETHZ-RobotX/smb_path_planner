@@ -16,6 +16,7 @@
     <arg name="pcd_topic"                 default="/mapping_node/raw_cloud"   doc="input pointcloud topic"/>
     <arg name="transformed_pcd_topic"     default="/registered_scan"   doc="output transformed pointcloud (in global frame) topic"/>
     <arg name="sensor_frame"     default="/rslidar"   doc="frame of the sensor"/>
+    <arg name="launch_far_planner"     default="true"   doc="whether launch far planner, if not, CMU base local planner is used"/>
   
 
     <remap from="/state_estimation" to="$(arg state_estimation_topic)"/>
@@ -32,6 +33,7 @@
     <node pkg="tf2_ros" type="static_transform_publisher" name="attach_map_link" args="0 0 0 0 0 0 $(arg global_frame) map" />
     <node pkg="tf2_ros" type="static_transform_publisher" name="attach_sensor_link" args="0 0 0 0 0 0 $(arg sensor_frame) sensor" />
 
+    <!-- Base CMU exploration layer-->
     <include file="$(find ps3joy)/launch/ps3.launch" />
   
     <include file="$(find local_planner)/launch/local_planner.launch" >
@@ -51,6 +53,15 @@
     <include file="$(find visualization_tools)/launch/visualization_tools.launch" >
       <arg name="world_name" value="$(arg world_name)"/>
     </include>
+
+    <!-- FAR Planner -->
+    <group if="$(arg launch_far_planner)">
+        <include file="$(find far_planner)/launch/far_planner.launch" >
+            <arg name="odom_topic" value="$(arg state_estimation_topic)"/>
+            <arg name="scan_cloud_topic" value="$(arg registered_scan_topic)"/>
+        </include>
+    </group>
+    
     
     <!-- From TwistStamped to Twist to feed into Twist Mux-->
     <node pkg="topic_tools" type="transform" name="twist_transformer"
