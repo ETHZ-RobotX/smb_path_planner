@@ -18,6 +18,20 @@
   <depend>octomap_ros</depend>
   <depend>map_server</depend>
   <depend>octomap_server</depend>
+
+  <!-- CMU autonomous exploration development environment -->
+  <depend>joy</depend>
+  <depend>joystick_drivers</depend>
+  <depend>ps3joy</depend>
+  <depend>loam_interface</depend>
+  <depend>local_planner</depend>
+  <depend>sensor_scan_generation</depend>
+  <depend>terrain_analysis</depend>
+  <depend>terrain_analysis_ext</depend>
+  <depend>visualization_tools</depend>
+  <depend>vehicle_simulator</depend> <!-- needed for the rviz config-->
+  <depend>waypoint_example</depend>
+  <depend>waypoint_rviz_plugin</depend>
   
   <exec_depend>smb_path_following_controller</exec_depend>
   <exec_depend>pointcloud_to_laserscan</exec_depend>

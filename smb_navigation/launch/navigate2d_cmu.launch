@@ -1,0 +1,63 @@
+<launch>
+
+    <arg name="world_name" default=""/>
+    <arg name="vehicleHeight" default="0.75"/>
+    <arg name="cameraOffsetZ" default="0"/>
+    <arg name="vehicleX" default="0"/>
+    <arg name="vehicleY" default="0"/>
+    <arg name="terrainZ" default="0"/>
+    <arg name="vehicleYaw" default="0"/>
+    <arg name="gazebo_gui" default="false"/>
+    <arg name="checkTerrainConn" default="true"/>
+    <arg name="state_estimation_topic" default="/mapping_node/scan2map_odometry"/>
+    <arg name="registered_scan_topic" default="/registered_scan"/>
+
+    <arg name="global_frame"              default="map_o3d"                   doc="global frame, in which odometry is defined"/>
+    <arg name="pcd_topic"                 default="/mapping_node/raw_cloud"   doc="input pointcloud topic"/>
+    <arg name="transformed_pcd_topic"     default="/registered_scan"   doc="output transformed pointcloud (in global frame) topic"/>
+    <arg name="sensor_frame"     default="/rslidar"   doc="frame of the sensor"/>
+  
+
+    <remap from="/state_estimation" to="$(arg state_estimation_topic)"/>
+    <remap from="/registered_scan" to="$(arg registered_scan_topic)"/> 
+  
+    <!-- Pointcloud Transformer Node -->
+    <node name="pointcloud_transformer" pkg="smb_navigation" type="pointcloud_transformer_node" output="screen">
+        <param name="global_frame"     value="$(arg global_frame)"/>
+        <param name="pcd_topic"        value="$(arg pcd_topic)"/>
+        <param name="transformed_pcd_topic"        value="$(arg transformed_pcd_topic)"/>
+    </node>
+
+    <!-- Static Transform adapt to CMU hardcoded frame -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="attach_map_link" args="0 0 0 0 0 0 $(arg global_frame) map" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="attach_sensor_link" args="0 0 0 0 0 0 $(arg sensor_frame) sensor" />
+
+    <include file="$(find ps3joy)/launch/ps3.launch" />
+  
+    <include file="$(find local_planner)/launch/local_planner.launch" >
+      <arg name="cameraOffsetZ" value="$(arg cameraOffsetZ)"/>
+      <arg name="goalX" value="$(arg vehicleX)"/>
+      <arg name="goalY" value="$(arg vehicleY)"/>
+    </include>
+  
+    <include file="$(find terrain_analysis)/launch/terrain_analysis.launch"/>
+
+    <include file="$(find terrain_analysis_ext)/launch/terrain_analysis_ext.launch" >
+      <arg name="checkTerrainConn" value="$(arg checkTerrainConn)"/>   
+    </include>
+  
+    <include file="$(find sensor_scan_generation)/launch/sensor_scan_generation.launch"/>
+    
+    <include file="$(find visualization_tools)/launch/visualization_tools.launch" >
+      <arg name="world_name" value="$(arg world_name)"/>
+    </include>
+    
+    <!-- From TwistStamped to Twist to feed into Twist Mux-->
+    <node pkg="topic_tools" type="transform" name="twist_transformer"
+            args="/cmd_vel /cmd_vel_twist geometry_msgs/Twist 'm.twist' --import geometry_msgs.msg">
+    </node>
+
+    <node launch-prefix="nice" pkg="rviz" type="rviz" name="rvizGA" args="-d $(find vehicle_simulator)/rviz/vehicle_simulator.rviz" respawn="true"/>
+    
+  </launch>
+  

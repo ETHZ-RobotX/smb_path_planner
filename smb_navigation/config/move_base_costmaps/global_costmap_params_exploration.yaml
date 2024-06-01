@@ -49,5 +49,5 @@ global_costmap:
     inflation_radius: 0.4
 
   static_layer:
-    map_topic: /exploration_map/global_costmap/costmap
+    map_topic: /map
     subscribe_to_updates: true
