@@ -16,6 +16,7 @@
     <arg name="pcd_topic"                 default="/mapping_node/raw_cloud"   doc="input pointcloud topic"/>
     <arg name="transformed_pcd_topic"     default="/registered_scan"   doc="output transformed pointcloud (in global frame) topic"/>
     <arg name="sensor_frame"     default="/rslidar"   doc="frame of the sensor"/>
+    <arg name="exploration"     default="false"   doc="whether is exploration, if not far planner will not be launched"/>
     <arg name="launch_far_planner"     default="true"   doc="whether launch far planner, if not, CMU base local planner is used"/>
   
 
@@ -55,13 +56,14 @@
     </include>
 
     <!-- FAR Planner -->
-    <group if="$(arg launch_far_planner)">
-        <include file="$(find far_planner)/launch/far_planner.launch" >
-            <arg name="odom_topic" value="$(arg state_estimation_topic)"/>
-            <arg name="scan_cloud_topic" value="$(arg registered_scan_topic)"/>
-        </include>
-    </group>
-    
+    <group unless="$(arg exploration)">
+        <group if="$(arg launch_far_planner)">
+            <include file="$(find far_planner)/launch/far_planner.launch" >
+                <arg name="odom_topic" value="$(arg state_estimation_topic)"/>
+                <arg name="scan_cloud_topic" value="$(arg registered_scan_topic)"/>
+            </include>
+        </group>
+    </group>    
     
     <!-- From TwistStamped to Twist to feed into Twist Mux-->
     <node pkg="topic_tools" type="transform" name="twist_transformer"
