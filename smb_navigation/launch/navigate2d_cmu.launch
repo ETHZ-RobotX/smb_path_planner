@@ -11,7 +11,7 @@
     <arg name="checkTerrainConn" default="true"/>
     <arg name="state_estimation_topic" default="/mapping_node/scan2map_odometry"/>
     <arg name="registered_scan_topic" default="/registered_scan"/>
-
+    <arg name="smb"                       default="true"                      doc="whether this is running on smb, if yes rviz is not run"/>
     <arg name="global_frame"              default="map_o3d"                   doc="global frame, in which odometry is defined"/>
     <arg name="pcd_topic"                 default="/mapping_node/raw_cloud"   doc="input pointcloud topic"/>
     <arg name="transformed_pcd_topic"     default="/registered_scan"   doc="output transformed pointcloud (in global frame) topic"/>
@@ -51,14 +51,17 @@
   
     <include file="$(find sensor_scan_generation)/launch/sensor_scan_generation.launch"/>
     
-    <include file="$(find visualization_tools)/launch/visualization_tools.launch" >
-      <arg name="world_name" value="$(arg world_name)"/>
-    </include>
+    <group unless="$(arg smb)">
+      <include file="$(find visualization_tools)/launch/visualization_tools.launch" >
+        <arg name="world_name" value="$(arg world_name)"/>
+      </include>
+    </group>
 
     <!-- FAR Planner -->
     <group unless="$(arg exploration)">
         <group if="$(arg launch_far_planner)">
             <include file="$(find far_planner)/launch/far_planner.launch" >
+                <arg name="smb" value="$(arg smb)"/>
                 <arg name="odom_topic" value="$(arg state_estimation_topic)"/>
                 <arg name="scan_cloud_topic" value="$(arg registered_scan_topic)"/>
             </include>
@@ -70,7 +73,9 @@
             args="/cmd_vel /cmd_vel_twist geometry_msgs/Twist 'm.twist' --import geometry_msgs.msg">
     </node>
 
-    <node launch-prefix="nice" pkg="rviz" type="rviz" name="rvizGA" args="-d $(find vehicle_simulator)/rviz/vehicle_simulator.rviz" respawn="true"/>
-    
-  </launch>
+    <group unless="$(arg smb)">
+        <node launch-prefix="nice" pkg="rviz" type="rviz" name="rvizGA" args="-d $(find vehicle_simulator)/rviz/vehicle_simulator.rviz" respawn="true"/>
+    </group>
+
+</launch>
   
