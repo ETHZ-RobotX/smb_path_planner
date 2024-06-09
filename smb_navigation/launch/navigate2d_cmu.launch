@@ -1,7 +1,7 @@
 <launch>
 
     <arg name="world_name" default=""/>
-    <arg name="vehicleHeight" default="0.75"/>
+    <arg name="vehicleHeight" default="0.6"/>
     <arg name="cameraOffsetZ" default="0"/>
     <arg name="vehicleX" default="0"/>
     <arg name="vehicleY" default="0"/>
@@ -34,26 +34,27 @@
     <node pkg="tf2_ros" type="static_transform_publisher" name="attach_map_link" args="0 0 0 0 0 0 $(arg global_frame) map" />
     <node pkg="tf2_ros" type="static_transform_publisher" name="attach_sensor_link" args="0 0 0 0 0 0 $(arg sensor_frame) sensor" />
 
-    <!-- Base CMU exploration layer-->
-    <include file="$(find ps3joy)/launch/ps3.launch" />
-  
+    <!-- Base CMU exploration layer-->  
     <include file="$(find local_planner)/launch/local_planner.launch" >
       <arg name="cameraOffsetZ" value="$(arg cameraOffsetZ)"/>
       <arg name="goalX" value="$(arg vehicleX)"/>
       <arg name="goalY" value="$(arg vehicleY)"/>
     </include>
   
-    <include file="$(find terrain_analysis)/launch/terrain_analysis.launch"/>
+    <include file="$(find terrain_analysis)/launch/terrain_analysis.launch">
+      <arg name="vehicleHeight" value="$(arg vehicleHeight)"/>
+    </include>
 
     <include file="$(find terrain_analysis_ext)/launch/terrain_analysis_ext.launch" >
-      <arg name="checkTerrainConn" value="$(arg checkTerrainConn)"/>   
+      <arg name="checkTerrainConn" value="$(arg checkTerrainConn)"/>
+      <arg name="vehicleHeight" value="$(arg vehicleHeight)"/>
     </include>
   
     <include file="$(find sensor_scan_generation)/launch/sensor_scan_generation.launch"/>
     
-    <include file="$(find visualization_tools)/launch/visualization_tools.launch" >
+    <!-- <include file="$(find visualization_tools)/launch/visualization_tools.launch" >
       <arg name="world_name" value="$(arg world_name)"/>
-    </include>
+    </include> -->
 
     <!-- FAR Planner -->
     <group unless="$(arg exploration)">

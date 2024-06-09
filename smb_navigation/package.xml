@@ -21,9 +21,6 @@
   <depend>octomap_server</depend>
 
   <!-- CMU autonomous exploration development environment -->
-  <depend>joy</depend>
-  <depend>joystick_drivers</depend>
-  <depend>ps3joy</depend>
   <depend>loam_interface</depend>
   <depend>local_planner</depend>
   <depend>sensor_scan_generation</depend>
