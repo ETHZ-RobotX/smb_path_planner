@@ -9,17 +9,19 @@
     <arg name="vehicleYaw" default="0"/>
     <arg name="gazebo_gui" default="false"/>
     <arg name="checkTerrainConn" default="true"/>
+    <arg name="use_msf" default="false" doc="if true use the state estimation from msf_graph, otherwise just o3d"/>
     <arg name="state_estimation_topic" default="/mapping_node/scan2map_odometry"/>
     <arg name="registered_scan_topic" default="/registered_scan"/>
 
     <arg name="global_frame"              default="map_o3d"                   doc="global frame, in which odometry is defined"/>
     <arg name="pcd_topic"                 default="/mapping_node/raw_cloud"   doc="input pointcloud topic"/>
     <arg name="transformed_pcd_topic"     default="/registered_scan"   doc="output transformed pointcloud (in global frame) topic"/>
-    <arg name="sensor_frame"     default="/rslidar"   doc="frame of the sensor"/>
+    <arg name="transformed_odom_topic"     default="/transformed_odom"   doc="output transformed odom topic"/>
+    <arg name="sensor_frame"     default="rslidar"   doc="frame of the sensor"/>
     <arg name="exploration"     default="false"   doc="whether is exploration, if not far planner will not be launched"/>
     <arg name="launch_far_planner"     default="true"   doc="whether launch far planner, if not, CMU base local planner is used"/>
   
-
+    <!-- Remapping State Estimation Topic -->
     <remap from="/state_estimation" to="$(arg state_estimation_topic)"/>
     <remap from="/registered_scan" to="$(arg registered_scan_topic)"/> 
   
@@ -30,6 +32,16 @@
         <param name="transformed_pcd_topic"        value="$(arg transformed_pcd_topic)"/>
     </node>
 
+    <!-- Odometry Transformer Node -->
+    <group if="$(arg use_msf)">
+      <node name="odometry_transformer" pkg="smb_navigation" type="odometry_transformer_node" output="screen">
+        <param name="target_frame"     value="$(arg sensor_frame)"/>
+        <param name="odom_topic"        value="/graph_msf/est_odometry_world_imu"/>
+        <param name="transformed_odom_topic"        value="$(arg transformed_odom_topic)"/>
+      </node>
+    </group>
+    
+  
     <!-- Static Transform adapt to CMU hardcoded frame -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="attach_map_link" args="0 0 0 0 0 0 $(arg global_frame) map" />
     <node pkg="tf2_ros" type="static_transform_publisher" name="attach_sensor_link" args="0 0 0 0 0 0 $(arg sensor_frame) sensor" />
