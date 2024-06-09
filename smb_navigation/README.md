@@ -23,4 +23,5 @@ roslaunch smb_gazebo sim.launch
 roslaunch smb_msf_graph smb_msf_graph.launch use_sim_time:=true
 roslaunch smb_navigation navigate2d_cmu.launch use_msf:=true global_frame:=world_graph_msf state_estimation_topic:=/transformed_odom smb:=false
 ```
+To navigate, in rviz set goal using WayPoint Plugin (local planner) or GoalPoint Plugin (far planner).
 
