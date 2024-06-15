@@ -1,13 +1,14 @@
 <launch>
 
     <arg name="world_name" default=""/>
-    <arg name="vehicleHeight" default="0.6"/>
+    <arg name="vehicleHeight" default="0.7"/>
+    <arg name="maxSpeed" default="1"/>
+    <arg name="maxYawRate" default="45"/>
+    <arg name="maxAccel" default="1"/>
+    <arg name="dirDiffThre" default="1"/>
     <arg name="cameraOffsetZ" default="0"/>
     <arg name="vehicleX" default="0"/>
     <arg name="vehicleY" default="0"/>
-    <arg name="terrainZ" default="0"/>
-    <arg name="vehicleYaw" default="0"/>
-    <arg name="gazebo_gui" default="false"/>
     <arg name="checkTerrainConn" default="true"/>
     <arg name="use_msf" default="false" doc="if true use the state estimation from msf_graph, otherwise just o3d"/>
     <arg name="state_estimation_topic" default="/mapping_node/scan2map_odometry"/>
@@ -49,6 +50,9 @@
     <!-- Base CMU exploration layer-->  
     <include file="$(find local_planner)/launch/local_planner.launch" >
       <arg name="cameraOffsetZ" value="$(arg cameraOffsetZ)"/>
+      <arg name="maxSpeed" value="$(arg maxSpeed)"/>
+      <arg name="maxYawRate" value="$(arg maxYawRate)"/>
+      <arg name="maxAccel" value="$(arg maxAccel)" />
       <arg name="goalX" value="$(arg vehicleX)"/>
       <arg name="goalY" value="$(arg vehicleY)"/>
     </include>
@@ -73,6 +77,7 @@
         <group if="$(arg launch_far_planner)">
             <include file="$(find far_planner)/launch/far_planner.launch" >
                 <arg name="smb" value="$(arg smb)"/>
+                <arg name="world_frame" value="$(arg global_frame)"/>
                 <arg name="odom_topic" value="$(arg state_estimation_topic)"/>
                 <arg name="scan_cloud_topic" value="$(arg registered_scan_topic)"/>
             </include>
