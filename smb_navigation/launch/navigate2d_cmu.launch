@@ -44,11 +44,12 @@
     
   
     <!-- Static Transform adapt to CMU hardcoded frame -->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="attach_map_link" args="0 0 0 0 0 0 $(arg global_frame) map" />
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="attach_map_link" args="0 0 0 0 0 0 $(arg global_frame) map" /> -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="attach_sensor_link" args="0 0 0 0 0 0 $(arg sensor_frame) sensor" />
 
     <!-- Base CMU exploration layer-->  
     <include file="$(find local_planner)/launch/local_planner.launch" >
+      <param name="world_frame"     value="$(arg global_frame)"/>
       <arg name="cameraOffsetZ" value="$(arg cameraOffsetZ)"/>
       <arg name="maxSpeed" value="$(arg maxSpeed)"/>
       <arg name="maxYawRate" value="$(arg maxYawRate)"/>
@@ -58,15 +59,19 @@
     </include>
   
     <include file="$(find terrain_analysis)/launch/terrain_analysis.launch">
+      <arg name="world_frame"     value="$(arg global_frame)"/>
       <arg name="vehicleHeight" value="$(arg vehicleHeight)"/>
     </include>
 
     <include file="$(find terrain_analysis_ext)/launch/terrain_analysis_ext.launch" >
+      <arg name="world_frame"     value="$(arg global_frame)"/>
       <arg name="checkTerrainConn" value="$(arg checkTerrainConn)"/>
       <arg name="vehicleHeight" value="$(arg vehicleHeight)"/>
     </include>
   
-    <include file="$(find sensor_scan_generation)/launch/sensor_scan_generation.launch"/>
+    <include file="$(find sensor_scan_generation)/launch/sensor_scan_generation.launch">
+      <arg name="world_frame"     value="$(arg global_frame)"/>
+    </include>
     
     <!-- <include file="$(find visualization_tools)/launch/visualization_tools.launch" >
       <arg name="world_name" value="$(arg world_name)"/>
