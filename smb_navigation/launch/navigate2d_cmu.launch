@@ -11,11 +11,11 @@
     <arg name="vehicleY" default="0"/>
     <arg name="checkTerrainConn" default="true"/>
     <arg name="use_msf" default="false" doc="if true use the state estimation from msf_graph, otherwise just o3d"/>
-    <arg name="state_estimation_topic" default="/mapping_node/scan2map_odometry"/>
+    <arg name="state_estimation_topic" default="/mapping/scan2map_odometry"/>
     <arg name="registered_scan_topic" default="/registered_scan"/>
     <arg name="smb"                       default="true"                      doc="whether this is running on smb, if yes rviz is not run"/>
     <arg name="global_frame"              default="map_o3d"                   doc="global frame, in which odometry is defined"/>
-    <arg name="pcd_topic"                 default="/mapping_node/raw_cloud"   doc="input pointcloud topic"/>
+    <arg name="pcd_topic"                 default="/mapping/raw_cloud"   doc="input pointcloud topic"/>
     <arg name="transformed_pcd_topic"     default="/registered_scan"   doc="output transformed pointcloud (in global frame) topic"/>
     <arg name="transformed_odom_topic"     default="/transformed_odom"   doc="output transformed odom topic"/>
     <arg name="sensor_frame"     default="rslidar"   doc="frame of the sensor"/>
