@@ -91,7 +91,7 @@
     
     <!-- From TwistStamped to Twist to feed into Twist Mux-->
     <node pkg="topic_tools" type="transform" name="twist_transformer"
-            args="/cmd_vel /cmd_vel_twist geometry_msgs/Twist 'm.twist' --import geometry_msgs.msg">
+            args="/nav/cmd_vel /nav/cmd_vel_twist geometry_msgs/Twist 'm.twist' --import geometry_msgs.msg">
     </node>
 
     <group unless="$(arg smb)">
