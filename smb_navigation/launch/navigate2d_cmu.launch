@@ -49,7 +49,7 @@
 
     <!-- Base CMU exploration layer-->  
     <include file="$(find local_planner)/launch/local_planner.launch" >
-      <param name="world_frame"     value="$(arg global_frame)"/>
+      <arg name="dirDiffThre" value="$(arg dirDiffThre)"/>
       <arg name="cameraOffsetZ" value="$(arg cameraOffsetZ)"/>
       <arg name="maxSpeed" value="$(arg maxSpeed)"/>
       <arg name="maxYawRate" value="$(arg maxYawRate)"/>
