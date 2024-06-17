@@ -5,7 +5,7 @@
     <arg name="maxSpeed" default="1"/>
     <arg name="maxYawRate" default="45"/>
     <arg name="maxAccel" default="1"/>
-    <arg name="dirDiffThre" default="1"/>
+    <arg name="dirDiffThre" default="0.1"/>
     <arg name="cameraOffsetZ" default="0"/>
     <arg name="vehicleX" default="0"/>
     <arg name="vehicleY" default="0"/>
