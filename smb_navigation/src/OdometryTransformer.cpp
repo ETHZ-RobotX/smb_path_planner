@@ -41,7 +41,7 @@ void OdometryTransformer::odometryCallback(const nav_msgs::OdometryConstPtr& odo
         geometry_msgs::TransformStamped transformStamped = tfBuffer_.lookupTransform(odom->child_frame_id, target_frame_,
                                                                                             odom->header.stamp, 
                                                                                             ros::Duration(1.0));
-        // Transform the pose from imu frame to lidar frame
+        // Transform the input odom to target_frame_ pose in odom frame
         tf2::doTransform(odom->pose.pose, transformed_odom.pose.pose, transformStamped);
 
         // Publish the transformed odometry message
