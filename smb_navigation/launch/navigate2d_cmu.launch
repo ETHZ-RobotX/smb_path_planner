@@ -1,0 +1,99 @@
+<launch>
+
+    <arg name="world_name" default=""/>
+    <arg name="vehicleHeight" default="0.7"/>
+    <arg name="maxSpeed" default="1"/>
+    <arg name="maxYawRate" default="45"/>
+    <arg name="maxAccel" default="1"/>
+    <arg name="dirDiffThre" default="0.1"/>
+    <arg name="cameraOffsetZ" default="0"/>
+    <arg name="vehicleX" default="0"/>
+    <arg name="vehicleY" default="0"/>
+    <arg name="checkTerrainConn" default="true"/>
+    <arg name="use_msf" default="false" doc="if true use the state estimation from msf_graph, otherwise just o3d"/>
+    <arg name="state_estimation_topic" default="/mapping/scan2map_odometry"/>
+    <arg name="registered_scan_topic" default="/registered_scan"/>
+    <arg name="smb"                       default="true"                      doc="whether this is running on smb, if yes rviz is not run"/>
+    <arg name="global_frame"              default="map_o3d"                   doc="global frame, in which odometry is defined"/>
+    <arg name="pcd_topic"                 default="/mapping/raw_cloud"   doc="input pointcloud topic"/>
+    <arg name="transformed_pcd_topic"     default="/registered_scan"   doc="output transformed pointcloud (in global frame) topic"/>
+    <arg name="transformed_odom_topic"     default="/transformed_odom"   doc="output transformed odom topic"/>
+    <arg name="sensor_frame"     default="rslidar"   doc="frame of the sensor"/>
+    <arg name="launch_far_planner"     default="true"   doc="whether launch far planner, if not, CMU base local planner is used"/>
+  
+    <!-- Remapping State Estimation Topic -->
+    <remap from="/state_estimation" to="$(arg state_estimation_topic)"/>
+    <remap from="/registered_scan" to="$(arg registered_scan_topic)"/> 
+  
+    <!-- Pointcloud Transformer Node -->
+    <node name="pointcloud_transformer" pkg="smb_navigation" type="pointcloud_transformer_node" output="screen">
+        <param name="global_frame"     value="$(arg global_frame)"/>
+        <param name="pcd_topic"        value="$(arg pcd_topic)"/>
+        <param name="transformed_pcd_topic"        value="$(arg transformed_pcd_topic)"/>
+    </node>
+
+    <!-- Odometry Transformer Node -->
+    <group if="$(arg use_msf)">
+      <node name="odometry_transformer" pkg="smb_navigation" type="odometry_transformer_node" output="screen">
+        <param name="target_frame"     value="$(arg sensor_frame)"/>
+        <param name="odom_topic"        value="/graph_msf/est_odometry_world_imu"/>
+        <param name="transformed_odom_topic"        value="$(arg transformed_odom_topic)"/>
+      </node>
+    </group>
+    
+  
+    <!-- Static Transform adapt to CMU hardcoded frame -->
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="attach_map_link" args="0 0 0 0 0 0 $(arg global_frame) map" /> -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="attach_sensor_link" args="0 0 0 0 0 0 $(arg sensor_frame) sensor" />
+
+    <!-- Base CMU exploration layer-->  
+    <include file="$(find local_planner)/launch/local_planner.launch" >
+      <arg name="dirDiffThre" value="$(arg dirDiffThre)"/>
+      <arg name="cameraOffsetZ" value="$(arg cameraOffsetZ)"/>
+      <arg name="maxSpeed" value="$(arg maxSpeed)"/>
+      <arg name="maxYawRate" value="$(arg maxYawRate)"/>
+      <arg name="maxAccel" value="$(arg maxAccel)" />
+      <arg name="goalX" value="$(arg vehicleX)"/>
+      <arg name="goalY" value="$(arg vehicleY)"/>
+    </include>
+  
+    <include file="$(find terrain_analysis)/launch/terrain_analysis.launch">
+      <arg name="world_frame"     value="$(arg global_frame)"/>
+      <arg name="vehicleHeight" value="$(arg vehicleHeight)"/>
+    </include>
+
+    <include file="$(find terrain_analysis_ext)/launch/terrain_analysis_ext.launch" >
+      <arg name="world_frame"     value="$(arg global_frame)"/>
+      <arg name="checkTerrainConn" value="$(arg checkTerrainConn)"/>
+      <arg name="vehicleHeight" value="$(arg vehicleHeight)"/>
+    </include>
+  
+    <include file="$(find sensor_scan_generation)/launch/sensor_scan_generation.launch">
+      <arg name="world_frame"     value="$(arg global_frame)"/>
+    </include>
+    
+    <!-- <include file="$(find visualization_tools)/launch/visualization_tools.launch" >
+      <arg name="world_name" value="$(arg world_name)"/>
+    </include> -->
+
+    <!-- FAR Planner -->
+    <group if="$(arg launch_far_planner)">
+        <include file="$(find far_planner)/launch/far_planner.launch" >
+            <arg name="smb" value="$(arg smb)"/>
+            <arg name="world_frame" value="$(arg global_frame)"/>
+            <arg name="odom_topic" value="$(arg state_estimation_topic)"/>
+            <arg name="scan_cloud_topic" value="$(arg registered_scan_topic)"/>
+        </include>
+    </group>
+    
+    <!-- From TwistStamped to Twist to feed into Twist Mux-->
+    <node pkg="topic_tools" type="transform" name="twist_transformer"
+            args="/nav/cmd_vel /nav/cmd_vel_twist geometry_msgs/Twist 'm.twist' --import geometry_msgs.msg">
+    </node>
+
+    <group unless="$(arg smb)">
+        <node launch-prefix="nice" pkg="rviz" type="rviz" name="rvizGA" args="-d $(find vehicle_simulator)/rviz/vehicle_simulator.rviz" respawn="true"/>
+    </group>
+
+</launch>
+  
