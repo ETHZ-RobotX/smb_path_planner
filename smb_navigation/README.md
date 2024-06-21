@@ -11,4 +11,5 @@ Before running make sure you build the package
 
 `catkin build smb_navigation_scripts`
 
-
+### Path Planning from CMU
+Please refer to the SMB documentation.

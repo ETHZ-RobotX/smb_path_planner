@@ -41,3 +41,6 @@ Makefile
 
 *.pcd
 *.bt
+
+# vscode
+.vscode/

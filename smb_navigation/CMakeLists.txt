@@ -113,6 +113,51 @@ add_dependencies(pose_interceptor_node
 target_link_libraries(pose_interceptor_node
     ${catkin_LIBRARIES})
 
+### Point Cloud transformer
+add_library(pointcloud_transformer
+    src/PointCloudTransformer.cpp
+)
+
+target_link_libraries(pointcloud_transformer
+    ${catkin_LIBRARIES})
+
+add_dependencies(pointcloud_transformer
+    ${catkin_EXPORTED_TARGETS})
+
+add_executable(pointcloud_transformer_node
+    src/nodes/pointcloud_transformer_node.cpp)
+
+add_dependencies(pointcloud_transformer_node
+    pointcloud_transformer
+    ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(pointcloud_transformer_node
+    pointcloud_transformer    
+    ${catkin_LIBRARIES})
+
+
+### Odometry transformer
+add_library(odometry_transformer
+    src/OdometryTransformer.cpp
+)
+
+target_link_libraries(odometry_transformer
+    ${catkin_LIBRARIES})
+
+add_dependencies(odometry_transformer
+    ${catkin_EXPORTED_TARGETS})
+
+add_executable(odometry_transformer_node
+    src/nodes/odometry_transformer_node.cpp)
+
+add_dependencies(odometry_transformer_node
+    odometry_transformer
+    ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(odometry_transformer_node
+    odometry_transformer    
+    ${catkin_LIBRARIES})
+
 ### Install
 install(DIRECTORY include/${PROJECT_NAME}/
     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
@@ -123,6 +168,10 @@ install(TARGETS path_interceptor
                 path_interceptor_node
                 gridmap_converter
                 gridmap_converter_node
+                pointcloud_transformer
+                pointcloud_transformer_node
+                odometry_transformer
+                odometry_transformer_node
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
