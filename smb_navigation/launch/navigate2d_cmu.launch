@@ -3,7 +3,7 @@
     <arg name="world_name" default=""/>
     <arg name="vehicleHeight" default="0.7"/>
     <arg name="maxSpeed" default="1"/>
-    <arg name="maxYawRate" default="45"/>
+    <arg name="maxYawRate" default="20"/>
     <arg name="maxAccel" default="1"/>
     <arg name="dirDiffThre" default="0.1"/>
     <arg name="cameraOffsetZ" default="0"/>
